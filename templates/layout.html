@@ -1,0 +1,15 @@
+<!doctype html>
+<title>Crawler Benchmark{% if title is defined %} | {{ title }}{% endif %}</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<div class=page>
+  <h1>Crawler Benchmark</h1>
+  {% if title is defined %}<h2>{{ title }}</h2>{% endif %}
+  {% if get_flashed_messages()|length %}
+    <ul class=flash>
+      {% for message in get_flashed_messages() %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% block body %}{% endblock %}
+</div>

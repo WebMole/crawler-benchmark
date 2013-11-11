@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+  <ul class=modes>
+  {% for mode in modes %}
+    {% if mode.enabled %}
+      <li><a href="{{ mode.url }}">{{ mode.name }}</a>
+    {% endif %}
+  {% else %}
+    <li><em>Unbelievable.  No modes so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}

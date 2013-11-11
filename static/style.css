@@ -1,0 +1,99 @@
+body {
+	background: #1D1A19;
+	color: #FFFFFF;
+	font-family: sans-serif;
+}
+
+a {
+	color: #333333;
+	-webkit-transition: color 1s ease-in-out;
+	-moz-transition: color 1s ease-in-out;
+	-ms-transition: color 1s ease-in-out;
+	-o-transition: color 1s ease-in-out;
+	transition: color 1s ease-in-out;
+}
+
+a:hover {
+	color: #5A740F;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	color: #5A740F;
+	font-family: 'Georgia', serif;
+}
+
+h1 {
+	margin-bottom: 1em;
+	border-bottom: 2px solid #383231;
+}
+
+h2 {
+	font-size: 1.2em;
+}
+
+.page
+{
+	margin: 2em auto;
+	padding: 0.8em;
+	width: 960px;
+	border: 5px solid #383231;
+	border-radius: 3px;
+	background: white;
+	color: #1D1A19;
+}
+
+.entries
+{
+	margin: 0; padding: 0;
+	list-style: none;
+}
+
+.entries li
+{
+	margin: 0.8em 1.2em;
+}
+
+.entries li h2
+{
+	margin-left: -1em;
+}
+
+.add-entry
+{
+	border-bottom: 1px solid #383231;
+}
+
+.add-entry dl
+{
+	font-weight: bold;
+}
+
+.metanav
+{
+	margin-bottom: 1em;
+	padding: 0.3em;
+	background: #fafafa;
+	text-align: right;
+	font-size: 0.8em;
+}
+
+.flash
+{
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0.5em 0.5em 0.5em 1.8em;
+	border: 1px solid #5A740F;
+	border-radius: 3px;
+	background: #889638;
+	color: #FFFFFF;
+}
+
+.error
+{
+	padding: 0.5em;
+	background: #F0D6D6;
+}
+
