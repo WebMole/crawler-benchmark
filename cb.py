@@ -111,8 +111,12 @@ def forum():
     entries = cur.fetchall()
     return render_template('forum.html', entries=entries, title='Forum')
 
+@app.route('/admin')
+def admin():
+    flash('Welcome to the administration page')
+    return render_template("admin.html", title='Admin')
 
-@app.route('/add', methods=['POST'])
+@app.route('/admin/add', methods=['POST'])
 def add_entry():
     if not session.get('logged_in'):
         abort(401)
@@ -121,12 +125,7 @@ def add_entry():
                  [request.form['title'], request.form['text']])
     db.commit()
     flash('New entry was successfully posted')
-    return redirect(url_for('index'))
-
-@app.route('/admin')
-def admin():
-    flash('Welcome to the administration page')
-    return render_template("admin.html", title='Admin')
+    return redirect(url_for('admin'))
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def login():
