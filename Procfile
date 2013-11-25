@@ -1,1 +1,1 @@
-web: gunicorn cb:app
+web: python cb.py
