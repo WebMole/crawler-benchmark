@@ -1,6 +1,11 @@
 <!doctype html>
-<title>Crawler Benchmark{% if title is defined %} | {{ title }}{% endif %}</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<head>
+  <title>Crawler Benchmark{% if title is defined %} | {{ title }}{% endif %}</title>
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+  <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/adapt.min.js') }}"></script>
+</head>
+<body>
 <div class=page>
   <h1>Crawler Benchmark</h1>
   {% if title is defined %}<h2>{{ title }}</h2>{% endif %}
@@ -13,3 +18,4 @@
   {% endif %}
   {% block body %}{% endblock %}
 </div>
+</body>

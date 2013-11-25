@@ -57,24 +57,33 @@ def close_db(error):
 
 @app.route('/')
 def index():
-    modes = [
-                {'name' : 'Blog',
-                 'url' : url_for('blog'),
-                 'enabled' : True},
-                {'name' : 'Forum',
-                 'url' : url_for('forum'),
-                 'enabled' : True},
-                {'name' : 'Newsfeed',
-                 'url' : url_for('newsfeed'),
-                 'enabled' : True},
-                {'name' : 'Forms',
-                 'url' : url_for('forms'),
-                 'enabled' : True},
-                {'name' : 'Catalog',
-                 'url' : url_for('catalog'),
-                 'enabled' : True},
-            ]
-    return render_template('index.html', modes=modes, title='Site type selection')
+    modes = [{
+        'name': 'Blog',
+        'url': url_for('blog'),
+        'enabled': True
+    },
+    {
+        'name': 'Forum',
+        'url': url_for('forum'),
+        'enabled': True
+    },
+    {
+        'name': 'Newsfeed',
+        'url': url_for('newsfeed'),
+        'enabled': True
+    },
+    {
+        'name': 'Forms',
+        'url': url_for('forms'),
+        'enabled': True
+    },
+    {
+        'name': 'Catalog',
+        'url': url_for('catalog'),
+        'enabled': True
+    }]
+    return render_template('index.html', modes=modes, title='Page selection')
+
 
 @app.route('/blog')
 def blog():
@@ -83,12 +92,14 @@ def blog():
     entries = cur.fetchall()
     return render_template('blog.html', entries=entries, title='Blog')
 
+
 @app.route('/catalog')
 def catalog():
     db = get_db()
     cur = db.execute('select title, text from entries order by id desc')
     entries = cur.fetchall()
     return render_template('catalog.html', entries=entries, title='Catalog')
+
 
 @app.route('/newsfeed')
 def newsfeed():
@@ -97,12 +108,14 @@ def newsfeed():
     entries = cur.fetchall()
     return render_template('newsfeed.html', entries=entries, title='Newsfeed')
 
+
 @app.route('/forms')
 def forms():
     db = get_db()
     cur = db.execute('select title, text from entries order by id desc')
     entries = cur.fetchall()
     return render_template('forms.html', entries=entries, title='Forms')
+
 
 @app.route('/forum')
 def forum():
@@ -111,21 +124,23 @@ def forum():
     entries = cur.fetchall()
     return render_template('forum.html', entries=entries, title='Forum')
 
+
 @app.route('/admin')
 def admin():
     flash('Welcome to the administration page')
     return render_template("admin.html", title='Admin')
+
 
 @app.route('/admin/add', methods=['POST'])
 def add_entry():
     if not session.get('logged_in'):
         abort(401)
     db = get_db()
-    db.execute('insert into entries (title, text) values (?, ?)',
-                 [request.form['title'], request.form['text']])
+    db.execute('insert into entries (title, text) values (?, ?)', [request.form['title'], request.form['text']])
     db.commit()
     flash('New entry was successfully posted')
     return redirect(url_for('admin'))
+
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def login():
@@ -147,6 +162,7 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('index'))
+
 
 @app.errorhandler(404)
 def page_not_found(e):

@@ -1,42 +1,16 @@
+@import 'reset.css';
+@import 'text.css';
+
 body {
 	background: #1D1A19;
 	color: #FFFFFF;
-	font-family: sans-serif;
-}
-
-a {
-	color: #333333;
-	-webkit-transition: color 1s ease-in-out;
-	-moz-transition: color 1s ease-in-out;
-	-ms-transition: color 1s ease-in-out;
-	-o-transition: color 1s ease-in-out;
-	transition: color 1s ease-in-out;
-}
-
-a:hover {
-	color: #5A740F;
-}
-
-h1, h2, h3, h4, h5, h6 {
-	margin: 0;
-	color: #5A740F;
-	font-family: 'Georgia', serif;
-}
-
-h1 {
-	margin-bottom: 1em;
-	border-bottom: 2px solid #383231;
-}
-
-h2 {
-	font-size: 1.2em;
 }
 
 .page
 {
 	margin: 2em auto;
 	padding: 0.8em;
-	width: 960px;
+	min-width: 400px;
 	border: 5px solid #383231;
 	border-radius: 3px;
 	background: white;
@@ -84,11 +58,15 @@ h2 {
 	margin-bottom: 1em;
 	margin-left: 0;
 	margin-right: 0;
-	padding: 0.5em 0.5em 0.5em 1.8em;
+	padding: 0.5em 1em 0.5em 1em;
 	border: 1px solid #5A740F;
 	border-radius: 3px;
 	background: #889638;
 	color: #FFFFFF;
+}
+
+.flash li {
+	margin-left: 0;
 }
 
 .error
