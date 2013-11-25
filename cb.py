@@ -8,6 +8,10 @@ Crawler Benchmark
 from sqlite3 import dbapi2 as sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 
+import logging, logging.config, yaml
+logging.config.dictConfig(yaml.load(open('logging.conf')))
+logFile = logging.getLogger('file')
+logConsole = logging.getLogger('console')
 
 # create our little application :)
 app = Flask(__name__)
@@ -22,7 +26,6 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
-
 def connect_db():
     """Connects to the specific database."""
     rv = sqlite3.connect(app.config['DATABASE'])
@@ -34,6 +37,7 @@ def init_db():
     """Creates the database tables."""
     with app.app_context():
         db = get_db()
+        # TODO: Change SQL script to don't drop the data table and transfer the configurations in it.
         with app.open_resource('schema.sql', mode='r') as f:
             db.cursor().executescript(f.read())
         db.commit()
@@ -53,7 +57,6 @@ def close_db(error):
     """Closes the database again at the end of the request."""
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
-
 
 @app.route('/')
 def index():
@@ -167,6 +170,21 @@ def logout():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html', title='404 Not Found'), 404
+
+
+#@app.before_request
+#def before_request():
+#    strToLog = '{0} - "{1}"'.format(request.method, request.path)
+#    logFile.debug(strToLog)
+#    #logConsole.debug(strToLog)
+
+@app.after_request
+def per_request_callbacks(response):
+    for func in getattr(g, 'call_after_request', ()):
+        response = func(response)
+    strToLog = '{0} - "{1}" - {2} - {3}'.format(request.method, request.path, request.routing_exception, request.environ['HTTP_USER_AGENT'])
+    logFile.debug(strToLog)
+    return response
 
 if __name__ == '__main__':
     init_db()
