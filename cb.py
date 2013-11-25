@@ -7,6 +7,7 @@ Crawler Benchmark
 
 from sqlite3 import dbapi2 as sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
+from Pagination import Pagination
 
 
 # create our little application :)
@@ -155,6 +156,21 @@ def login():
             flash('You were logged in')
             return redirect(url_for('admin'))
     return render_template('login.html', error=error)
+
+PER_PAGE = 20
+
+@app.route('/test/', defaults={'page': 1})
+@app.route('/test/page/<int:page>')
+def show_users(page):
+    count = 65
+    users = ["user" + x in range(0, count)]
+    if not users and page != 1:
+        abort(404)
+    pagination = Pagination(page, PER_PAGE, count)
+    return render_template('users.html',
+        pagination=pagination,
+        users=users
+    )
 
 
 @app.route('/admin/logout')
