@@ -1,9 +1,9 @@
-{{! Based on Simple Pagination by Armin Ronarcher: http://flask.pocoo.org/snippets/44/ }}
+{# Based on Simple Pagination by Armin Ronarcher: http://flask.pocoo.org/snippets/44/ #}
 
-{% macro render_pagination(pagination) %}
+{% macro render_pagination(pagination) -%}
   <div class=pagination>
 
-  {% if pagination.has_next %}
+  {% if pagination.has_prev %}
   <a href="{{ url_for_other_page(pagination.page - 1)
       }}">&laquo; Previous</a>
   {% endif %}
@@ -26,4 +26,4 @@
   {% endif %}
 
   </div>
-{% endmacro %}
+{%- endmacro %}

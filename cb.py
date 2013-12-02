@@ -163,13 +163,14 @@ PER_PAGE = 20
 @app.route('/test/page/<int:page>')
 def show_users(page):
     count = 65
-    users = ["user" + x in range(0, count)]
+    users = ["user" + str(x) for x in range(0, count)]
     if not users and page != 1:
         abort(404)
     pagination = Pagination(page, PER_PAGE, count)
-    return render_template('users.html',
+    visible_users = users[(pagination.page - 1) * PER_PAGE : pagination.page * PER_PAGE]
+    return render_template('test_pagination.html',
         pagination=pagination,
-        users=users
+        users=visible_users
     )
 
 
@@ -183,6 +184,14 @@ def logout():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html', title='404 Not Found'), 404
+
+
+def url_for_other_page(page):
+    """url_for helper function for pagination"""
+    args = request.view_args.copy()
+    args['page'] = page
+    return url_for(request.endpoint, **args)
+app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 if __name__ == '__main__':
     init_db()
