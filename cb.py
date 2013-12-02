@@ -6,7 +6,7 @@ Crawler Benchmark
 # -*- coding: utf-8 -*-
 
 from sqlite3 import dbapi2 as sqlite3
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify, json
 
 import logging, logging.config, yaml
 logging.config.dictConfig(yaml.load(open('logging.conf')))
@@ -182,7 +182,10 @@ def page_not_found(e):
 def per_request_callbacks(response):
     for func in getattr(g, 'call_after_request', ()):
         response = func(response)
-    strToLog = '{0} - "{1}" - {2} - {3}'.format(request.method, request.path, request.routing_exception, request.environ['HTTP_USER_AGENT'])
+    strToLog = '{0} - {1} - {2} - ' \
+               '{3} - {4} - {5}'.format(request.method,       request.path,              request.args.lists(),
+                                        request.form.lists(), request.routing_exception, request.environ['HTTP_USER_AGENT'])
+    #strToLog = '{0}\n{1}\n{2}'.format(response.__dict__, request.__dict__, session.__dict__)
     logFile.debug(strToLog)
     return response
 
