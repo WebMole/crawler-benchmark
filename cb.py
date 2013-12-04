@@ -13,6 +13,47 @@ from Pagination import Pagination
 # create our little application :)
 app = Flask(__name__)
 
+PER_PAGE = 20
+modes = [
+    {
+        'name': 'Blog',
+        'route': 'blog',
+        'add': 'admin/blog/add',
+        'enabled': True
+     },
+     {
+        'name': 'Forum',
+        'route': 'forum',
+        'add': 'admin/forum/add',
+        'enabled': True
+    },
+    {
+        'name': 'Newsfeed',
+        'route': 'newsfeed',
+        'add': 'admin/newsfeed/add',
+        'enabled': True
+    },
+    {
+        'name': 'Forms',
+        'route': 'forms',
+        'add': 'admin/forms/add',
+        'enabled': True
+    },
+    {
+        'name': 'Catalog',
+        'route': 'catalog',
+        'add': 'admin/catalog/add',
+        'enabled': True
+    }
+]
+
+def get_specific_item(table, key, value):
+    for item in table:
+        if item.get(key) == value:
+            return item
+    raise ValueError('No item found for ' + key + ":" + value)
+
+
 # Load default config and override config from an environment variable
 app.config.update(dict(
     DATABASE='./db/main.db',
@@ -35,9 +76,15 @@ def init_db():
     """Creates the database tables."""
     with app.app_context():
         db = get_db()
-        with app.open_resource('schema.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+        for mode in modes:
+            request = "drop table if exists " + mode.get("route") + ";" \
+                      "    create table " + mode.get("route") + " (" \
+                      "    id integer primary key autoincrement," \
+                      "    title text not null," \
+                      "    text text not null" \
+                      ");"
+            db.cursor().executescript(request)
+            db.commit()
 
 
 def get_db():
@@ -58,78 +105,13 @@ def close_db(error):
 
 @app.route('/')
 def index():
-    modes = [{
-        'name': 'Blog',
-        'url': url_for('blog'),
-        'enabled': True
-    },
-    {
-        'name': 'Forum',
-        'url': url_for('forum'),
-        'enabled': True
-    },
-    {
-        'name': 'Newsfeed',
-        'url': url_for('newsfeed'),
-        'enabled': True
-    },
-    {
-        'name': 'Forms',
-        'url': url_for('forms'),
-        'enabled': True
-    },
-    {
-        'name': 'Catalog',
-        'url': url_for('catalog'),
-        'enabled': True
-    }]
     return render_template('index.html', modes=modes, title='Page selection')
-
-
-@app.route('/blog')
-def blog():
-    db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
-    return render_template('blog.html', entries=entries, title='Blog')
-
-
-@app.route('/catalog')
-def catalog():
-    db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
-    return render_template('catalog.html', entries=entries, title='Catalog')
-
-
-@app.route('/newsfeed')
-def newsfeed():
-    db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
-    return render_template('newsfeed.html', entries=entries, title='Newsfeed')
-
-
-@app.route('/forms')
-def forms():
-    db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
-    return render_template('forms.html', entries=entries, title='Forms')
-
-
-@app.route('/forum')
-def forum():
-    db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
-    return render_template('forum.html', entries=entries, title='Forum')
 
 
 @app.route('/admin')
 def admin():
     flash('Welcome to the administration page')
-    return render_template("admin.html", title='Admin')
+    return render_template("admin.html", modes=modes, title='Admin')
 
 
 @app.route('/admin/add', methods=['POST'])
@@ -157,7 +139,23 @@ def login():
             return redirect(url_for('admin'))
     return render_template('login.html', error=error)
 
-PER_PAGE = 20
+
+@app.route("/modes/<type>")
+def entries(type):
+    try:
+        mode = get_specific_item(modes, "route", type)
+    except ValueError:
+        return "invalid page"
+
+    if not mode.get('enabled'):
+        return "This mode is disabled"
+
+    db = get_db()
+    cur = db.execute('select title, text from ' + type + ' order by id desc')
+    entries = cur.fetchall()
+
+    return render_template('modes/' + type + '.html', entries=entries, title=type.title())
+
 
 @app.route('/test/', defaults={'page': 1})
 @app.route('/test/page/<int:page>')
@@ -192,6 +190,7 @@ def url_for_other_page(page):
     args['page'] = page
     return url_for(request.endpoint, **args)
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+
 
 if __name__ == '__main__':
     init_db()

@@ -2,8 +2,8 @@
 {% block body %}
   <ul class=modes>
   {% for mode in modes %}
-    {% if mode.enabled %}
-      <li><a href="{{ mode.url }}">{{ mode.name }}</a>
+    {% if mode.get('enabled') %}
+      <li><a href="{{ url_for('entries', type=mode.get('route')) }}">{{ mode.get('name') }}</a>
     {% endif %}
   {% else %}
     <li><em>Unbelievable.  No modes so far</em>
