@@ -11,10 +11,6 @@ Then launch the server using `cb.py` (cb for Crawler Benchmark)
 
     python cb.py
 
-Or you can use `gunicorn` used in the requirements by running
-
-    foreman start
-
 Once the server is running, visit `/admin` and login with credentials.
 
 Default login:
