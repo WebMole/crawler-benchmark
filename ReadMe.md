@@ -15,5 +15,12 @@ Or you can use `gunicorn` used in the requirements by running
 
     foreman start
 
+Once the server is running, visit `/admin` and login with credentials.
+
+Default login:
+
+    username: admin
+    password: default
+
 ## Changelog
 See [changelog.md](./Changelog.md) file.

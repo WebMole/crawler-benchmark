@@ -1,6 +1,6 @@
 {% macro add_entry(entry_type) -%}
-  <h3>Add a {{ entry_type.name }} entry</h3>
-  <form action="{{ url_for(entry_type.route) }}" method=post class=add-entry>
+  <h3>Add a {{ entry_type.get('name') }} entry</h3>
+  <form action="{{ url_for('entries_add', type=entry_type.get('route')) }}" method=post class=add-entry>
     <dl>
       <dt>Title:
       <dd><input type=text size=30 name=title>

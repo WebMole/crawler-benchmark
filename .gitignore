@@ -1,4 +1,7 @@
+# Project related files
 db/main.db
+logging.log
+
 
 *.py[cod]
 

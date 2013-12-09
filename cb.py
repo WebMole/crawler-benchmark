@@ -6,9 +6,14 @@ Crawler Benchmark
 # -*- coding: utf-8 -*-
 
 from sqlite3 import dbapi2 as sqlite3
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+import logging, logging.config, yaml
+
 from Pagination import Pagination
 
+logging.config.dictConfig(yaml.load(open('logging.conf')))
+logFile = logging.getLogger('file')
+logConsole = logging.getLogger('console')
 
 # create our little application :)
 app = Flask(__name__)
@@ -64,7 +69,6 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
-
 def connect_db():
     """Connects to the specific database."""
     rv = sqlite3.connect(app.config['DATABASE'])
@@ -77,6 +81,7 @@ def init_db():
     with app.app_context():
         db = get_db()
         for mode in modes:
+            # TODO: stop dropping tables and give a function to the admin to reset db
             request = "drop table if exists " + mode.get("route") + ";" \
                       "    create table " + mode.get("route") + " (" \
                       "    id integer primary key autoincrement," \
@@ -102,7 +107,6 @@ def close_db(error):
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
 
-
 @app.route('/')
 def index():
     return render_template('index.html', modes=modes, title='Page selection')
@@ -110,19 +114,14 @@ def index():
 
 @app.route('/admin')
 def admin():
-    flash('Welcome to the administration page')
-    return render_template("admin.html", modes=modes, title='Admin')
-
-
-@app.route('/admin/add', methods=['POST'])
-def add_entry():
-    if not session.get('logged_in'):
-        abort(401)
+    #todo: fix this or get count correctly cuz I'm still a noob ;)
     db = get_db()
-    db.execute('insert into entries (title, text) values (?, ?)', [request.form['title'], request.form['text']])
-    db.commit()
-    flash('New entry was successfully posted')
-    return redirect(url_for('admin'))
+    for mode in modes:
+        cur = db.execute('select count(*) from ' + mode.get("route"))
+        count = cur.fetchall()
+        mode.__setitem__("count", count)
+
+    return render_template("admin.html", modes=modes, title='Admin')
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -138,6 +137,23 @@ def login():
             flash('You were logged in')
             return redirect(url_for('admin'))
     return render_template('login.html', error=error)
+
+
+@app.route("/admin/add/<type>", methods=['POST'])
+def entries_add(type):
+    if not session.get('logged_in'):
+        abort(401)
+
+    try:
+        mode = get_specific_item(modes, "route", type)
+    except ValueError:
+        return "invalid page"
+
+    db = get_db()
+    db.execute('insert into ' + type + ' (title, text) values (?, ?)', [request.form['title'], request.form['text']])
+    db.commit()
+    flash('New ' + type + 'entry was successfully posted')
+    return redirect(url_for('admin'))
 
 
 @app.route("/modes/<type>")
@@ -157,6 +173,7 @@ def entries(type):
     return render_template('modes/' + type + '.html', entries=entries, title=type.title())
 
 
+# @todo: remove this and add pagination to different modes
 @app.route('/test/', defaults={'page': 1})
 @app.route('/test/page/<int:page>')
 def show_users(page):
@@ -190,6 +207,25 @@ def url_for_other_page(page):
     args['page'] = page
     return url_for(request.endpoint, **args)
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+
+
+#@app.before_request
+#def before_request():
+#    strToLog = '{0} - "{1}"'.format(request.method, request.path)
+#    logFile.debug(strToLog)
+#    #logConsole.debug(strToLog)
+
+
+@app.after_request
+def per_request_callbacks(response):
+    for func in getattr(g, 'call_after_request', ()):
+        response = func(response)
+    strToLog = '{0} - {1} - {2} - ' \
+               '{3} - {4} - {5}'.format(request.method,       request.path,              request.args.lists(),
+                                        request.form.lists(), request.routing_exception, request.environ['HTTP_USER_AGENT'])
+    #strToLog = '{0}\n{1}\n{2}'.format(response.__dict__, request.__dict__, session.__dict__)
+    logFile.debug(strToLog)
+    return response
 
 
 if __name__ == '__main__':

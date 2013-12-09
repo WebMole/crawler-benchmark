@@ -8,8 +8,8 @@
     {% import "components/add_entry.html" as entry %}
 
     {%- for mode in modes %}
-      Checkbox: {{ mode.enabled }}
-      {% if mode.enabled %}
+      Checkbox: {{ mode.get("enabled") }}
+      {% if mode.get("enabled") %}
         {{ entry.add_entry(mode) }}
       {% endif %}
     {% endfor -%}
