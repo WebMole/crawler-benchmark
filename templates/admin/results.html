@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+
+  {% if not session.logged_in %}
+    {% include "login.html" %}
+  {% else %}
+
+  {%- for graph in graphs %}
+      <figure>
+          {{ graph|safe() }}
+      </figure>
+    {% endfor -%}
+
+  {% import "components/metanav.html" as metanav %}
+  {{ metanav.metanav() }}
+
+  {% endif %}
+{% endblock %}

@@ -24,7 +24,7 @@ class FlaskrTestCase(unittest.TestCase):
         os.close(self.db_fd)
         os.unlink(cb.app.config['DATABASE'])
 
-    def login(self, username, password):
+    def login(self, username, password)
         return self.app.post('/login', data=dict(
             username=username,
             password=password
