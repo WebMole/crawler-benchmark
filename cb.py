@@ -10,8 +10,10 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 import logging, logging.config, yaml
 import pygal
 import re
+import datetime
 
 from Pagination import Pagination
+from LoggingRequest import LoggingRequest
 
 logging.config.dictConfig(yaml.load(open('logging.conf')))
 logFile = logging.getLogger('file')
@@ -228,16 +230,18 @@ app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 #    logFile.debug(strToLog)
 #    #logConsole.debug(strToLog)
 
-
 @app.after_request
 def per_request_callbacks(response):
     if not re.match(r'/admin(.*)', request.path, re.M|re.I):
         for func in getattr(g, 'call_after_request', ()):
             response = func(response)
-        strToLog = '{0} - {1} - {2} - ' \
-                   '{3} - {4} - {5}'.format(request.method,       request.path,              request.args.lists(),
-                                            request.form.lists(), request.routing_exception, request.environ['HTTP_USER_AGENT'])
+        #strToLog = '{0} - {1} - {2} - ' \
+        #           '{3} - {4} - {5}'.format(request.method,       request.path,              request.args.lists(),
+        #                                    request.form.lists(), request.routing_exception, request.environ['HTTP_USER_AGENT'])
         #strToLog = '{0}\n{1}\n{2}'.format(response.__dict__, request.__dict__, session.__dict__)
+        lr = LoggingRequest(datetime.datetime.today(), request.method,            request.path,             request.args.lists(),
+                            request.form.lists(),      request.routing_exception, request.environ['HTTP_USER_AGENT'])
+        strToLog = lr.__dict__
         logFile.debug(strToLog)
     return response
 
