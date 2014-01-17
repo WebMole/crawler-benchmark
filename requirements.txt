@@ -6,7 +6,6 @@ Werkzeug==0.9.4
 docopt==0.6.1
 itsdangerous==0.23
 livereload==1.0.1
-lxml==3.2.3
 pygal==1.2.1
 wsgiref==0.1.2
 CairoSVG==1.0.3
