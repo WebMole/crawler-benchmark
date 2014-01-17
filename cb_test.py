@@ -12,7 +12,6 @@ import tempfile
 
 class FlaskrTestCase(unittest.TestCase):
 
-
     def setUp(self):
         """Before each test, set up a blank database"""
         self.db_fd, cb.app.config['DATABASE'] = tempfile.mkstemp()
@@ -20,12 +19,10 @@ class FlaskrTestCase(unittest.TestCase):
         self.app = cb.app.test_client()
         cb.init_db()
 
-
     def tearDown(self):
         """Get rid of the database again after each test."""
         os.close(self.db_fd)
         os.unlink(cb.app.config['DATABASE'])
-
 
     def login(self, username, password):
         return self.app.post('/login', data=dict(
@@ -33,18 +30,15 @@ class FlaskrTestCase(unittest.TestCase):
             password=password
         ), follow_redirects=True)
 
-
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)
 
     # testing functions
 
-
     def test_empty_db(self):
         """Start with a blank database."""
         rv = self.app.get('/')
         assert b'No entries here so far' in rv.data
-
 
     def test_login_logout(self):
         """Make sure login and logout works"""
@@ -59,7 +53,6 @@ class FlaskrTestCase(unittest.TestCase):
         rv = self.login(cb.app.config['USERNAME'],
                         cb.app.config['PASSWORD'] + 'x')
         assert b'Invalid password' in rv.data
-
 
     def test_messages(self):
         """Test that messages work"""
