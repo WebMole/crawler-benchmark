@@ -1,0 +1,5 @@
+{% macro metanav() -%}
+<div class=metanav>
+  <a href="{{ url_for('index') }}">Index Page</a> | <a href="{{ url_for('logout') }}">log out</a>
+</div>
+{%- endmacro %}
