@@ -27,12 +27,13 @@ body {
 
 .entries li
 {
+    border: 1px solid black;
 	margin: 0.8em 1.2em;
+	padding: 10px;
 }
 
 .entries li h2
 {
-	margin-left: -1em;
 }
 
 .add-entry dl
