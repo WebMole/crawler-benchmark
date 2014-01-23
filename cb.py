@@ -15,6 +15,8 @@ import re
 import datetime
 import json
 
+from loremipsum import get_paragraphs, get_sentences
+
 from Pagination import Pagination
 from LoggingRequest import LoggingRequest
 
@@ -164,9 +166,28 @@ def entries_add(type):
     db.execute('insert into ' + type + ' (title, text) values (?, ?)',
                [request.form['title'], request.form['text']])
     db.commit()
-    flash('New ' + type + 'entry was successfully posted')
+    flash('New ' + type + ' entry was successfully posted')
     return redirect(url_for('admin'))
 
+# todo: Add this to the admin interface.
+@app.route("/admin/add/<type>/<int:num>")
+def entries_add_auto(type, num):
+    if not session.get('logged_in'):
+        abort(401)
+        
+    try:
+        mode = get_specific_item(modes, "route", type)
+    except ValueError:
+        return "invalid page"
+
+    titles = get_sentences(num, False)
+    texts = get_paragraphs(num, False)
+    db = get_db()
+    for i in range(0, num):
+        db.execute('insert into ' + type + ' (title, text) values (?, ?)', [titles[i], texts[i]])
+    db.commit()
+    flash('New automatic %d %s entrie%s successfully posted' % (num, type, 's were' if (num > 1) else ' was'))
+    return redirect(url_for('admin'))
 
 @app.route("/modes/<type>/", defaults={'page': 1})
 @app.route("/modes/<type>/page/<int:page>")
@@ -210,10 +231,9 @@ def results():
     line_chart = pygal.Line(style=LightStyle, disable_xml_declaration=True)
     line_chart.title = 'Navigation time from First request to last request'
     line_chart.x_labels = map(str, range(2002, 2013))
-    line_chart.add(
-        'Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-    # line_chart.render()
-    return render_template("admin/results.html", graphs=[line_chart.render()])
+    line_chart.add('Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
+    #line_chart.render()
+    return render_template("admin/results.html", graphs = [line_chart.render()])
 
 
 @app.errorhandler(404)
