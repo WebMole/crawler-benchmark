@@ -11,6 +11,7 @@ import logging, logging.config, yaml
 import pygal
 import re
 import datetime
+import json
 
 from Pagination import Pagination
 from LoggingRequest import LoggingRequest
@@ -239,9 +240,11 @@ def per_request_callbacks(response):
         #           '{3} - {4} - {5}'.format(request.method,       request.path,              request.args.lists(),
         #                                    request.form.lists(), request.routing_exception, request.environ['HTTP_USER_AGENT'])
         #strToLog = '{0}\n{1}\n{2}'.format(response.__dict__, request.__dict__, session.__dict__)
-        lr = LoggingRequest(datetime.datetime.today(), request.method,            request.path,             request.args.lists(),
-                            request.form.lists(),      request.routing_exception, request.environ['HTTP_USER_AGENT'])
+        lr = LoggingRequest(datetime.datetime.today(),  request.method,  request.path,   request.args.lists(),
+                            request.form.lists(),       None if (request.routing_exception is None) else str(request.routing_exception),
+                            request.environ['HTTP_USER_AGENT'])
         strToLog = lr.__dict__
+        #strToLog = json.dumps(lr)
         logFile.debug(strToLog)
     return response
 
