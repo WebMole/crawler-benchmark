@@ -7,7 +7,9 @@ Crawler Benchmark
 
 from sqlite3 import dbapi2 as sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
-import logging, logging.config, yaml
+import logging
+import logging.config
+import yaml
 import pygal
 import re
 import datetime
@@ -30,8 +32,8 @@ modes = [
         'route': 'blog',
         'add': 'admin/blog/add',
         'enabled': True
-     },
-     {
+    },
+    {
         'name': 'Forum',
         'route': 'forum',
         'add': 'admin/forum/add',
@@ -57,6 +59,7 @@ modes = [
     }
 ]
 
+
 def get_specific_item(table, key, value):
     for item in table:
         if item.get(key) == value:
@@ -74,6 +77,7 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
+
 def connect_db():
     """Connects to the specific database."""
     rv = sqlite3.connect(app.config['DATABASE'])
@@ -86,7 +90,8 @@ def init_db():
     with app.app_context():
         db = get_db()
         for mode in modes:
-            # TODO: stop dropping tables and give a function to the admin to reset db
+            # TODO: stop dropping tables and give a function to the admin to
+            # reset db
             request = "drop table if exists " + mode.get("route") + ";" \
                       "    create table " + mode.get("route") + " (" \
                       "    id integer primary key autoincrement," \
@@ -112,6 +117,7 @@ def close_db(error):
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
 
+
 @app.route('/')
 def index():
     return render_template('index.html', modes=modes, title='Page selection')
@@ -119,7 +125,7 @@ def index():
 
 @app.route('/admin')
 def admin():
-    #todo: fix this or get count correctly cuz I'm still a noob ;)
+    # todo: fix this or get count correctly cuz I'm still a noob ;)
     db = get_db()
     for mode in modes:
         cur = db.execute('select count(*) from ' + mode.get("route"))
@@ -155,14 +161,16 @@ def entries_add(type):
         return "invalid page"
 
     db = get_db()
-    db.execute('insert into ' + type + ' (title, text) values (?, ?)', [request.form['title'], request.form['text']])
+    db.execute('insert into ' + type + ' (title, text) values (?, ?)',
+               [request.form['title'], request.form['text']])
     db.commit()
     flash('New ' + type + 'entry was successfully posted')
     return redirect(url_for('admin'))
 
 
-@app.route("/modes/<type>")
-def entries(type):
+@app.route("/modes/<type>/", defaults={'page': 1})
+@app.route("/modes/<type>/page/<int:page>")
+def entries(type, page):
     try:
         mode = get_specific_item(modes, "route", type)
     except ValueError:
@@ -175,23 +183,18 @@ def entries(type):
     cur = db.execute('select title, text from ' + type + ' order by id desc')
     entries = cur.fetchall()
 
-    return render_template('modes/' + type + '.html', entries=entries, title=type.title())
-
-
-# @todo: remove this and add pagination to different modes
-@app.route('/test/', defaults={'page': 1})
-@app.route('/test/page/<int:page>')
-def show_users(page):
-    count = 65
-    users = ["user" + str(x) for x in range(0, count)]
-    if not users and page != 1:
+    if not entries and page != 1:
         abort(404)
-    pagination = Pagination(page, PER_PAGE, count)
-    visible_users = users[(pagination.page - 1) * PER_PAGE : pagination.page * PER_PAGE]
-    return render_template('test_pagination.html',
-        pagination=pagination,
-        users=visible_users
-    )
+
+    pagination = Pagination(page, PER_PAGE, len(entries))
+    visible_entries = entries[
+        (pagination.page - 1) * PER_PAGE: pagination.page * PER_PAGE]
+
+    return render_template('modes/' + type + '.html',
+                           pagination=pagination,
+                           entries=visible_entries,
+                           title=type.title()
+                           )
 
 
 @app.route('/admin/logout')
@@ -207,9 +210,10 @@ def results():
     line_chart = pygal.Line(style=LightStyle, disable_xml_declaration=True)
     line_chart.title = 'Navigation time from First request to last request'
     line_chart.x_labels = map(str, range(2002, 2013))
-    line_chart.add('Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-    #line_chart.render()
-    return render_template("admin/results.html", graphs = [line_chart.render()])
+    line_chart.add(
+        'Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
+    # line_chart.render()
+    return render_template("admin/results.html", graphs=[line_chart.render()])
 
 
 @app.errorhandler(404)
@@ -226,23 +230,27 @@ app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 
 #@app.before_request
-#def before_request():
+# def before_request():
 #    strToLog = '{0} - "{1}"'.format(request.method, request.path)
 #    logFile.debug(strToLog)
-#    #logConsole.debug(strToLog)
+# logConsole.debug(strToLog)
 
 @app.after_request
 def per_request_callbacks(response):
-    if not re.match(r'/admin(.*)', request.path, re.M|re.I):
+    if not re.match(r'/admin(.*)', request.path, re.M | re.I):
         for func in getattr(g, 'call_after_request', ()):
             response = func(response)
         #strToLog = '{0} - {1} - {2} - ' \
         #           '{3} - {4} - {5}'.format(request.method,       request.path,              request.args.lists(),
         #                                    request.form.lists(), request.routing_exception, request.environ['HTTP_USER_AGENT'])
         #strToLog = '{0}\n{1}\n{2}'.format(response.__dict__, request.__dict__, session.__dict__)
-        lr = LoggingRequest(datetime.datetime.today(),  request.method,  request.path,   request.args.lists(),
-                            request.form.lists(),       None if (request.routing_exception is None) else str(request.routing_exception),
-                            request.environ['HTTP_USER_AGENT'])
+        lr = LoggingRequest(
+            datetime.datetime.today(
+            ),  request.method,  request.path,   request.args.lists(),
+            request.form.lists(),       None if (
+                request.routing_exception is None) else str(
+                request.routing_exception),
+            request.environ['HTTP_USER_AGENT'])
         strToLog = lr.__dict__
         #strToLog = json.dumps(lr)
         logFile.debug(strToLog)
