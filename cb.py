@@ -92,10 +92,8 @@ def init_db():
     with app.app_context():
         db = get_db()
         for mode in modes:
-            # TODO: stop dropping tables and give a function to the admin to
-            # reset db
-            request = "drop table if exists " + mode.get("route") + ";" \
-                      "    create table " + mode.get("route") + " (" \
+            # create tables if not already created
+            request = "    create table if not exists " + mode.get("route") + " (" \
                       "    id integer primary key autoincrement," \
                       "    title text not null," \
                       "    text text not null" \
@@ -186,8 +184,25 @@ def entries_add_auto(type, num):
     for i in range(0, num):
         db.execute('insert into ' + type + ' (title, text) values (?, ?)', [get_sentences(1, False)[0], get_paragraphs(1, False)[0]])
     db.commit()
-    flash('New automatic %d %s entrie%s successfully posted' % (num, type, 's were' if (num > 1) else ' was'))
-    return redirect(url_for('admin'))
+    #flash('New automatic %d %s entrie%s successfully posted' % (num, type, 's were' if (num > 1) else ' was'))
+    return "OK"
+
+@app.route("/admin/clear/<type>", methods=['DELETE'])
+def clear_entries(type):
+    """Creates the database tables."""
+    with app.app_context():
+        db = get_db()
+
+        try:
+            mode = get_specific_item(modes, "route", type)
+        except ValueError:
+            abort(404)
+
+        request = "drop table if exists " + type + ";"
+        db.cursor().executescript(request)
+        db.commit()
+        init_db()
+        return "OK"
 
 @app.route("/modes/<type>/", defaults={'page': 1})
 @app.route("/modes/<type>/page/<int:page>")
