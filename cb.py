@@ -125,12 +125,11 @@ def index():
 
 @app.route('/admin')
 def admin():
-    # todo: fix this or get count correctly cuz I'm still a noob ;)
     db = get_db()
     for mode in modes:
-        cur = db.execute('select count(*) from ' + mode.get("route"))
-        count = cur.fetchall()
-        mode.__setitem__("count", count)
+        cur = db.execute('select count(id) from ' + mode.get("route"))
+        count = cur.fetchone()
+        mode.__setitem__('count', count[0])
 
     return render_template("admin/admin.html", modes=modes, title='Admin')
 
