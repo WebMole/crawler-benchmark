@@ -170,7 +170,7 @@ def entries_add(type):
     return redirect(url_for('admin'))
 
 # todo: Add this to the admin interface.
-@app.route("/admin/add/<type>/<int:num>")
+@app.route("/admin/add/<type>/<int:num>", methods=['POST'])
 def entries_add_auto(type, num):
     if not session.get('logged_in'):
         abort(401)

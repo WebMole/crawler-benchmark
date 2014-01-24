@@ -8,5 +8,11 @@
       <dd><textarea name=text rows=5 cols=40></textarea>
       <dd><input type=submit value=Share>
     </dl>
-  </form>
+ </form>
+ <div id="divAddAuto">
+   <input type="text" id="num{{ entry_type.get('route') }}" value="0">
+   <button class="btnAddAuto" url="{{ url_for('entries_add', type=entry_type.get('route')) }}" route="{{ entry_type.get('route') }}">
+     Add auto
+   </button>
+ </div>
 {%- endmacro %}
