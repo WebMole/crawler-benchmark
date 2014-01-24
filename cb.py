@@ -214,6 +214,7 @@ def entries(type, page):
     if not mode.get('enabled'):
         return "This mode is disabled"
 
+    # todo: add a request to get the count and another using LIMIT <skip>, <count> or LIMIT <count> OFFSET <skip>
     db = get_db()
     cur = db.execute('select title, text from ' + type + ' order by id desc')
     entries = cur.fetchall()
