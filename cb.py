@@ -180,11 +180,11 @@ def entries_add_auto(type, num):
     except ValueError:
         return "invalid page"
 
-    titles = get_sentences(num, False)
-    texts = get_paragraphs(num, False)
+    #titles = get_sentences(num, False)
+    #texts = get_paragraphs(num, False)
     db = get_db()
     for i in range(0, num):
-        db.execute('insert into ' + type + ' (title, text) values (?, ?)', [titles[i], texts[i]])
+        db.execute('insert into ' + type + ' (title, text) values (?, ?)', [get_sentences(1, False)[0], get_paragraphs(1, False)[0]])
     db.commit()
     flash('New automatic %d %s entrie%s successfully posted' % (num, type, 's were' if (num > 1) else ' was'))
     return redirect(url_for('admin'))
