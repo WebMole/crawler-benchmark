@@ -1,7 +1,7 @@
 # Project related files
 db/main.db
 logging.log
-
+.idea
 
 *.py[cod]
 
@@ -39,5 +39,3 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
-
-.idea

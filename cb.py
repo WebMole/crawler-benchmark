@@ -151,7 +151,7 @@ def entries_add_auto(type, num):
     db = get_db()
     for i in range(0, num):
         db.execute('insert into ' + type + ' (title, text) values (?, ?)',
-                   [get_sentences(1, False)[0], get_paragraphs(1, False)[0].replace(".","")])
+                   [get_sentences(1, False)[0].replace(".",""), get_paragraphs(1, False)[0]])
     db.commit()
     flash('New automatic %d %s entrie%s successfully posted' %
           (num, type, 's were' if (num > 1) else ' was'))
