@@ -161,8 +161,6 @@ def entries_add_auto(type, num):
     return "OK"
 
 
-@app.route("/modes/<string:type>", defaults={'page': 1})
-@app.route("/modes/<string:type>/page/<int:page>")
 @app.route("/admin/clear/<type>", methods=['DELETE'])
 def clear_entries(type):
     """Creates the database tables."""
@@ -170,7 +168,7 @@ def clear_entries(type):
         db = get_db()
 
         try:
-            mode = get_specific_item(modes, "route", type)
+            mode = get_specific_item(config.modes, "route", type)
         except ValueError:
             abort(404)
 
