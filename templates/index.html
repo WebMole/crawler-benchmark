@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-  <ul class=modes>
+  <ul class="modes">
   {% for mode in modes %}
     {% if mode.get('enabled') %}
       <li><a href="{{ url_for('entries', type=mode.get('route')) }}">{{ mode.get('name') }}</a>
@@ -8,5 +8,12 @@
   {% else %}
     <li><em>Unbelievable. No modes so far</em>
   {% endfor %}
+  </ul>
+  <h2>Traps</h2>
+   <ul class="traps">
+     <li><a href="/random/">Random each time</a></li>
+     <li><a href="/login/">login (displayed on page)</a></li>
+     <li><a href="/outgoing/">Outgoing links inside</a></li>
+     <li><a href="/session-variables/">Session Variables</a></li>
   </ul>
 {% endblock %}

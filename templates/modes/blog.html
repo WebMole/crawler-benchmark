@@ -4,7 +4,7 @@
 {% block body %}
   <ul class=entries>
   {% for entry in entries %}
-    <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
+    <li><h2>{% if config.article_per_page %}<a href="{{ url_for('entries', type='blog', id=id) }}">{% endif %}{{ entry.title }}{% if config.article_per_page %}</a>{% endif %}</h2>{{ entry.text|safe }}
   {% else %}
     <li><em>Unbelievable. No entries here so far</em>
   {% endfor %}

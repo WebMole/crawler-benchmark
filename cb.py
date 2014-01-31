@@ -7,18 +7,20 @@ Crawler Benchmark
 
 from sqlite3 import dbapi2 as sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+
 import logging
 import logging.config
 import yaml
 import pygal
 import re
 import datetime
-import json
 
 from loremipsum import get_paragraphs, get_sentences
 
 from Pagination import Pagination
 from LoggingRequest import LoggingRequest
+
+from Config import Config
 
 logging.config.dictConfig(yaml.load(open('logging.conf')))
 logFile = logging.getLogger('file')
@@ -26,41 +28,6 @@ logConsole = logging.getLogger('console')
 
 # create our little application :)
 app = Flask(__name__)
-
-PER_PAGE = 20
-modes = [
-    {
-        'name': 'Blog',
-        'route': 'blog',
-        'add': 'admin/blog/add',
-        'enabled': True
-    },
-    {
-        'name': 'Forum',
-        'route': 'forum',
-        'add': 'admin/forum/add',
-        'enabled': True
-    },
-    {
-        'name': 'Newsfeed',
-        'route': 'newsfeed',
-        'add': 'admin/newsfeed/add',
-        'enabled': True
-    },
-    {
-        'name': 'Forms',
-        'route': 'forms',
-        'add': 'admin/forms/add',
-        'enabled': True
-    },
-    {
-        'name': 'Catalog',
-        'route': 'catalog',
-        'add': 'admin/catalog/add',
-        'enabled': True
-    }
-]
-
 
 def get_specific_item(table, key, value):
     for item in table:
@@ -78,7 +45,7 @@ app.config.update(dict(
     PASSWORD='default'
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
-
+config = Config
 
 def connect_db():
     """Connects to the specific database."""
@@ -91,7 +58,7 @@ def init_db():
     """Creates the database tables."""
     with app.app_context():
         db = get_db()
-        for mode in modes:
+        for mode in config.modes:
             # TODO: stop dropping tables and give a function to the admin to
             # reset db
             request = "drop table if exists " + mode.get("route") + ";" \
@@ -122,19 +89,19 @@ def close_db(error):
 
 @app.route('/')
 def index():
-    return render_template('index.html', modes=modes, title='Page selection')
+    return render_template('index.html', modes=config.modes, title='Page selection')
 
 
 @app.route('/admin')
 def admin():
     # todo: fix this or get count correctly cuz I'm still a noob ;)
     db = get_db()
-    for mode in modes:
+    for mode in config.modes:
         cur = db.execute('select count(*) from ' + mode.get("route"))
         count = cur.fetchall()
         mode.__setitem__("count", count)
 
-    return render_template("admin/admin.html", modes=modes, title='Admin')
+    return render_template("admin/admin.html", modes=config.modes, title='Admin')
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -152,13 +119,13 @@ def login():
     return render_template('login.html', error=error)
 
 
-@app.route("/admin/add/<type>", methods=['POST'])
+@app.route("/admin/add/<string:type>", methods=['POST'])
 def entries_add(type):
     if not session.get('logged_in'):
         abort(401)
 
     try:
-        mode = get_specific_item(modes, "route", type)
+        mode = get_specific_item(config.modes, "route", type)
     except ValueError:
         return "invalid page"
 
@@ -170,13 +137,15 @@ def entries_add(type):
     return redirect(url_for('admin'))
 
 # todo: Add this to the admin interface.
-@app.route("/admin/add/<type>/<int:num>", methods=['POST'])
+
+
+@app.route("/admin/add/<string:type>/<int:num>", methods=['POST'])
 def entries_add_auto(type, num):
     if not session.get('logged_in'):
         abort(401)
-        
+
     try:
-        mode = get_specific_item(modes, "route", type)
+        mode = get_specific_item(config.modes, "route", type)
     except ValueError:
         return "invalid page"
 
@@ -184,16 +153,19 @@ def entries_add_auto(type, num):
     #texts = get_paragraphs(num, False)
     db = get_db()
     for i in range(0, num):
-        db.execute('insert into ' + type + ' (title, text) values (?, ?)', [get_sentences(1, False)[0], get_paragraphs(1, False)[0]])
+        db.execute('insert into ' + type + ' (title, text) values (?, ?)',
+                   [get_sentences(1, False)[0], get_paragraphs(1, False)[0]])
     db.commit()
-    flash('New automatic %d %s entrie%s successfully posted' % (num, type, 's were' if (num > 1) else ' was'))
+    flash('New automatic %d %s entrie%s successfully posted' %
+          (num, type, 's were' if (num > 1) else ' was'))
     return redirect(url_for('admin'))
 
-@app.route("/modes/<type>/", defaults={'page': 1})
-@app.route("/modes/<type>/page/<int:page>")
+
+@app.route("/modes/<string:type>", defaults={'page': 1})
+@app.route("/modes/<string:type>/page/<int:page>")
 def entries(type, page):
     try:
-        mode = get_specific_item(modes, "route", type)
+        mode = get_specific_item(config.modes, "route", type)
     except ValueError:
         return "invalid page"
 
@@ -207,13 +179,36 @@ def entries(type, page):
     if not entries and page != 1:
         abort(404)
 
-    pagination = Pagination(page, PER_PAGE, len(entries))
+    pagination = Pagination(page, config.pagination_entry_per_page, len(entries))
     visible_entries = entries[
-        (pagination.page - 1) * PER_PAGE: pagination.page * PER_PAGE]
+        (pagination.page - 1) * config.pagination_entry_per_page: pagination.page * config.pagination_entry_per_page]
 
     return render_template('modes/' + type + '.html',
                            pagination=pagination,
                            entries=visible_entries,
+                           title=type.title()
+                           )
+
+
+@app.route("/modes/<string:type>/<int:id>")
+def entry(type, id):
+    try:
+        mode = get_specific_item(config.modes, "route", type)
+    except ValueError:
+        return "invalid page"
+
+    if not mode.get('enabled'):
+        return "This mode is disabled"
+
+    db = get_db()
+    cur = db.execute('select title, text from ' + type + ' where id = ' + str(id))
+    entry = cur.fetchall()
+
+    if not entry:
+        abort(404)
+
+    return render_template('modes/' + type + '.html',
+                           entries=entry,
                            title=type.title()
                            )
 
@@ -231,9 +226,10 @@ def results():
     line_chart = pygal.Line(style=LightStyle, disable_xml_declaration=True)
     line_chart.title = 'Navigation time from First request to last request'
     line_chart.x_labels = map(str, range(2002, 2013))
-    line_chart.add('Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-    #line_chart.render()
-    return render_template("admin/results.html", graphs = [line_chart.render()])
+    line_chart.add(
+        'Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
+    # line_chart.render()
+    return render_template("admin/results.html", graphs=[line_chart.render()])
 
 
 @app.errorhandler(404)
