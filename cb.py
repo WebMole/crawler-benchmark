@@ -14,6 +14,7 @@ import yaml
 import pygal
 import re
 import datetime
+import json
 
 from loremipsum import get_paragraphs, get_sentences
 
@@ -135,8 +136,6 @@ def entries_add(type):
     return redirect(url_for('admin'))
 
 # todo: Add this to the admin interface.
-
-
 @app.route("/admin/add/<string:type>/<int:num>", methods=['POST'])
 def entries_add_auto(type, num):
     if not session.get('logged_in'):
@@ -154,9 +153,6 @@ def entries_add_auto(type, num):
         db.execute('insert into ' + type + ' (title, text) values (?, ?)',
                    [get_sentences(1, False)[0], get_paragraphs(1, False)[0]])
     db.commit()
-    flash('New automatic %d %s entrie%s successfully posted' %
-          (num, type, 's were' if (num > 1) else ' was'))
-    return redirect(url_for('admin'))
     #flash('New automatic %d %s entrie%s successfully posted' % (num, type, 's were' if (num > 1) else ' was'))
     return "OK"
 
@@ -189,24 +185,26 @@ def entries(type, page):
     if not mode.get('enabled'):
         return "This mode is disabled"
 
-    # todo: add a request to get the count and another using LIMIT <skip>, <count> or LIMIT <count> OFFSET <skip>
     db = get_db()
-    cur = db.execute('select title, text from ' + type + ' order by id desc')
+
+    cur = db.execute('select count(id) from ' + mode.get("route"))
+    count = cur.fetchone()
+    countValue = count[0]
+
+    pagination = Pagination(page, config.pagination_entry_per_page, countValue)
+
+    db = get_db()
+    cur = db.execute('select title, text from %s order by id desc limit %d offset %d' % (type, config.pagination_entry_per_page, (pagination.page - 1) * config.pagination_entry_per_page))
     entries = cur.fetchall()
 
     if not entries and page != 1:
         abort(404)
 
-    pagination = Pagination(page, config.pagination_entry_per_page, len(entries))
-    visible_entries = entries[
-        (pagination.page - 1) * config.pagination_entry_per_page: pagination.page * config.pagination_entry_per_page]
-
     return render_template('modes/' + type + '.html',
                            pagination=pagination,
-                           entries=visible_entries,
+                           entries=entries,
                            title=type.title()
                            )
-
 
 @app.route("/modes/<string:type>/<int:id>")
 def entry(type, id):
@@ -219,7 +217,7 @@ def entry(type, id):
         return "This mode is disabled"
 
     db = get_db()
-    cur = db.execute('select title, text from ' + type + ' where id = ' + str(id))
+    cur = db.execute('select title, text from %s where id = %d' % (type, id))
     entry = cur.fetchall()
 
     if not entry:
