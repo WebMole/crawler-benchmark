@@ -15,4 +15,9 @@
      Add auto
    </button>
  </div>
+ <div id="divClearEntries">
+   <button class="btnClearEntries" url="{{ url_for('clear_entries', type=entry_type.get('route')) }}">
+     Clear {{ entry_type.get('count') }} entries
+   </button>
+ </div>
 {%- endmacro %}

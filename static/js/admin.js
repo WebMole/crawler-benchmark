@@ -11,4 +11,17 @@ $(function() {
           }
         });
     });
+
+    $('.btnClearEntries').click(function() {
+      $.ajax({
+          type: "DELETE",
+          url: $(this).attr('url'),
+          success: function() {
+            alert('Success');
+          },
+          error: function() {
+            alert('Error')
+          }
+        });
+    });
 });

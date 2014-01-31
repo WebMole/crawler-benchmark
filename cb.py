@@ -58,11 +58,10 @@ def init_db():
     """Creates the database tables."""
     with app.app_context():
         db = get_db()
+        
         for mode in config.modes:
-            # TODO: stop dropping tables and give a function to the admin to
-            # reset db
-            request = "drop table if exists " + mode.get("route") + ";" \
-                      "    create table " + mode.get("route") + " (" \
+            # create tables if not already created
+            request = "    create table if not exists " + mode.get("route") + " (" \
                       "    id integer primary key autoincrement," \
                       "    title text not null," \
                       "    text text not null" \
@@ -94,12 +93,11 @@ def index():
 
 @app.route('/admin')
 def admin():
-    # todo: fix this or get count correctly cuz I'm still a noob ;)
     db = get_db()
     for mode in config.modes:
-        cur = db.execute('select count(*) from ' + mode.get("route"))
-        count = cur.fetchall()
-        mode.__setitem__("count", count)
+        cur = db.execute('select count(id) from ' + mode.get("route"))
+        count = cur.fetchone()
+        mode.__setitem__('count', count[0])
 
     return render_template("admin/admin.html", modes=config.modes, title='Admin')
 
@@ -159,10 +157,31 @@ def entries_add_auto(type, num):
     flash('New automatic %d %s entrie%s successfully posted' %
           (num, type, 's were' if (num > 1) else ' was'))
     return redirect(url_for('admin'))
+    #flash('New automatic %d %s entrie%s successfully posted' % (num, type, 's were' if (num > 1) else ' was'))
+    return "OK"
 
 
 @app.route("/modes/<string:type>", defaults={'page': 1})
 @app.route("/modes/<string:type>/page/<int:page>")
+@app.route("/admin/clear/<type>", methods=['DELETE'])
+def clear_entries(type):
+    """Creates the database tables."""
+    with app.app_context():
+        db = get_db()
+
+        try:
+            mode = get_specific_item(modes, "route", type)
+        except ValueError:
+            abort(404)
+
+        request = "drop table if exists " + type + ";"
+        db.cursor().executescript(request)
+        db.commit()
+        init_db()
+        return "OK"
+
+@app.route("/modes/<type>/", defaults={'page': 1})
+@app.route("/modes/<type>/page/<int:page>")
 def entries(type, page):
     try:
         mode = get_specific_item(config.modes, "route", type)
@@ -172,6 +191,7 @@ def entries(type, page):
     if not mode.get('enabled'):
         return "This mode is disabled"
 
+    # todo: add a request to get the count and another using LIMIT <skip>, <count> or LIMIT <count> OFFSET <skip>
     db = get_db()
     cur = db.execute('select title, text from ' + type + ' order by id desc')
     entries = cur.fetchall()
