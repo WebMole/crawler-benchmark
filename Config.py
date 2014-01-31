@@ -36,6 +36,7 @@ class Config:
                 }
             ]
     entry_single_page = True
+    article_per_page = True
     pagination_entry_per_page = 20
 
     def __init__(self):

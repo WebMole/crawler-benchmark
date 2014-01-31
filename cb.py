@@ -4,6 +4,7 @@ Crawler Benchmark
 
 """
 # -*- coding: utf-8 -*-
+import random
 
 from sqlite3 import dbapi2 as sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
@@ -147,18 +148,14 @@ def entries_add_auto(type, num):
     except ValueError:
         return "invalid page"
 
-    #titles = get_sentences(num, False)
-    #texts = get_paragraphs(num, False)
     db = get_db()
     for i in range(0, num):
         db.execute('insert into ' + type + ' (title, text) values (?, ?)',
-                   [get_sentences(1, False)[0], get_paragraphs(1, False)[0]])
+                   [get_sentences(1, False)[0], get_paragraphs(1, False)[0].replace(".","")])
     db.commit()
     flash('New automatic %d %s entrie%s successfully posted' %
           (num, type, 's were' if (num > 1) else ' was'))
     return redirect(url_for('admin'))
-    #flash('New automatic %d %s entrie%s successfully posted' % (num, type, 's were' if (num > 1) else ' was'))
-    return "OK"
 
 
 @app.route("/admin/clear/<type>", methods=['DELETE'])
@@ -178,6 +175,14 @@ def clear_entries(type):
         init_db()
         return "OK"
 
+@app.route("/random/")
+def randomPage():
+   return render_template('random.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+                           )
+
 @app.route("/modes/<type>/", defaults={'page': 1})
 @app.route("/modes/<type>/page/<int:page>")
 def entries(type, page):
@@ -191,7 +196,7 @@ def entries(type, page):
 
     # todo: add a request to get the count and another using LIMIT <skip>, <count> or LIMIT <count> OFFSET <skip>
     db = get_db()
-    cur = db.execute('select title, text from ' + type + ' order by id desc')
+    cur = db.execute('select id, title, text from ' + type + ' order by id desc')
     entries = cur.fetchall()
 
     if not entries and page != 1:
@@ -204,7 +209,9 @@ def entries(type, page):
     return render_template('modes/' + type + '.html',
                            pagination=pagination,
                            entries=visible_entries,
-                           title=type.title()
+                           title=type.title(),
+                           type=type,
+                           config=config
                            )
 
 
@@ -219,7 +226,7 @@ def entry(type, id):
         return "This mode is disabled"
 
     db = get_db()
-    cur = db.execute('select title, text from ' + type + ' where id = ' + str(id))
+    cur = db.execute('select id, title, text from ' + type + ' where id = ' + str(id))
     entry = cur.fetchall()
 
     if not entry:
