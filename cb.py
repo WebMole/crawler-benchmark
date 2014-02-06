@@ -4,6 +4,7 @@ Crawler Benchmark
 
 """
 # -*- coding: utf-8 -*-
+import StringIO
 import random
 
 from sqlite3 import dbapi2 as sqlite3
@@ -12,7 +13,6 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 import logging
 import logging.config
 import yaml
-import pygal
 import re
 import datetime
 
@@ -22,6 +22,8 @@ from Pagination import Pagination
 from LoggingRequest import LoggingRequest
 
 from Config import Config
+
+import GraphManager
 
 logging.config.dictConfig(yaml.load(open('logging.conf')))
 logFile = logging.getLogger('file')
@@ -244,17 +246,18 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('index'))
 
+@app.route('/plot.png')
+def plot():
+    from flask import make_response
+
+    output = GraphManager.draw_custom_graph()
+    response = make_response(output.getvalue())
+    response.mimetype = 'image/png'
+    return response
 
 @app.route('/admin/results')
 def results():
-    from pygal.style import LightStyle
-    line_chart = pygal.Line(style=LightStyle, disable_xml_declaration=True)
-    line_chart.title = 'Navigation time from First request to last request'
-    line_chart.x_labels = map(str, range(2002, 2013))
-    line_chart.add(
-        'Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-    # line_chart.render()
-    return render_template("admin/results.html", graphs=[line_chart.render()])
+    return render_template("admin/results.html")
 
 
 @app.errorhandler(404)

@@ -6,11 +6,7 @@
     {% include "login.html" %}
   {% else %}
 
-  {%- for graph in graphs %}
-      <figure>
-          {{ graph|safe() }}
-      </figure>
-    {% endfor -%}
+  <img src="{{ url_for('plot') }}" alt="Image Placeholder">
 
   {% import "components/metanav.html" as metanav %}
   {{ metanav.metanav() }}

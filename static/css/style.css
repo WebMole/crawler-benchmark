@@ -6,6 +6,10 @@ body {
 	color: #FFFFFF;
 }
 
+img {
+    max-width: 100%;
+}
+
 .page
 {
     min-width: 300px;
