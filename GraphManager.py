@@ -10,9 +10,9 @@ def draw_custom_graph():
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
 
-    requets = LogParser.get_log_dicts()
-    ys = range(0, len(requets))
-    xs = [request['datetime'] for request in requets]
+    requests = LogParser.get_log_dicts()
+    ys = range(0, len(requests))
+    xs = [request['datetime'] for request in requests]
 
     axis.plot(xs, ys)
 

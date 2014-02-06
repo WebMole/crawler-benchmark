@@ -246,7 +246,7 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('index'))
 
-@app.route('/plot.png')
+@app.route('/admin/plot.png')
 def plot():
     from flask import make_response
 

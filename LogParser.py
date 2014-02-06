@@ -1,10 +1,12 @@
 import datetime # Used in evaluated log line
 
 # We shouldn't do this :|
-def get_log_dicts(log_file=open("logging.log", "r")):
+def get_log_dicts():
+    log_file=open("logging.log", "r")
     data = []
     for line in log_file:
         data.append(eval(line))
+    log_file.close()
     return data
 
 
