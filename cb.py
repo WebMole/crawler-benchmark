@@ -246,13 +246,15 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('index'))
 
-@app.route('/admin/plot.png')
+#@app.route('/admin/plot.png')
+@app.route('/admin/plot.svg')
 def plot():
     from flask import make_response
 
     output = GraphManager.draw_custom_graph()
     response = make_response(output.getvalue())
-    response.mimetype = 'image/png'
+    #response.mimetype = 'image/png'
+    response.mimetype = 'image/svg+xml'
     return response
 
 @app.route('/admin/results')

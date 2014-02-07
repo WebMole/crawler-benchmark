@@ -1,17 +1,20 @@
 import datetime # Used in evaluated log line
+import re
 
 # We shouldn't do this :|
-def get_log_dicts():
+def get_log_dicts(user_agent = None):
     log_file=open("logging.log", "r")
-    data = []
+    requests = []
     for line in log_file:
-        data.append(eval(line))
+        request = eval(line)
+        if user_agent is not None:
+            if re.match(user_agent, request['user_agent']):
+                requests.append(request)
+        else:
+            requests.append(request)
     log_file.close()
-    return data
+    return requests
 
 
 if __name__ == '__main__':
     print get_log_dicts()
-
-
-
