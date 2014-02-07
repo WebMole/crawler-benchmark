@@ -1,0 +1,97 @@
+@import 'reset.css';
+@import 'text.css';
+
+$dark: #1D1A19;
+$dark_green: #5A740F;
+$light_green: #889638;
+$grey: #383231;
+$light: #fafafa;
+
+body {
+  background: $dark;
+  color: $light;
+}
+
+img {
+  max-width: 100%;
+}
+
+.page
+{
+  width: 80%;
+  margin: 2em auto;
+  padding: 0.8em;
+  min-width: 400px;
+  border: 5px solid $grey;
+  border-radius: 3px;
+  background: $light;
+  color: $dark;
+}
+
+.entries
+{
+  margin: 0; padding: 0;
+  list-style: none;
+}
+
+.entries li
+{
+  border: 1px solid $dark;
+  margin: 0.8em 1.2em;
+  padding: 10px;
+}
+
+.entries li h2
+{
+}
+
+.add-entry dl
+{
+  font-weight: bold;
+}
+
+ul.metanav
+{
+  padding: 10px;
+  height: 100%;
+
+  li {
+    padding: 10px;
+    margin: 0;
+    float: right;
+
+    a {
+      float:left;
+      display:block;
+      text-align:center;
+    }
+  }
+  li.active a {
+    text-decoration: none;
+  }
+}
+
+.flash
+{
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0.5em 1em 0.5em 1em;
+  border: 1px solid $dark_green;
+  border-radius: 3px;
+  background: $light_green;
+  color: $light;
+}
+
+.flash li {
+  margin-left: 0;
+  display: inline;
+}
+
+.error
+{
+  padding: 0.5em;
+  background: darkred;
+  color: $light
+}

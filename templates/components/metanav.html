@@ -1,5 +1,16 @@
 {% macro metanav() -%}
-<div class=metanav>
-  <a href="{{ url_for('index') }}">Index Page</a> | <a href="{{ url_for('logout') }}">log out</a>
-</div>
+<ul class=metanav>
+  <li>
+    <a href="{{ url_for('index') }}">Behcnmark Home</a>
+  </li>
+  <li{% if request.path == url_for('admin') %} class="active"{% endif %}>
+    <a href="{{ url_for('admin') }}">Admin</a>
+    </li>
+  <li{% if request.path == url_for('results') %} class="active"{% endif %}>
+    <a href="{{ url_for('results') }}">Results</a>
+  </li>
+  <li>
+    <a href="{{ url_for('logout') }}">log out</a>
+  </li>
+</ul>
 {%- endmacro %}
