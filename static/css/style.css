@@ -1,79 +1,65 @@
-@import 'reset.css';
-@import 'text.css';
-
+@import url(reset.css);
+@import url(text.css);
 body {
-	background: #1D1A19;
-	color: #FFFFFF;
-}
+  background: #1d1a19;
+  color: #fafafa; }
 
 img {
-    max-width: 100%;
-}
+  max-width: 100%; }
 
-.page
-{
-    min-width: 300px;
-    width: 80%;
-	margin: 2em auto;
-	padding: 0.8em;
-	min-width: 400px;
-	border: 5px solid #383231;
-	border-radius: 3px;
-	background: white;
-	color: #1D1A19;
-}
+.page {
+  width: 80%;
+  margin: 2em auto;
+  padding: 0.8em;
+  min-width: 400px;
+  border: 5px solid #383231;
+  border-radius: 3px;
+  background: #fafafa;
+  color: #1d1a19; }
 
-.entries
-{
-	margin: 0; padding: 0;
-	list-style: none;
-}
+.entries {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
 
-.entries li
-{
-    border: 1px solid black;
-	margin: 0.8em 1.2em;
-	padding: 10px;
-}
+.entries li {
+  border: 1px solid #1d1a19;
+  margin: 0.8em 1.2em;
+  padding: 10px; }
 
-.entries li h2
-{
-}
+.add-entry dl {
+  font-weight: bold; }
 
-.add-entry dl
-{
-	font-weight: bold;
-}
+ul.metanav {
+  padding: 10px;
+  height: 100%; }
+  ul.metanav li {
+    padding: 10px;
+    margin: 0;
+    float: right; }
+    ul.metanav li a {
+      float: left;
+      display: block;
+      text-align: center; }
+  ul.metanav li.active a {
+    text-decoration: none; }
 
-.metanav
-{
-	margin-bottom: 1em;
-	padding: 0.3em;
-	background: #fafafa;
-	text-align: right;
-	font-size: 0.8em;
-}
-
-.flash
-{
-	margin-top: 0.5em;
-	margin-bottom: 1em;
-	margin-left: 0;
-	margin-right: 0;
-	padding: 0.5em 1em 0.5em 1em;
-	border: 1px solid #5A740F;
-	border-radius: 3px;
-	background: #889638;
-	color: #FFFFFF;
-}
+.flash {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0.5em 1em 0.5em 1em;
+  border: 1px solid #5a740f;
+  border-radius: 3px;
+  background: #889638;
+  color: #fafafa; }
 
 .flash li {
-	margin-left: 0;
-}
+  margin-left: 0;
+  display: inline; }
 
-.error
-{
-	padding: 0.5em;
-	background: #F0D6D6;
-}
-
+.error {
+  padding: 0.5em;
+  background: darkred;
+  color: #fafafa; }
