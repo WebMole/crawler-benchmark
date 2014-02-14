@@ -19,9 +19,6 @@ formatter = ticker.FuncFormatter(timeTicks)
 def get_total_seconds(td): return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
 
 def timeDelta(dt1, dt2):
-    #t1_ms = (dt1.hour*60*60 + dt1.minute*60 + dt1.second)*1000 + dt1.microsecond
-    #t2_ms = (dt2.hour*60*60 + dt2.minute*60 + dt2.second)*1000 + dt2.microsecond
-    #return max([t1_ms, t2_ms]) - min([t1_ms, t2_ms])
     return get_total_seconds(max([dt1, dt2]) - min([dt1, dt2]))
 
 def draw_custom_graph(user_agents):
@@ -48,7 +45,8 @@ def draw_custom_graph(user_agents):
     currentIndex = 0;
     for xy in plotXY:
         # todo: Use different color (not only random) and add the ability to choose multiple user_agent.
-        ax.plot(xy['x'], xy['y'], color=graph_colors[currentIndex % len(graph_colors)])
+        ax.plot(xy['x'], xy['y'], color=graph_colors[currentIndex % len(graph_colors)], label=user_agents[currentIndex])
+        ax.legend(framealpha=0.5, loc=4, prop={'size':8})
         currentIndex+=1
 
     plt.xlabel('Time (seconds)')
