@@ -6,7 +6,20 @@
     {% include "login.html" %}
   {% else %}
 
-  <img src="{{ url_for('plot') }}" alt="Image Placeholder">
+  <img src="{{ url_for('plot') }}" id="imgResult" alt="Image Placeholder">
+
+  <div id="divUserAgent">
+    <form id="frmUserAgent" action="{{ url_for('plot') }}">
+      <h2>User Agents</h2>
+      <select name="selUserAgent" id="selUserAgent" multiple>
+      {%- for user_agent in user_agents %}
+        <option value="{{ user_agent }}">{{ user_agent }}</option>
+      {% endfor -%}
+      </select>
+      <br />
+      <input type="submit" value="Update graph">
+    </form>
+  </div>
 
   {% import "components/metanav.html" as metanav %}
   {{ metanav.metanav() }}

@@ -9,6 +9,8 @@ from matplotlib import ticker
 
 import random
 
+graph_colors = ['r', 'b', 'g', 'c', 'm', 'y', 'k']
+
 def timeTicks(x, pos):
     return "{:10.2f}".format(float(x) / 1.0)
 
@@ -22,47 +24,33 @@ def timeDelta(dt1, dt2):
     #return max([t1_ms, t2_ms]) - min([t1_ms, t2_ms])
     return get_total_seconds(max([dt1, dt2]) - min([dt1, dt2]))
 
-def draw_custom_graph():
-    requests = LogParser.get_log_dicts(user_agent = r'SiteSucker.*')
-    #requests = LogParser.get_log_dicts(user_agent = r'.*HTTrack.*')
+def draw_custom_graph(user_agents):
+    plotXY = []
 
-    firstDate = None
-    x = []
-    y = []
-    for index, request in enumerate(requests):
-        if index is not 0:
-            x.append(timeDelta(request['datetime'], firstDate))
-        else:
-            firstDate = request['datetime']
-            x.append(0)
-        y.append(index)
-
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-
-    # TEST\
-    requests = LogParser.get_log_dicts(user_agent = r'.*HTTrack.*')
-
-    firstDate = None
-    x2 = []
-    y2 = []
-    for index, request in enumerate(requests):
-        if index is not 0:
-            x2.append(timeDelta(request['datetime'], firstDate))
-        else:
-            firstDate = request['datetime']
-            x2.append(0)
-        y2.append(index)
+    #requests = LogParser.get_log_dicts(user_agent = r'SiteSucker.*')
+    for user_agent in user_agents:
+        requests = LogParser.get_log_dicts(user_agent = user_agent)
+        firstDate = None
+        x = []
+        y = []
+        for index, request in enumerate(requests):
+            if index is not 0:
+                x.append(timeDelta(request['datetime'], firstDate))
+            else:
+                firstDate = request['datetime']
+                x.append(0)
+            y.append(index)
+        plotXY.append({'x':x, 'y':y})
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    # TEST/
 
-    # todo: Use different color (not only random) and add the ability to choose multiple user_agent.
-    ax.plot(x, y, color=random.choice(['r', 'b', 'g', 'c', 'm', 'y', 'k']))
-    # TEST\
-    ax.plot(x2, y2, color=random.choice(['r', 'b', 'g', 'c', 'm', 'y', 'k']))
-    # TEST/
+    currentIndex = 0;
+    for xy in plotXY:
+        # todo: Use different color (not only random) and add the ability to choose multiple user_agent.
+        ax.plot(xy['x'], xy['y'], color=graph_colors[currentIndex % len(graph_colors)])
+        currentIndex+=1
+
     plt.xlabel('Time (seconds)')
     plt.ylabel('Request number')
 

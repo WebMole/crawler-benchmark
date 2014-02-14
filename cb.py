@@ -24,6 +24,7 @@ from LoggingRequest import LoggingRequest
 from Config import Config
 
 import GraphManager
+import LogParser
 
 logging.config.dictConfig(yaml.load(open('logging.conf')))
 logFile = logging.getLogger('file')
@@ -251,7 +252,7 @@ def logout():
 def plot():
     from flask import make_response
 
-    output = GraphManager.draw_custom_graph()
+    output = GraphManager.draw_custom_graph(user_agents = request.values.getlist('selUserAgent'))
     response = make_response(output.getvalue())
     #response.mimetype = 'image/png'
     response.mimetype = 'image/svg+xml'
@@ -259,7 +260,9 @@ def plot():
 
 @app.route('/admin/results')
 def results():
-    return render_template("admin/results.html")
+    return render_template("admin/results.html",
+                           user_agents=LogParser.get_log_user_agents()
+                          )
 
 
 @app.errorhandler(404)
