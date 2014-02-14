@@ -95,3 +95,37 @@ ul.metanav
   background: darkred;
   color: $light
 }
+
+.calendars {
+  text-align: center;
+  .calendar {
+    border: 2px solid $light_green;
+    border-radius: 5px;
+    float: left;
+    padding: 10px;
+    margin: 4px;
+    height: 290px;
+    .current-month {
+      background: lighten($light_green, 30%)
+    }
+    .past-month {
+      background: lighten($light_green, 50%)
+    }
+    tr td {
+      padding: 10px;
+    }
+  }
+}
+
+.navigation {
+  .previous {
+    text-align: left;
+  }
+  .next {
+    text-align: right;
+  }
+}
+
+.clear {
+  clear: both;
+}

@@ -14,7 +14,8 @@ import logging
 import logging.config
 import yaml
 import re
-import datetime
+from datetime import datetime, date
+from calendar import Calendar
 
 from loremipsum import get_paragraphs, get_sentences
 
@@ -32,6 +33,7 @@ logConsole = logging.getLogger('console')
 
 # create our little application :)
 app = Flask(__name__)
+
 
 def get_specific_item(table, key, value):
     for item in table:
@@ -51,6 +53,7 @@ app.config.update(dict(
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 config = Config
 
+
 def connect_db():
     """Connects to the specific database."""
     rv = sqlite3.connect(app.config['DATABASE'])
@@ -62,14 +65,14 @@ def init_db():
     """Creates the database tables."""
     with app.app_context():
         db = get_db()
-        
+
         for mode in config.modes:
             # create tables if not already created
             request = "    create table if not exists " + mode.get("route") + " (" \
-                      "    id integer primary key autoincrement," \
-                      "    title text not null," \
-                      "    text text not null" \
-                      ");"
+                                                                              "    id integer primary key autoincrement," \
+                                                                              "    title text not null," \
+                                                                              "    text text not null" \
+                                                                              ");"
             db.cursor().executescript(request)
             db.commit()
 
@@ -138,6 +141,7 @@ def entries_add(type):
     flash('New ' + type + ' entry was successfully posted')
     return redirect(url_for('admin'))
 
+
 # todo: Add this to the admin interface.
 
 
@@ -154,7 +158,7 @@ def entries_add_auto(type, num):
     db = get_db()
     for i in range(0, num):
         db.execute('insert into ' + type + ' (title, text) values (?, ?)',
-                   [get_sentences(1, False)[0].replace(".",""), get_paragraphs(1, False)[0]])
+                   [get_sentences(1, False)[0].replace(".", ""), get_paragraphs(1, False)[0]])
     db.commit()
     flash('New automatic %d %s entrie%s successfully posted' %
           (num, type, 's were' if (num > 1) else ' was'))
@@ -178,13 +182,6 @@ def clear_entries(type):
         init_db()
         return "OK"
 
-@app.route("/random/")
-def randomPage():
-   return render_template('random.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           config=config
-                           )
 
 @app.route("/modes/<type>/", defaults={'page': 1})
 @app.route("/modes/<type>/page/<int:page>")
@@ -207,7 +204,8 @@ def entries(type, page):
 
     pagination = Pagination(page, config.pagination_entry_per_page, len(entries))
     visible_entries = entries[
-        (pagination.page - 1) * config.pagination_entry_per_page: pagination.page * config.pagination_entry_per_page]
+                      (
+                          pagination.page - 1) * config.pagination_entry_per_page: pagination.page * config.pagination_entry_per_page]
 
     return render_template('modes/' + type + '.html',
                            pagination=pagination,
@@ -215,7 +213,7 @@ def entries(type, page):
                            title=type.title(),
                            type=type,
                            config=config
-                           )
+    )
 
 
 @app.route("/modes/<string:type>/<int:id>")
@@ -238,7 +236,7 @@ def entry(type, id):
     return render_template('modes/' + type + '.html',
                            entries=entry,
                            title=type.title()
-                           )
+    )
 
 
 @app.route('/admin/logout')
@@ -247,22 +245,24 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('index'))
 
+
 #@app.route('/admin/plot.png')
 @app.route('/admin/plot.svg')
 def plot():
     from flask import make_response
 
-    output = GraphManager.draw_custom_graph(user_agents = request.values.getlist('selUserAgent'))
+    output = GraphManager.draw_custom_graph(user_agents=request.values.getlist('selUserAgent'))
     response = make_response(output.getvalue())
     #response.mimetype = 'image/png'
     response.mimetype = 'image/svg+xml'
     return response
 
+
 @app.route('/admin/results')
 def results():
     return render_template("admin/results.html",
                            user_agents=LogParser.get_log_user_agents()
-                          )
+    )
 
 
 @app.errorhandler(404)
@@ -270,11 +270,113 @@ def page_not_found(e):
     return render_template('404.html', title='404 Not Found'), 404
 
 
+@app.route('/trap/random/')
+def trap_random_page():
+    return render_template('traps/random.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+    )
+
+
+@app.route('/trap/login/')
+def trap_login():
+    return render_template('traps/login.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+    )
+
+
+@app.route('/trap/outgoing/')
+def trap_outgoing():
+    return render_template('traps/outgoing.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+    )
+
+
+@app.route('/trap/parameters/')
+def trap_parameters():
+    return render_template('traps/parameters.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+    )
+
+
+@app.route('/trap/session-variables/')
+def trap_session_variables():
+    return render_template('traps/parameters.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+    )
+
+
+@app.route('/trap/calendar/', defaults={'year': None})
+@app.route('/trap/calendar/<int:year>/')
+def trap_calendar(year):
+    cal = Calendar(0)
+    try:
+        if year is None:
+            year = date.today().year
+        else:
+            year = year % 10000
+            if not year:
+                year = 1
+        cal_list = [cal.monthdatescalendar(year, i + 1) for i in xrange(12)]
+    except Exception, e:
+        abort(500)
+    else:
+        return render_template('traps/calendar.html', year=year, calendar=cal_list)
+    abort(501)
+
+
+@app.route('/trap/errors/')
+def trap_errors():
+    return render_template('traps/errors.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+    )
+
+
+@app.route('/trap/deadends/')
+def trap_deadends():
+    return render_template('traps/deadends.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+    )
+
+
+@app.route('/trap/comet/')
+def trap_comet():
+    return render_template('traps/comet.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+    )
+
+
+@app.route('/trap/depth/')
+def trap_depth():
+    return render_template('traps/depth.html',
+                           title=get_sentences(1, False)[0],
+                           content=get_sentences(random.randint(1, 5)),
+                           config=config
+    )
+
+
 def url_for_other_page(page):
     """url_for helper function for pagination"""
     args = request.view_args.copy()
     args['page'] = page
     return url_for(request.endpoint, **args)
+
+
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 
@@ -294,9 +396,9 @@ def per_request_callbacks(response):
         #                                    request.form.lists(), request.routing_exception, request.environ['HTTP_USER_AGENT'])
         #strToLog = '{0}\n{1}\n{2}'.format(response.__dict__, request.__dict__, session.__dict__)
         lr = LoggingRequest(
-            datetime.datetime.today(
-            ),  request.method,  request.path,   request.args.lists(),
-            request.form.lists(),       None if (
+            datetime.today(
+            ), request.method, request.path, request.args.lists(),
+            request.form.lists(), None if (
                 request.routing_exception is None) else str(
                 request.routing_exception),
             request.environ['HTTP_USER_AGENT'])
@@ -304,6 +406,7 @@ def per_request_callbacks(response):
         #strToLog = json.dumps(lr)
         logFile.debug(strToLog)
     return response
+
 
 if __name__ == '__main__':
     init_db()
