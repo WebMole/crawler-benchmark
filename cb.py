@@ -322,11 +322,12 @@ def trap_calendar(year):
     try:
         if year is None:
             year = date.today().year
+            yearMod = year
         else:
-            year = year % 10000
-            if not year:
-                year = 1
-        cal_list = [cal.monthdatescalendar(year, i + 1) for i in xrange(12)]
+            yearMod = year % 10000
+            if yearMod < 1:
+                yearMod = 1
+        cal_list = [cal.monthdatescalendar(yearMod, i + 1) for i in xrange(12)]
     except Exception, e:
         abort(500)
     else:
