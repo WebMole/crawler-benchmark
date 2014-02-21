@@ -3,15 +3,13 @@
     "version": "0.0.1",
     "description": "default configuration to use with crawler-benchmark",
     "modes": {
-        // Reorder elements inside to select the order
         "Blog": {
             "route": "blog",
             "add": "admin/blog/add",
             "enabled": "true",
             "entry_single_page": "true",
             "pagination_entry_per_page": 20,
-            "insert_elements_on_load": 50,
-            ""
+            "insert_elements_on_load": 50
         },
         "Forum": {
             "route": "forum",
@@ -87,5 +85,40 @@
             "enabled": "true",
             "pagination": "true"
         }
-    }
+    },
+    "external_links": [
+        {
+            "name": "Google",
+            "url": "http://www.google.ca/",
+            "target": "_blank"
+        },
+        {
+            "name": "Facebook",
+            "url": "http://www.facebook.com/"
+        },
+        {
+            "name": "twitter",
+            "url": "http://www.twitter.com/"
+        },
+        {
+            "name": "Facebook",
+            "url": "http://www.facebook.com/"
+        },
+        {
+            "name": "Grooveshark",
+            "url": "http://www.grooveshark.com/"
+        },
+        {
+            "name": "Python",
+            "url": "http://www.python.org/"
+        },
+        {
+            "name": "Perdu?",
+            "url": "http://www.perdu.com/"
+        },
+        {
+            "name": "thisdomaindoesnetexist",
+            "url": "http://www.thisdomaindoesnetexist.com/"
+        }
+    ]
 }
