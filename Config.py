@@ -1,4 +1,5 @@
 import shelve
+import json
 
 
 class Config:
@@ -36,8 +37,51 @@ class Config:
                 }
             ]
     entry_single_page = True
-    article_per_page = True
     pagination_entry_per_page = 20
+
+
+
+    # external links to use with the trap
+    links = {
+        "external": [
+            {
+                "name": "Google",
+                "url": "http://www.google.ca/",
+                "target": "_blank"
+            },
+            {
+                "name": "Facebook",
+                "url": "http://www.facebook.com/"
+            },
+            {
+                "name": "twitter",
+                "url": "http://www.twitter.com/"
+            },
+            {
+                "name": "Facebook",
+                "url": "http://www.facebook.com/"
+            },
+            {
+                "name": "Grooveshark",
+                "url": "http://www.grooveshark.com/"
+            },
+            {
+                "name": "Python",
+                "url": "http://www.python.org/"
+            },
+            {
+                "name": "Perdu?",
+                "url": "http://www.perdu.com/"
+            },
+            {
+                "name": "thisdomaindoesnetexist",
+                "url": "http://www.thisdomaindoesnetexist.com/"
+            },
+        ]
+    }
+
+
+    # Shelve database for configuration, unused yet
 
     def __init__(self):
         self.config_path = "db/shelve.db"

@@ -4,26 +4,21 @@ Crawler Benchmark
 
 """
 # -*- coding: utf-8 -*-
-import StringIO
 import random
-
-from sqlite3 import dbapi2 as sqlite3
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
-
 import logging
 import logging.config
-import yaml
 import re
 from datetime import datetime, date
 from calendar import Calendar
 
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+import sqlite3
+import yaml
 from loremipsum import get_paragraphs, get_sentences
 
 from Pagination import Pagination
 from LoggingRequest import LoggingRequest
-
 from Config import Config
-
 import GraphManager
 import LogParser
 
@@ -54,9 +49,9 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 config = Config
 
 
-def connect_db():
+def connect_db(databaseName):
     """Connects to the specific database."""
-    rv = sqlite3.connect(app.config['DATABASE'])
+    rv = sqlite3.connect(databaseName)
     rv.row_factory = sqlite3.Row
     return rv
 
@@ -82,7 +77,7 @@ def get_db():
     current application context.
     """
     if not hasattr(g, 'sqlite_db'):
-        g.sqlite_db = connect_db()
+        g.sqlite_db = connect_db(app.config["DATABASE"])
     return g.sqlite_db
 
 
@@ -301,11 +296,24 @@ def trap_random_page():
     )
 
 
-@app.route('/trap/login/')
+@app.route('/trap/login/', methods=['GET', 'POST'])
 def trap_login():
+
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != "test":
+            error = 'Invalid username'
+        elif request.form['password'] != "test":
+            error = 'Invalid password'
+        else:
+            session['trap_logged_in'] = True
+            flash('You were logged in')
+            return redirect(url_for('success', challenge="login"))
+
     return render_template('traps/login.html',
                            title=get_sentences(1, False)[0],
                            content=get_sentences(random.randint(1, 5)),
+                           error=error,
                            config=config
     )
 
@@ -315,7 +323,9 @@ def trap_outgoing():
     return render_template('traps/outgoing.html',
                            title=get_sentences(1, False)[0],
                            content=get_sentences(random.randint(1, 5)),
-                           config=config
+                           config=config,
+                           links=config.links["external"],
+                           next=url_for("success", challenge="outgoing")
     )
 
 
@@ -391,6 +401,15 @@ def trap_depth():
                            content=get_sentences(random.randint(1, 5)),
                            config=config
     )
+
+
+@app.route('/success/', defaults={"challenge": None})
+@app.route('/success/<string:challenge>')
+def success(challenge):
+    if (not challenge):
+        abort(500)
+    else:
+        return render_template('success.html', title="Challenge " + challenge + " complete!", challenge=challenge)
 
 
 def url_for_other_page(page):

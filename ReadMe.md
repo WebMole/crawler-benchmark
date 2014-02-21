@@ -7,6 +7,10 @@ First, clone the repository, cd to the directory and install dependencies using 
 
     pip install -r requirements.txt
 
+You may have troubles installing matplotlib so you can do this:
+
+    pip install matplotlib --allow-external matplotlib
+
 Then launch the server using `cb.py` (cb for Crawler Benchmark)
 
     python cb.py
