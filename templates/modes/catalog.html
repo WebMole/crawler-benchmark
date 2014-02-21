@@ -1,9 +1,9 @@
-{% extends "layout.html" %}
+{% if not noLayout %}{% extends "layout.html" %}{% endif %}
 {% import "components/pagination.html" as p %}
 
 {% block body %}
-  <div id="content">
-  {% if not ajaxOn %}
+  {% if not noLayout %}<div id="content"{% if ajaxOn %} type="{{ type }}"{% endif %} firstUrl="{{ url_for_other_page(1) }}">{% endif %}
+  {% if not ajaxOn or noLayout %}
     <ul class=entries>
     {% for entry in entries %}
       <li>
@@ -16,5 +16,5 @@
     </ul>
     {{ p.render_pagination(pagination) }}
   {% endif %}
-  </div>
+  {% if not noLayout %}</div>{% endif %}
 {% endblock %}

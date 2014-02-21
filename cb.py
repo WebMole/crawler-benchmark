@@ -214,8 +214,9 @@ def entries(type, page):
 
 
 # todo: add a way to retrieve the elements in the content div in ajax
-@app.route("/modes/ajax/<type>/")
-def entries_ajax(type):
+@app.route("/modes/ajax/<type>/", defaults={'page': None})
+@app.route("/modes/ajax/<type>/page/<int:page>")
+def entries_ajax(type, page):
     try:
         mode = get_specific_item(config.modes, "route", type)
     except ValueError:
@@ -224,11 +225,36 @@ def entries_ajax(type):
     if not mode.get('enabled'):
         return "This mode is disabled"
 
+    pagination = None
+    entries = None
+
+    if (page is None):
+        noLayout = False
+    else:
+        noLayout = True
+        db = get_db()
+
+        cur = db.execute('select count(id) from ' + mode.get("route"))
+        count = cur.fetchone()
+        countValue = count[0]
+
+        pagination = Pagination(page, config.pagination_entry_per_page, countValue)
+
+        db = get_db()
+        cur = db.execute('select id, title, text from %s order by id desc limit %d offset %d' % (type, config.pagination_entry_per_page, (pagination.page - 1) * config.pagination_entry_per_page))
+        entries = cur.fetchall()
+
+        if not entries and page != 1:
+            abort(404)
+
     return render_template('modes/' + type + '.html',
+                           pagination=pagination,
+                           entries=entries,
                            title=type.title(),
                            type=type,
                            config=config,
-                           ajaxOn=True
+                           ajaxOn=True,
+                           noLayout=noLayout
     )
 
 
