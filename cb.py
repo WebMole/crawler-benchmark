@@ -106,7 +106,7 @@ def admin():
         count = cur.fetchone()
         mode.__setitem__('count', count[0])
 
-    return render_template("admin/admin.html", modes=config.modes, title='Admin')
+    return render_template("admin/admin.html", modes=config.modes, title='Admin', inAdmin=True)
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -194,25 +194,46 @@ def entries(type, page):
     if not mode.get('enabled'):
         return "This mode is disabled"
 
-    # todo: add a request to get the count and another using LIMIT <skip>, <count> or LIMIT <count> OFFSET <skip>
     db = get_db()
-    cur = db.execute('select id, title, text from ' + type + ' order by id desc')
+
+    cur = db.execute('select count(id) from ' + mode.get("route"))
+    count = cur.fetchone()
+    countValue = count[0]
+
+    pagination = Pagination(page, config.pagination_entry_per_page, countValue)
+
+    db = get_db()
+    cur = db.execute('select id, title, text from %s order by id desc limit %d offset %d' % (type, config.pagination_entry_per_page, (pagination.page - 1) * config.pagination_entry_per_page))
     entries = cur.fetchall()
 
     if not entries and page != 1:
         abort(404)
 
-    pagination = Pagination(page, config.pagination_entry_per_page, len(entries))
-    visible_entries = entries[
-                      (
-                          pagination.page - 1) * config.pagination_entry_per_page: pagination.page * config.pagination_entry_per_page]
-
     return render_template('modes/' + type + '.html',
                            pagination=pagination,
-                           entries=visible_entries,
+                           entries=entries,
                            title=type.title(),
                            type=type,
                            config=config
+                           )
+
+
+# todo: add a way to retrieve the elements in the content div in ajax
+@app.route("/modes/ajax/<type>/")
+def entries_ajax(type):
+    try:
+        mode = get_specific_item(config.modes, "route", type)
+    except ValueError:
+        return "invalid page"
+
+    if not mode.get('enabled'):
+        return "This mode is disabled"
+
+    return render_template('modes/' + type + '.html',
+                           title=type.title(),
+                           type=type,
+                           config=config,
+                           ajaxOn=True
     )
 
 
@@ -261,7 +282,8 @@ def plot():
 @app.route('/admin/results')
 def results():
     return render_template("admin/results.html",
-                           user_agents=LogParser.get_log_user_agents()
+                           user_agents=LogParser.get_log_user_agents(),
+                           inAdmin=True
     )
 
 
