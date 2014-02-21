@@ -213,7 +213,6 @@ def entries(type, page):
                            )
 
 
-# todo: add a way to retrieve the elements in the content div in ajax
 @app.route("/modes/ajax/<type>/", defaults={'page': None})
 @app.route("/modes/ajax/<type>/page/<int:page>")
 def entries_ajax(type, page):
