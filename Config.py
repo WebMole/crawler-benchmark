@@ -39,6 +39,8 @@ class Config:
     entry_single_page = True
     pagination_entry_per_page = 20
 
+    ajaxOn = True
+    infiniteScrollOn = True
 
 
     # external links to use with the trap

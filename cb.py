@@ -177,45 +177,9 @@ def clear_entries(type):
         init_db()
         return "OK"
 
-
-@app.route("/modes/<type>/", defaults={'page': 1})
+@app.route("/modes/<type>/", defaults={'page': None})
 @app.route("/modes/<type>/page/<int:page>")
 def entries(type, page):
-    try:
-        mode = get_specific_item(config.modes, "route", type)
-    except ValueError:
-        return "invalid page"
-
-    if not mode.get('enabled'):
-        return "This mode is disabled"
-
-    db = get_db()
-
-    cur = db.execute('select count(id) from ' + mode.get("route"))
-    count = cur.fetchone()
-    countValue = count[0]
-
-    pagination = Pagination(page, config.pagination_entry_per_page, countValue)
-
-    db = get_db()
-    cur = db.execute('select id, title, text from %s order by id desc limit %d offset %d' % (type, config.pagination_entry_per_page, (pagination.page - 1) * config.pagination_entry_per_page))
-    entries = cur.fetchall()
-
-    if not entries and page != 1:
-        abort(404)
-
-    return render_template('modes/' + type + '.html',
-                           pagination=pagination,
-                           entries=entries,
-                           title=type.title(),
-                           type=type,
-                           config=config
-                           )
-
-
-@app.route("/modes/ajax/<type>/", defaults={'page': None})
-@app.route("/modes/ajax/<type>/page/<int:page>")
-def entries_ajax(type, page):
     try:
         mode = get_specific_item(config.modes, "route", type)
     except ValueError:
@@ -227,10 +191,20 @@ def entries_ajax(type, page):
     pagination = None
     entries = None
 
-    if (page is None):
+    # todo: Chose if ajaxOn and infiniteScrollOn configs are for each separate modes or globals
+    ajaxOn = config.ajaxOn
+    infiniteScrollOn = config.infiniteScrollOn
+
+    if (ajaxOn and page is None):
         noLayout = False
     else:
-        noLayout = True
+        if (ajaxOn):
+            noLayout = True
+        else: # AJAX is disabled
+            noLayout = False
+            infiniteScrollOn = False
+            if (page is None):
+                page = 1;
         db = get_db()
 
         cur = db.execute('select count(id) from ' + mode.get("route"))
@@ -252,7 +226,8 @@ def entries_ajax(type, page):
                            title=type.title(),
                            type=type,
                            config=config,
-                           ajaxOn=True,
+                           ajaxOn=ajaxOn,
+                           infiniteScrollOn=infiniteScrollOn,
                            noLayout=noLayout
     )
 
