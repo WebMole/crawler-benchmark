@@ -273,6 +273,10 @@ def plot():
     response.mimetype = 'image/svg+xml'
     return response
 
+@app.route('/admin/clearLogUserAgents', methods=['DELETE'])
+def clearLogUserAgents():
+    LogParser.clear_log(user_agents=request.values.getlist('selUserAgent'))
+    return "OK"
 
 @app.route('/admin/results')
 def results():
