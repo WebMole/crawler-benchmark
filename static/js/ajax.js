@@ -19,13 +19,16 @@ function loadMoreContent()
 $(function() {
 	$("#content").load($("#content").attr('firstUrl'));
 	
+	if ($('#infiniteScrollOn').val() === "on") {
+		infiniteScrollOn = true;
+	}
+
     $(document).on('click', '.btnPaging' , function( event ) {
 		event.preventDefault();
-		$("#content").load($(this).attr('href'));
+		if (!infiniteScrollOn) {
+			$("#content").load($(this).attr('href'));
+		}
 	});
-
-	if ($('#infiniteScrollOn').val() === "on")
-		infiniteScrollOn = true;
 
 	$(window).scroll(function() {
 		if (infiniteScrollOn)

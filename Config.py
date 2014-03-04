@@ -37,7 +37,7 @@ class Config:
                 }
             ]
     entry_single_page = True
-    pagination_entry_per_page = 20
+    pagination_entry_per_page = 25
 
     ajaxOn = True
     infiniteScrollOn = True
