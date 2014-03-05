@@ -1,27 +1,48 @@
 var infiniteScrollOn = false;
 var infiniteScrollThreshold = 50;
+var nextUrl = null;
 
-function loadMoreContent()
+function loadMoreContent(pageToLoad)
 {
-	// We are not on the last page
-	if (!$(".pagination :last-child").is('strong'))
+	if (pageToLoad != null)
 	{
-		var pageToLoad = $('.pagination a').last().attr('href');
 		$('.pagination').html('<img style="display:block;margin:auto;" src="/static/img/loadingBar.gif">');
 
 		$("<div>").load(pageToLoad, function() {
+			$('.pagination').empty(); // Remove loadingBar
 			$("#content ul.entries").append($(this).find("ul.entries").html());
-			$('.pagination').html($(this).find(".pagination").html());
+			nextUrl = findNextPage($(this).find(".pagination"));
 		});
 	}
-};
+}
+
+function findNextPage(divPagination)
+{
+	var pageToLoad = null;
+	// We are not on the last page
+	if (!$(divPagination).find(":last-child").is('strong'))
+	{
+		pageToLoad = $(divPagination).find('a').last().attr('href');
+	}
+	return pageToLoad;
+}
 
 $(function() {
-	$("#content").load($("#content").attr('firstUrl'));
-	
 	if ($('#infiniteScrollOn').val() === "on") {
 		infiniteScrollOn = true;
 	}
+
+	$("<div>").load($("#content").attr('firstUrl'), function() {
+		if (infiniteScrollOn)
+		{
+			$("#content").html($(this).find("ul.entries")).append('<div class="pagination"></div>');
+			nextUrl = findNextPage($(this).find(".pagination"));
+		}
+		else
+		{
+			$("#content").html($(this).html());
+		}
+	});
 
     $(document).on('click', '.btnPaging' , function( event ) {
 		event.preventDefault();
@@ -34,7 +55,7 @@ $(function() {
 		if (infiniteScrollOn)
 		{
 			if ($(window).scrollTop() + infiniteScrollThreshold >= $(document).height() - $(window).height()) {
-				loadMoreContent();
+				loadMoreContent(nextUrl);
 			}
 		}
 	});
