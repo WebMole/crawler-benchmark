@@ -10,7 +10,7 @@
     <ul class=entries>
     {% for entry in entries %}
       <li>
-        <h2>{% if config.article_per_page %}<a href="{{ url_for('entry', mode=mode, id=entry.id) }}">{% endif %}{{ entry.title }}{% if config.article_per_page %}</a>{% endif %}</h2>
+        <h2>{% if config.entry_single_page %}<a href="{{ url_for('entry', mode=mode, mode_id=entry.id) }}">{% endif %}{{ entry.title }}{% if config.entry_single_page %}</a>{% endif %}</h2>
         {{ entry.text|safe }}
       </li>
     {% else %}

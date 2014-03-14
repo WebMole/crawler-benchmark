@@ -228,7 +228,7 @@ def entries(mode, page_number):
         db = get_db()
         cur = db.execute(
             'select id, title, text from %s order by id desc limit %d offset %d' % (
-                mode,
+                mode.get('route'),
                 config.pagination_entry_per_page,
                 (pagination.page - 1) * config.pagination_entry_per_page
             )
@@ -239,11 +239,11 @@ def entries(mode, page_number):
             abort(404)
 
     return render_template(
-        'modes/' + mode + '.html',
+        'modes/' + mode.get('route') + '.html',
         pagination=pagination,
         entries=mode_entries,
-        title=mode.title(),
-        mode=mode,
+        title=mode.get('name'),
+        mode=mode.get('route'),
         config=config,
         ajaxOn=ajax_enabled,
         infiniteScrollOn=infinite_scroll_enabled,
@@ -251,7 +251,7 @@ def entries(mode, page_number):
     )
 
 
-@app.route("/modes/<mode>/<mode_id>")
+@app.route("/modes/<string:mode>/<int:mode_id>")
 def entry(mode, mode_id):
     try:
         mode = get_specific_item(config.modes, "route", mode)
@@ -262,16 +262,16 @@ def entry(mode, mode_id):
         return "This mode is disabled"
 
     db = get_db()
-    cur = db.execute('select id, title, text from ' + mode + ' where id = ' + str(mode_id))
+    cur = db.execute('select id, title, text from ' + mode.get('route') + ' where id = ' + str(mode_id))
     mode_entry = cur.fetchall()
 
     if not mode_entry:
         abort(404)
 
     return render_template(
-        'modes/' + mode + '.html',
+        'modes/' + mode.get('route') + '.html',
         entries=mode_entry,
-        title=mode.title()
+        title=mode.get('name')
     )
 
 
