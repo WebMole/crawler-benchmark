@@ -1,10 +1,11 @@
+{% if not no_layout %}
 <!doctype html>
 <head>
   <title>Crawler Benchmark{% if title is defined %} | {{ title }}{% endif %}</title>
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.0.2.min.js') }}"></script>
-  {% if inAdmin %}<script type="text/javascript" src="{{ url_for('static', filename='js/admin.js') }}"></script>{% endif %}
-  {% if ajaxOn %}<script type="text/javascript" src="{{ url_for('static', filename='js/ajax.js') }}"></script>{% endif %}
+  {% if in_admin %}<script type="text/javascript" src="{{ url_for('static', filename='js/admin.js') }}"></script>{% endif %}
+  {% if ajax_enabled %}<script type="text/javascript" src="{{ url_for('static', filename='js/ajax.js') }}"></script>{% endif %}
 </head>
 <body>
 <div class=page>
@@ -21,3 +22,4 @@
 </div>
 {% if infiniteScrollOn %}<input id="infiniteScrollOn" type="hidden" value="on">{% endif %}
 </body>
+{% endif %}

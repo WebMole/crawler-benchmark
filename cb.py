@@ -1,7 +1,5 @@
 """
 Crawler Benchmark
-
-
 """
 # -*- coding: utf-8 -*-
 import random
@@ -11,7 +9,7 @@ import re
 from datetime import datetime, date
 from calendar import Calendar
 
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response
 import sqlite3
 import yaml
 from loremipsum import get_paragraphs, get_sentences
@@ -20,10 +18,10 @@ from Pagination import Pagination
 from LoggingRequest import LoggingRequest
 from Config import Config
 import GraphManager
-import LogParser
+import log_parser
 
 logging.config.dictConfig(yaml.load(open('logging.conf')))
-logFile = logging.getLogger('file')
+log_file = logging.getLogger('file')
 logConsole = logging.getLogger('console')
 
 # create our little application :)
@@ -49,9 +47,9 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 config = Config
 
 
-def connect_db(databaseName):
+def connect_db(database_name):
     """Connects to the specific database."""
-    rv = sqlite3.connect(databaseName)
+    rv = sqlite3.connect(database_name)
     rv.row_factory = sqlite3.Row
     return rv
 
@@ -63,17 +61,20 @@ def init_db():
 
         for mode in config.modes:
             # create tables if not already created
-            request = "    create table if not exists " + mode.get("route") + " (" \
-                                                                              "    id integer primary key autoincrement," \
-                                                                              "    title text not null," \
-                                                                              "    text text not null" \
-                                                                              ");"
-            db.cursor().executescript(request)
+            database_request = "create table if not exists " \
+                               + mode.get("route")\
+                               + " (" \
+                                 "    id integer primary key autoincrement," \
+                                 "    title text not null," \
+                                 "    text text not null" \
+                                 ");"
+            db.cursor().executescript(database_request)
             db.commit()
 
 
 def get_db():
-    """Opens a new database connection if there is none yet for the
+    """
+    Opens a new database connection if there is none yet for the
     current application context.
     """
     if not hasattr(g, 'sqlite_db'):
@@ -101,7 +102,12 @@ def admin():
         count = cur.fetchone()
         mode.__setitem__('count', count[0])
 
-    return render_template("admin/admin.html", modes=config.modes, title='Admin', inAdmin=True)
+    return render_template(
+        "admin/admin.html",
+        modes=config.modes,
+        title='Admin',
+        in_admin=True
+    )
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -113,75 +119,77 @@ def login():
         elif request.form['password'] != app.config['PASSWORD']:
             error = 'Invalid password'
         else:
-            session['logged_in'] = True
+            session['logged_in'] = "True"
             flash('You were logged in')
             return redirect(url_for('admin'))
     return render_template('login.html', error=error)
 
 
-@app.route("/admin/add/<string:type>", methods=['POST'])
-def entries_add(type):
+@app.route("/admin/add/<string:mode>", methods=['POST'])
+def entries_add(mode):
     if not session.get('logged_in'):
         abort(401)
 
     try:
-        mode = get_specific_item(config.modes, "route", type)
+        mode = get_specific_item(config.modes, "route", mode)
     except ValueError:
         return "invalid page"
 
     db = get_db()
-    db.execute('insert into ' + type + ' (title, text) values (?, ?)',
+    db.execute('insert into ' + mode + ' (title, text) values (?, ?)',
                [request.form['title'], request.form['text']])
     db.commit()
-    flash('New ' + type + ' entry was successfully posted')
+    flash('New ' + mode + ' entry was successfully posted')
     return redirect(url_for('admin'))
 
 
 # todo: Add this to the admin interface.
-
-
-@app.route("/admin/add/<string:type>/<int:num>", methods=['POST'])
-def entries_add_auto(type, num):
+@app.route("/admin/add/<string:mode>/<int:num>", methods=['POST'])
+def entries_add_auto(mode, num):
     if not session.get('logged_in'):
         abort(401)
 
     try:
-        mode = get_specific_item(config.modes, "route", type)
+        mode = get_specific_item(config.modes, "route", mode)
     except ValueError:
         return "invalid page"
 
     db = get_db()
     for i in range(0, num):
-        db.execute('insert into ' + type + ' (title, text) values (?, ?)',
-                   [get_sentences(1, False)[0].replace(".", ""), get_paragraphs(1, False)[0]])
+        db.execute(
+            'insert into ' + mode +
+            ' (title, text) values (?, ?)',
+            [get_sentences(1, False)[0].replace(".", ""), get_paragraphs(1, False)[0]]
+        )
     db.commit()
     flash('New automatic %d %s entrie%s successfully posted' %
-          (num, type, 's were' if (num > 1) else ' was'))
+          (num, mode, 's were' if (num > 1) else ' was'))
     return redirect(url_for('admin'))
 
 
-@app.route("/admin/clear/<type>", methods=['DELETE'])
-def clear_entries(type):
+@app.route("/admin/clear/<string:mode>", methods=['DELETE'])
+def clear_entries(mode):
     """Creates the database tables."""
     with app.app_context():
         db = get_db()
 
         try:
-            mode = get_specific_item(config.modes, "route", type)
+            mode = get_specific_item(config.modes, "route", mode)
         except ValueError:
             abort(404)
 
-        request = "drop table if exists " + type + ";"
-        db.cursor().executescript(request)
+        database_request = "drop table if exists " + mode + ";"
+        db.cursor().executescript(database_request)
         db.commit()
         init_db()
         return "OK"
 
-@app.route("/modes/<type>/", defaults={'page': None})
-@app.route("/modes/<type>/page/<int:page>")
-def entries(type, page):
+
+@app.route("/modes/<string:mode>/", defaults={'page_number': None})
+@app.route("/modes/<string:mode>/page/<int:page_number>")
+def entries(mode, page_number):
     try:
-        mode = get_specific_item(config.modes, "route", type)
+        mode = get_specific_item(config.modes, "route", mode)
     except ValueError:
         return "invalid page"
 
@@ -189,53 +197,64 @@ def entries(type, page):
         return "This mode is disabled"
 
     pagination = None
-    entries = None
+    mode_entries = None
 
-    # todo: Chose if ajaxOn and infiniteScrollOn configs are for each separate modes or globals
-    ajaxOn = config.ajaxOn
-    infiniteScrollOn = config.infiniteScrollOn
+    # todo: Chose if ajax_enabled and infinite_scroll_enabled configs are for each separate modes or globals
+    ajax_enabled = config.ajax_enabled
+    infinite_scroll_enabled = config.infinite_scroll_enabled
 
-    if (ajaxOn and page is None):
-        noLayout = False
+    if ajax_enabled and page_number is None:
+        no_layout = False
     else:
-        if (ajaxOn):
-            noLayout = True
-        else: # AJAX is disabled
-            noLayout = False
-            infiniteScrollOn = False
-            if (page is None):
-                page = 1;
+        if ajax_enabled:
+            no_layout = True
+        else:  # AJAX is disabled
+            no_layout = False
+            infinite_scroll_enabled = False
+            if page_number is None:
+                page_number = 1
         db = get_db()
 
         cur = db.execute('select count(id) from ' + mode.get("route"))
         count = cur.fetchone()
-        countValue = count[0]
+        count_value = count[0]
 
-        pagination = Pagination(page, config.pagination_entry_per_page, countValue)
+        pagination = Pagination(
+            page_number,
+            config.pagination_entry_per_page,
+            count_value
+        )
 
         db = get_db()
-        cur = db.execute('select id, title, text from %s order by id desc limit %d offset %d' % (type, config.pagination_entry_per_page, (pagination.page - 1) * config.pagination_entry_per_page))
-        entries = cur.fetchall()
+        cur = db.execute(
+            'select id, title, text from %s order by id desc limit %d offset %d' % (
+                mode,
+                config.pagination_entry_per_page,
+                (pagination.page - 1) * config.pagination_entry_per_page
+            )
+        )
+        mode_entries = cur.fetchall()
 
-        if not entries and page != 1:
+        if not mode_entries and page_number != 1:
             abort(404)
 
-    return render_template('modes/' + type + '.html',
-                           pagination=pagination,
-                           entries=entries,
-                           title=type.title(),
-                           type=type,
-                           config=config,
-                           ajaxOn=ajaxOn,
-                           infiniteScrollOn=infiniteScrollOn,
-                           noLayout=noLayout
+    return render_template(
+        'modes/' + mode + '.html',
+        pagination=pagination,
+        entries=mode_entries,
+        title=mode.title(),
+        mode=mode,
+        config=config,
+        ajaxOn=ajax_enabled,
+        infiniteScrollOn=infinite_scroll_enabled,
+        noLayout=no_layout
     )
 
 
-@app.route("/modes/<string:type>/<int:id>")
-def entry(type, id):
+@app.route("/modes/<mode>/<mode_id>")
+def entry(mode, mode_id):
     try:
-        mode = get_specific_item(config.modes, "route", type)
+        mode = get_specific_item(config.modes, "route", mode)
     except ValueError:
         return "invalid page"
 
@@ -243,15 +262,16 @@ def entry(type, id):
         return "This mode is disabled"
 
     db = get_db()
-    cur = db.execute('select id, title, text from ' + type + ' where id = ' + str(id))
-    entry = cur.fetchall()
+    cur = db.execute('select id, title, text from ' + mode + ' where id = ' + str(mode_id))
+    mode_entry = cur.fetchall()
 
-    if not entry:
+    if not mode_entry:
         abort(404)
 
-    return render_template('modes/' + type + '.html',
-                           entries=entry,
-                           title=type.title()
+    return render_template(
+        'modes/' + mode + '.html',
+        entries=mode_entry,
+        title=mode.title()
     )
 
 
@@ -269,34 +289,40 @@ def plot():
 
     output = GraphManager.draw_custom_graph(user_agents=request.values.getlist('selUserAgent'))
     response = make_response(output.getvalue())
-    #response.mimetype = 'image/png'
-    response.mimetype = 'image/svg+xml'
+    #response.mimemode = 'image/png'
+    response.mimemode = 'image/svg+xml'
     return response
 
-@app.route('/admin/clearLogUserAgents', methods=['DELETE'])
-def clearLogUserAgents():
-    LogParser.clear_log(user_agents=request.values.getlist('selUserAgent'))
+
+@app.route('/admin/clear_log_user_agents', methods=['DELETE'])
+def clear_log_user_agents():
+    log_parser.clear_log(user_agents=request.values.getlist('selUserAgent'))
     return "OK"
+
 
 @app.route('/admin/results')
 def results():
-    return render_template("admin/results.html",
-                           user_agents=LogParser.get_log_user_agents(),
-                           inAdmin=True
+    return render_template(
+        "admin/results.html",
+        user_agents=log_parser.get_log_user_agents(),
+        in_admin=True
     )
 
 
 @app.errorhandler(404)
 def page_not_found(e):
+    if e:
+        raise Exception(str(e))
     return render_template('404.html', title='404 Not Found'), 404
 
 
 @app.route('/trap/random/')
 def trap_random_page():
-    return render_template('traps/random.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           config=config
+    return render_template(
+        'traps/random.html',
+        title=get_sentences(1, False)[0],
+        content=get_sentences(random.randint(1, 5)),
+        config=config
     )
 
 
@@ -314,40 +340,67 @@ def trap_login():
             flash('You were logged in')
             return redirect(url_for('success', challenge="login"))
 
-    return render_template('traps/login.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           error=error,
-                           config=config
+    return render_template(
+        'traps/login.html',
+        title=get_sentences(1, False)[0],
+        content=get_sentences(random.randint(1, 5)),
+        error=error,
+        config=config
     )
 
 
 @app.route('/trap/outgoing/')
 def trap_outgoing():
-    return render_template('traps/outgoing.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           config=config,
-                           links=config.links["external"],
-                           next=url_for("success", challenge="outgoing")
+    return render_template(
+        'traps/outgoing.html',
+        title=get_sentences(1, False)[0],
+        content=get_sentences(random.randint(1, 5)),
+        config=config,
+        links=config.links["external"],
+        next=url_for("success", challenge="outgoing")
     )
 
 
 @app.route('/trap/parameters/')
 def trap_parameters():
-    return render_template('traps/parameters.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           config=config
+    return render_template(
+        'traps/parameters.html',
+        title=get_sentences(1, False)[0],
+        content=get_sentences(random.randint(1, 5)),
+        config=config
     )
+
+
+@app.route('/trap/cookies/')
+def trap_cookies():
+    resp = make_response(
+        render_template(
+            'traps/cookies.html',
+            title=get_sentences(1, False)[0],
+            content=get_sentences(random.randint(1, 5)),
+            config=config
+        )
+    )
+    resp.set_cookie('crawler_stores_cookies', 'yes')
+    return resp
+
+
+@app.route('/trap/cookies/verify')
+def trap_cookies_verify():
+    crawler_supports_cookies = request.cookies.get('crawler_stores_cookies')
+    if crawler_supports_cookies == "yes":
+        return redirect(url_for('success', challenge="cookies"))
+    else:
+        return redirect(url_for('fail', challenge="cookies"))
 
 
 @app.route('/trap/session-variables/')
 def trap_session_variables():
-    return render_template('traps/parameters.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           config=config
+    return render_template(
+        'traps/parameters.html',
+        title=get_sentences(1, False)[0],
+        content=get_sentences(random.randint(1, 5)),
+        config=config
     )
 
 
@@ -358,62 +411,86 @@ def trap_calendar(year):
     try:
         if year is None:
             year = date.today().year
-            yearMod = year
+            year_mod = year
         else:
-            yearMod = year % 10000
-            if yearMod < 1:
-                yearMod = 1
-        cal_list = [cal.monthdatescalendar(yearMod, i + 1) for i in xrange(12)]
+            year_mod = year % 10000
+            if year_mod < 1:
+                year_mod = 1
+        cal_list = [cal.monthdatescalendar(year_mod, i + 1) for i in xrange(12)]
     except Exception, e:
+        logConsole(e)
         abort(500)
     else:
-        return render_template('traps/calendar.html', year=year, calendar=cal_list)
+        return render_template(
+            'traps/calendar.html',
+            year=year,
+            calendar=cal_list
+        )
     abort(501)
 
 
 @app.route('/trap/errors/')
 def trap_errors():
-    return render_template('traps/errors.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           config=config
+    return render_template(
+        'traps/errors.html',
+        title=get_sentences(1, False)[0],
+        content=get_sentences(random.randint(1, 5)),
+        config=config
     )
 
 
 @app.route('/trap/deadends/')
 def trap_deadends():
-    return render_template('traps/deadends.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           config=config
+    return render_template(
+        'traps/deadends.html',
+        title=get_sentences(1, False)[0],
+        content=get_sentences(random.randint(1, 5)),
+        config=config
     )
 
 
 @app.route('/trap/comet/')
 def trap_comet():
-    return render_template('traps/comet.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           config=config
+    return render_template(
+        'traps/comet.html',
+        title=get_sentences(1, False)[0],
+        content=get_sentences(random.randint(1, 5)),
+        config=config
     )
 
 
 @app.route('/trap/depth/')
 def trap_depth():
-    return render_template('traps/depth.html',
-                           title=get_sentences(1, False)[0],
-                           content=get_sentences(random.randint(1, 5)),
-                           config=config
+    return render_template(
+        'traps/depth.html',
+        title=get_sentences(1, False)[0],
+        content=get_sentences(random.randint(1, 5)),
+        config=config
     )
 
 
 @app.route('/success/', defaults={"challenge": None})
 @app.route('/success/<string:challenge>')
 def success(challenge):
-    if (not challenge):
+    if not challenge:
         abort(500)
     else:
-        return render_template('success.html', title="Challenge " + challenge + " complete!", challenge=challenge)
+        return render_template(
+            'success.html',
+            title="Challenge "
+                  + challenge
+                  + " complete!",
+            challenge=challenge
+        )
+
+
+@app.route('/fail/', defaults={"challenge": None})
+@app.route('/fail/<string:challenge>')
+def fail(challenge):
+    if not challenge:
+        abort(500)
+    else:
+        return render_template('fail.html', title="Challenge " + challenge + " failed!", challenge=challenge)
 
 
 def url_for_other_page(page):
@@ -426,31 +503,27 @@ def url_for_other_page(page):
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
 
-#@app.before_request
-# def before_request():
-#    strToLog = '{0} - "{1}"'.format(request.method, request.path)
-#    logFile.debug(strToLog)
-# logConsole.debug(strToLog)
-
 @app.after_request
 def per_request_callbacks(response):
     if not re.match(r'/admin(.*)', request.path, re.M | re.I):
+
         for func in getattr(g, 'call_after_request', ()):
             response = func(response)
-        #strToLog = '{0} - {1} - {2} - ' \
-        #           '{3} - {4} - {5}'.format(request.method,       request.path,              request.args.lists(),
-        #                                    request.form.lists(), request.routing_exception, request.environ['HTTP_USER_AGENT'])
-        #strToLog = '{0}\n{1}\n{2}'.format(response.__dict__, request.__dict__, session.__dict__)
+
         lr = LoggingRequest(
-            datetime.today(
-            ), request.method, request.path, request.args.lists(),
-            request.form.lists(), None if (
-                request.routing_exception is None) else str(
-                request.routing_exception),
-            request.environ['HTTP_USER_AGENT'])
-        strToLog = lr.__dict__
-        #strToLog = json.dumps(lr)
-        logFile.debug(strToLog)
+            datetime.today(),
+            request.method,
+            request.path,
+            request.args.lists(),
+            request.form.lists(),
+            None if request.routing_exception is None
+            else str(request.routing_exception),
+            request.environ['HTTP_USER_AGENT']
+        )
+
+        str_to_log = lr.__dict__
+        log_file.debug(str_to_log)
+
     return response
 
 

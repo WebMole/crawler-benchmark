@@ -1,8 +1,9 @@
 import datetime # Used in evaluated log line
 #import re
 
-def get_log_dicts(user_agent = None):
-    log_file=open("logging.log", "r")
+
+def get_log_dicts(user_agent=None):
+    log_file = open("logging.log", "r")
     requests = []
     for line in log_file:
         request = eval(line)
@@ -15,27 +16,29 @@ def get_log_dicts(user_agent = None):
     log_file.close()
     return requests
 
-def clear_log(user_agents = None):
+
+def clear_log(user_agents=None):
     # Read the log file
-    log_file=open("logging.log", "r")
+    log_file = open("logging.log", "r")
     lines = log_file.readlines()
     log_file.close()
     # ReWrite to the log file each lines excepts theses with selected user_agents
-    log_file=open("logging.log", "w")
+    log_file = open("logging.log", "w")
     for line in lines:
-        hasToWriteLine = True
+        has_to_write_line = True
         request = eval(line)
         if user_agents is not None:
             for user_agent in user_agents:
                 if user_agent == request['user_agent']:
-                    hasToWriteLine = False
+                    has_to_write_line = False
                     break
-        if hasToWriteLine:
+        if has_to_write_line:
             log_file.write(line)
     log_file.close()
 
+
 def get_log_user_agents():
-    log_file=open("logging.log", "r")
+    log_file = open("logging.log", "r")
     user_agents = []
     for line in log_file:
         request = eval(line)

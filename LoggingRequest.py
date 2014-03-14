@@ -9,5 +9,5 @@ class LoggingRequest(object):
         self.path = path
         self.args = args
         self.form = form
-        self.routing_exception = routing_exception
+        self.routing_exception = str(routing_exception)
         self.user_agent = user_agent

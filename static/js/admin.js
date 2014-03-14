@@ -30,7 +30,7 @@ $(function() {
 
 		if (confirm("Do you really want to clear the log for these user agents?")) {
 	    	var userAgents = $('#selUserAgent').val();
-	    	var clearUserAgentsUrl = $(this).attr('url');
+	    	var clearUserAgentsUrl = $(this).data('url');
 
 			if (userAgents != null) {
 		    	var userAgentsString = '';

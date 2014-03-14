@@ -1,13 +1,16 @@
-{% if not noLayout %}{% extends "layout.html" %}{% endif %}
+{% extends "layout.html" %}
 {% import "components/pagination.html" as p %}
 
 {% block body %}
-  {% if not noLayout %}<div id="content"{% if ajaxOn %} type="{{ type }}"{% endif %} firstUrl="{{ url_for_other_page(1) }}">{% endif %}
-  {% if not ajaxOn or noLayout %}
+  {% if not no_layout %}
+      <div id="content"{% if ajax_enabled %} data-first_url="{{ url_for_other_page(1) }}">{% endif %}
+  {% endif %}
+
+{% if not ajax_enabled or no_layout %}
     <ul class=entries>
     {% for entry in entries %}
       <li>
-        <h2>{% if config.article_per_page %}<a href="{{ url_for('entry', type=type, id=entry.id) }}">{% endif %}{{ entry.title }}{% if config.article_per_page %}</a>{% endif %}</h2>
+        <h2>{% if config.article_per_page %}<a href="{{ url_for('entry', mode=mode, id=entry.id) }}">{% endif %}{{ entry.title }}{% if config.article_per_page %}</a>{% endif %}</h2>
         {{ entry.text|safe }}
       </li>
     {% else %}
@@ -16,5 +19,8 @@
     </ul>
     {{ p.render_pagination(pagination) }}
   {% endif %}
-  {% if not noLayout %}</div>{% endif %}
+
+  {% if not no_layout %}
+      </div>
+  {% endif %}
 {% endblock %}

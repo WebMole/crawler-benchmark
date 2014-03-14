@@ -32,7 +32,7 @@ $(function() {
 		infiniteScrollOn = true;
 	}
 
-	$("<div>").load($("#content").attr('firstUrl'), function() {
+	$("<div>").load($("#content").data('firstUrl'), function() {
 		if (infiniteScrollOn)
 		{
 			$("#content").html($(this).find("ul.entries")).append('<div class="pagination"></div>');
