@@ -500,10 +500,10 @@ def fail(challenge):
         return render_template('fail.html', title="Challenge " + challenge + " failed!", challenge=challenge)
 
 
-def url_for_other_page(page):
+def url_for_other_page(page_number):
     """url_for helper function for pagination"""
     args = request.view_args.copy()
-    args['page_number'] = page
+    args['page_number'] = page_number
     return url_for(request.endpoint, **args)
 
 
