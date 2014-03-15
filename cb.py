@@ -85,8 +85,13 @@ def get_db():
 @app.teardown_appcontext
 def close_db(error):
     """Closes the database again at the end of the request."""
-    if hasattr(g, 'sqlite_db'):
-        g.sqlite_db.close()
+    if error is not None:
+        raise Exception(str(error))
+    else:
+        if hasattr(g, 'sqlite_db'):
+            g.sqlite_db.close()
+        else:
+            raise Exception("couldn't close sqlite_db")
 
 
 @app.route('/')
@@ -311,9 +316,7 @@ def results():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    if e:
-        raise Exception(str(e))
-    return render_template('404.html', title='404 Not Found'), 404
+        return render_template('404.html', title=e), 404
 
 
 @app.route('/trap/random/')
