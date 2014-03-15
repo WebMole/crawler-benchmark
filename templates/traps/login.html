@@ -1,18 +1,18 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h2>Login</h2>
-  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-  Username: <span class="username">test</span>
-  Password: <span class="password">test</span>
-  <form action="{{ url_for('trap_login') }}" method=post>
-    <dl>
-      <dt>Username:
-      <dd><input type=text name=username>
-      <dt>Password:
-      <dd><input type=password name=password>
-      <dd><input type=submit value=Login>
-    </dl>
-  </form>
+    <h2>Login</h2>
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+    Username: <span class="username">test</span>
+    Password: <span class="password">test</span>
+    <form action="{{ url_for('trap_login') }}" method=post>
+        <dl>
+            <dt>Username:
+            <dd><input type=text name=username>
+            <dt>Password:
+            <dd><input type=password name=password>
+            <dd><input type=submit value=Login>
+        </dl>
+    </form>
 {% endblock %}
 
 

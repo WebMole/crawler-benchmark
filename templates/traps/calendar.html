@@ -1,34 +1,34 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h2>Calendar</h2>
-  <div class="calendars">
-    {% for month in calendar %}
-      {% set current_month = loop.index %}
-      <div class="calendar">
-        <h3>{{ ['January', 'Febuary', 'March', 'April',
+    <h2>Calendar</h2>
+    <div class="calendars">
+        {% for month in calendar %}
+            {% set current_month = loop.index %}
+            <div class="calendar">
+                <h3>{{ ['January', 'Febuary', 'March', 'April',
                     'May', 'June', 'July', 'August',
                     'September', 'October', 'November', 'December'][loop.index0] }} {{ year }}</h3>
-        <table>
-          {% for week in month %}
-            <tr>
-              {% for date in week %}
-                {% if date.month == current_month %}
-                  <td class="current-month">
-                    {% else %}
-                  <td class="past-month">
-                {% endif %}
-              {{ date.day }}
-              </td>
-              {% endfor %}
-            </tr>
-          {% endfor %}
-        </table>
-      </div>
-    {% endfor %}
-    <div class="clear"></div>
-    <div class="navigation">
-      <a class="previous" href="{{ url_for('trap_calendar', year=year - 1) }}">Previous year</a>
-      <a class="next" href="{{ url_for('trap_calendar', year=year + 1) }}">Next year</a>
+                <table>
+                    {% for week in month %}
+                        <tr>
+                            {% for date in week %}
+                                {% if date.month == current_month %}
+                                    <td class="current-month">
+                                        {% else %}
+                                    <td class="past-month">
+                                {% endif %}
+                            {{ date.day }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+        <div class="clear"></div>
+        <div class="navigation">
+            <a class="previous" href="{{ url_for('trap_calendar', year=year - 1) }}">Previous year</a>
+            <a class="next" href="{{ url_for('trap_calendar', year=year + 1) }}">Next year</a>
+        </div>
     </div>
-  </div>
 {% endblock %}

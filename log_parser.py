@@ -1,4 +1,3 @@
-import datetime # Used in evaluated log line
 #import re
 
 
@@ -47,6 +46,7 @@ def get_log_user_agents():
             user_agents.append(user_agent)
     log_file.close()
     return user_agents
+
 
 if __name__ == '__main__':
     print get_log_dicts()

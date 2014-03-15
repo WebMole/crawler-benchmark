@@ -1,23 +1,24 @@
 {% macro add_entry(entry_type) -%}
-  <h3>Add a {{ entry_type.get('name') }} entry</h3>
-  <form action="{{ url_for('entries_add', type=entry_type.get('route')) }}" method=post class=add-entry>
-    <dl>
-      <dt>Title:
-      <dd><input type=text size=30 name=title>
-      <dt>Text:
-      <dd><textarea name=text rows=5 cols=40></textarea>
-      <dd><input type=submit value=Share>
-    </dl>
- </form>
- <div id="divAddAuto">
-   <input type="text" id="num{{ entry_type.get('route') }}" value="0">
-   <button class="btnAddAuto" url="{{ url_for('entries_add', type=entry_type.get('route')) }}" route="{{ entry_type.get('route') }}">
-     Add auto
-   </button>
- </div>
- <div id="divClearEntries">
-   <button class="btnClearEntries" url="{{ url_for('clear_entries', type=entry_type.get('route')) }}">
-     Clear {{ entry_type.get('count') }} entries
-   </button>
- </div>
+    <h3>Add a {{ entry_type.get('name') }} entry</h3>
+    <form action="{{ url_for('entries_add', type=entry_type.get('route')) }}" method=post class=add-entry>
+        <dl>
+            <dt>Title:
+            <dd><input type=text size=30 name=title>
+            <dt>Text:
+            <dd><textarea name=text rows=5 cols=40></textarea>
+            <dd><input type=submit value=Share>
+        </dl>
+    </form>
+    <div id="divAddAuto">
+        <input type="text" id="num{{ entry_type.get('route') }}" value="0">
+        <button class="btnAddAuto" url="{{ url_for('entries_add', type=entry_type.get('route')) }}"
+                route="{{ entry_type.get('route') }}">
+            Add auto
+        </button>
+    </div>
+    <div id="divClearEntries">
+        <button class="btnClearEntries" url="{{ url_for('clear_entries', type=entry_type.get('route')) }}">
+            Clear {{ entry_type.get('count') }} entries
+        </button>
+    </div>
 {%- endmacro %}

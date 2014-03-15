@@ -5,13 +5,14 @@ Flaskr Tests
 Crawler Benchmark tests.
 """
 import os
-import cb
 import unittest
 import tempfile
 
+import cb
 
+
+# @todo: make real tests
 class FlaskrTestCase(unittest.TestCase):
-
     def setUp(self):
         """Before each test, set up a blank database"""
         self.db_fd, cb.app.config['DATABASE'] = tempfile.mkstemp()

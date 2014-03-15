@@ -1,19 +1,18 @@
 from __future__ import print_function
-import datetime
-import matplotlib.pyplot as plt
-
 import StringIO
+
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import log_parser
 from matplotlib import ticker
 
-import random
+import log_parser
 
 graph_colors = ['r', 'b', 'g', 'c', 'm', 'y', 'k']
 
 
 def time_ticks(x, pos):
     return "{:10.2f}".format(float(x) / 1.0)
+
 
 formatter = ticker.FuncFormatter(time_ticks)
 

@@ -1,9 +1,8 @@
 # Based on Simple Pagination by Armin Ronarcher: http://flask.pocoo.org/snippets/44/
 from math import ceil
 
+
 class Pagination(object):
-
-
     def __init__(self, page, per_page, total_count):
         self.page = page
         self.per_page = per_page

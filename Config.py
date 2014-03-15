@@ -1,41 +1,40 @@
 import shelve
-import json
 
 
+#@todo: use config.json instead
 class Config:
-
     modes = [
-                {
-                    'name': 'Blog',
-                    'route': 'blog',
-                    'add': 'admin/blog/add',
-                    'enabled': True
-                },
-                {
-                    'name': 'Forum',
-                    'route': 'forum',
-                    'add': 'admin/forum/add',
-                    'enabled': True
-                },
-                {
-                    'name': 'Newsfeed',
-                    'route': 'newsfeed',
-                    'add': 'admin/newsfeed/add',
-                    'enabled': True
-                },
-                {
-                    'name': 'Forms',
-                    'route': 'forms',
-                    'add': 'admin/forms/add',
-                    'enabled': True
-                },
-                {
-                    'name': 'Catalog',
-                    'route': 'catalog',
-                    'add': 'admin/catalog/add',
-                    'enabled': True
-                }
-            ]
+        {
+            'name': 'Blog',
+            'route': 'blog',
+            'add': 'admin/blog/add',
+            'enabled': True
+        },
+        {
+            'name': 'Forum',
+            'route': 'forum',
+            'add': 'admin/forum/add',
+            'enabled': True
+        },
+        {
+            'name': 'Newsfeed',
+            'route': 'newsfeed',
+            'add': 'admin/newsfeed/add',
+            'enabled': True
+        },
+        {
+            'name': 'Forms',
+            'route': 'forms',
+            'add': 'admin/forms/add',
+            'enabled': True
+        },
+        {
+            'name': 'Catalog',
+            'route': 'catalog',
+            'add': 'admin/catalog/add',
+            'enabled': True
+        }
+    ]
 
     entry_single_page = True
     pagination_entry_per_page = 25

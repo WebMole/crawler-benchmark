@@ -1,21 +1,21 @@
 {% extends "layout.html" %}
 {% block body %}
-  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 
-  {% if not session.logged_in %}
-    {% include "login.html" %}
-  {% else %}
-    {% import "components/add_entry.html" as entry %}
+    {% if not session.logged_in %}
+        {% include "login.html" %}
+    {% else %}
+        {% import "components/add_entry.html" as entry %}
 
-    {%- for mode in modes %}
-      Checkbox: {{ mode.get("enabled") }}
-      {% if mode.get("enabled") %}
-        {{ entry.add_entry(mode) }}
-      {% endif %}
-    {% endfor -%}
+        {%- for mode in modes %}
+            Checkbox: {{ mode.get("enabled") }}
+            {% if mode.get("enabled") %}
+                {{ entry.add_entry(mode) }}
+            {% endif %}
+        {% endfor -%}
 
-    {% import "components/metanav.html" as metanav %}
-    {{ metanav.metanav() }}
+        {% import "components/metanav.html" as metanav %}
+        {{ metanav.metanav() }}
 
-  {% endif %}
+    {% endif %}
 {% endblock %}

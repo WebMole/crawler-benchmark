@@ -8,9 +8,9 @@ import logging.config
 import re
 from datetime import datetime, date
 from calendar import Calendar
+import sqlite3
 
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response
-import sqlite3
 import yaml
 from loremipsum import get_paragraphs, get_sentences
 
@@ -19,6 +19,7 @@ from LoggingRequest import LoggingRequest
 from Config import Config
 import GraphManager
 import log_parser
+
 
 logging.config.dictConfig(yaml.load(open('logging.conf')))
 log_file = logging.getLogger('file')
@@ -62,7 +63,7 @@ def init_db():
         for mode in config.modes:
             # create tables if not already created
             database_request = "create table if not exists " \
-                               + mode.get("route")\
+                               + mode.get("route") \
                                + " (" \
                                  "    id integer primary key autoincrement," \
                                  "    title text not null," \
@@ -91,7 +92,7 @@ def close_db(error):
         if hasattr(g, 'sqlite_db'):
             g.sqlite_db.close()
         else:
-            raise Exception("couldn't close sqlite_db")
+            abort(500, "Database not loaded yet")
 
 
 @app.route('/')
@@ -316,7 +317,7 @@ def results():
 
 @app.errorhandler(404)
 def page_not_found(e):
-        return render_template('404.html', title=e), 404
+    return render_template('404.html', title=e), 404
 
 
 @app.route('/trap/random/')
@@ -331,7 +332,6 @@ def trap_random_page():
 
 @app.route('/trap/login/', methods=['GET', 'POST'])
 def trap_login():
-
     error = None
     if request.method == 'POST':
         if request.form['username'] != "test":
@@ -432,6 +432,7 @@ def trap_calendar(year):
     abort(501)
 
 
+# @todo: implement this
 @app.route('/trap/errors/')
 def trap_errors():
     return render_template(
@@ -442,6 +443,7 @@ def trap_errors():
     )
 
 
+# @todo: implement this
 @app.route('/trap/deadends/')
 def trap_deadends():
     return render_template(
@@ -452,6 +454,7 @@ def trap_deadends():
     )
 
 
+# @todo: implement this
 @app.route('/trap/comet/')
 def trap_comet():
     return render_template(
@@ -462,6 +465,7 @@ def trap_comet():
     )
 
 
+# @todo: implement this
 @app.route('/trap/depth/')
 def trap_depth():
     return render_template(
@@ -499,7 +503,7 @@ def fail(challenge):
 def url_for_other_page(page):
     """url_for helper function for pagination"""
     args = request.view_args.copy()
-    args['page'] = page
+    args['page_number'] = page
     return url_for(request.endpoint, **args)
 
 
