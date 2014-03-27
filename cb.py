@@ -296,8 +296,8 @@ def plot():
 
     output = GraphManager.draw_custom_graph(user_agents=request.values.getlist('selUserAgent'))
     response = make_response(output.getvalue())
-    #response.mimemode = 'image/png'
-    response.mimemode = 'image/svg+xml'
+    #response.mimetype = 'image/png'
+    response.mimetype = 'image/svg+xml'
     return response
 
 

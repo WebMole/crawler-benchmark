@@ -6,11 +6,11 @@
         {% include "login.html" %}
     {% else %}
 
-        <img src="{{ url_for('plot') }}" id="imgResult" alt="Image Placeholder">
+        <img src="{{ url_for('plot') }}" id="imgResult" alt="Image Placeholder" />
 
         <div id="divUserAgent">
             <form id="frmUserAgent" action="{{ url_for('plot') }}">
-                <h2>User Agents</h2>
+                <label for="selUserAgent">User Agents</label><br />
                 <select name="selUserAgent" id="selUserAgent" multiple>
                     {%- for user_agent in user_agents %}
                         <option value="{{ user_agent }}">{{ user_agent }}</option>
