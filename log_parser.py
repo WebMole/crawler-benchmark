@@ -1,4 +1,5 @@
 #import re
+import datetime # Used in evaluated log line
 
 
 def get_log_dicts(user_agent=None):

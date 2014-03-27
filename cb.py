@@ -288,6 +288,7 @@ def logout():
     return redirect(url_for('index'))
 
 
+#TODO: fix the image display...
 #@app.route('/admin/plot.png')
 @app.route('/admin/plot.svg')
 def plot():
