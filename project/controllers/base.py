@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from os import abort
 
-from flask import render_template
+from flask import render_template, url_for, request
 
 from project import app, config
 
@@ -38,3 +38,12 @@ def fail(challenge):
         abort(500)
     else:
         return render_template('layout/fail.html', title="Challenge " + challenge + " failed!", challenge=challenge)
+
+
+def url_for_other_page(page_number):
+    """url_for helper function for pagination"""
+    args = request.view_args.copy()
+    args['page_number'] = page_number
+    return url_for(request.endpoint, **args)
+
+app.jinja_env.globals['url_for_other_page'] = url_for_other_page

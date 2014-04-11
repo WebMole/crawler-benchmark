@@ -4,7 +4,10 @@ import shelve
 #@todo: use config.json instead
 class Configuration:
 
+    log_conf_path = "project/configuration/logging.conf"
     log_file_path = "logging.log"
+
+    template_folder_path = "project/templates/"
 
     modes = [
         {

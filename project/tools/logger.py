@@ -2,16 +2,19 @@
 import datetime
 import re
 
-from flask import logging, request, g
+import logging
+import logging.config
+
+from flask import request, g
 import yaml
 
 from project import app
-from project.configuration import configuration
+from project.configuration.configuration import Configuration
 
 from project.models.LoggingRequest import LoggingRequest
 
 
-logging.getLogger(app.name).config.dictConfig(yaml.load(open(configuration.log_conf_file)))
+logging.config.dictConfig(yaml.load(open(Configuration.log_conf_path)))
 log_file = logging.getLogger('file')
 logConsole = logging.getLogger('console')
 

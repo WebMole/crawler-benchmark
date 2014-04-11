@@ -1,9 +1,9 @@
-{% extends "layout.html" %}
+{% extends "/layout/layout.html" %}
 {% block body %}
     {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 
     {% if not session.logged_in %}
-        {% include "login.html" %}
+        {% include "/layout/login.html" %}
     {% else %}
 
         <img src="{{ url_for('plot') }}" id="imgResult" alt="Image Placeholder" />

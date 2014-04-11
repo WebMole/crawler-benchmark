@@ -3,7 +3,7 @@ from os import abort
 import sqlite3
 from flask import g
 from project import app
-from project.configuration import configuration
+from project.configuration.configuration import Configuration
 
 __author__ = 'gableroux'
 
@@ -13,7 +13,7 @@ def init_db():
     with app.app_context():
         db = get_db()
 
-        for mode in configuration.modes:
+        for mode in Configuration.modes:
             # create tables if not already created
             database_request = "create table if not exists " \
                                + mode.get("route") \
