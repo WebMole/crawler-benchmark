@@ -1,5 +1,19 @@
 # noinspection PyUnresolvedReferences
-import datetime  # Used in evaluated log line
+import datetime
+import re
+
+from flask import logging, request, g
+import yaml
+
+from project import app
+from project.configuration import configuration
+
+from project.models.LoggingRequest import LoggingRequest
+
+
+logging.getLogger(app.name).config.dictConfig(yaml.load(open(configuration.log_conf_file)))
+log_file = logging.getLogger('file')
+logConsole = logging.getLogger('console')
 
 
 def get_log_dicts(user_agent=None):
@@ -8,7 +22,6 @@ def get_log_dicts(user_agent=None):
     for line in log_file:
         request = eval(line)
         if user_agent is not None:
-            #if re.match(user_agent, request['user_agent']):
             if user_agent == request['user_agent']:
                 requests.append(request)
         else:
@@ -22,6 +35,7 @@ def clear_log(user_agents=None):
     log_file = open("logging.log", "r")
     lines = log_file.readlines()
     log_file.close()
+
     # ReWrite to the log file each lines excepts theses with selected user_agents
     log_file = open("logging.log", "w")
     for line in lines:
@@ -47,6 +61,30 @@ def get_log_user_agents():
             user_agents.append(user_agent)
     log_file.close()
     return user_agents
+
+
+@app.after_request
+def per_request_callbacks(response):
+    if not re.match(r'/admin(.*)', request.path, re.M | re.I):
+
+        for func in getattr(g, 'call_after_request', ()):
+            response = func(response)
+
+        lr = LoggingRequest(
+            datetime.date.today(),
+            request.method,
+            request.path,
+            request.args.lists(),
+            request.form.lists(),
+            None if request.routing_exception is None
+            else str(request.routing_exception),
+            request.environ['HTTP_USER_AGENT']
+        )
+
+        str_to_log = lr.__dict__
+        log_file.debug(str_to_log)
+
+    return response
 
 
 if __name__ == '__main__':

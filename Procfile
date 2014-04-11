@@ -1,1 +1,1 @@
-web: python cb.py
+web: python runserver.py

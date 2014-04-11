@@ -5,7 +5,7 @@
     {% if not session.logged_in %}
         {% include "login.html" %}
     {% else %}
-        {% import "components/add_entry.html" as entry %}
+        {% import "components/../components/add_entry.html" as entry %}
 
         {%- for mode in modes %}
             Checkbox: {{ mode.get("enabled") }}
@@ -14,7 +14,7 @@
             {% endif %}
         {% endfor -%}
 
-        {% import "components/metanav.html" as metanav %}
+        {% import "components/../components/metanav.html" as metanav %}
         {{ metanav.metanav() }}
 
     {% endif %}

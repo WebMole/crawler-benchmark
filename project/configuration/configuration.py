@@ -2,7 +2,10 @@ import shelve
 
 
 #@todo: use config.json instead
-class Config:
+class Configuration:
+
+    log_file_path = "logging.log"
+
     modes = [
         {
             'name': 'Blog',

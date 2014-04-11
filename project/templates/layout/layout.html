@@ -14,13 +14,14 @@
         <h1>Crawler Benchmark</h1>
 
         {% if title is defined %}<h2>{{ title }}</h2>{% endif %}
-        {% if get_flashed_messages()|length %}
-            <ul class=flash>
-                {% for message in get_flashed_messages() %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+           {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+            {% macro render_error(field) %}
+                {% if field.errors %}
+                    {% for error in field.errors %}<span class='error'>{{ error }}</span>{% endfor %}
+                {% endif %}
+            {% endmacro %}
         {% block body %}{% endblock %}
     </div>
     {% if infiniteScrollOn %}<input id="infiniteScrollOn" type="hidden" value="on">{% endif %}

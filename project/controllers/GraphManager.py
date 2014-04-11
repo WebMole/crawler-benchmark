@@ -1,13 +1,13 @@
-from __future__ import print_function
+# -*- coding: utf-8 -*-
 import StringIO
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib import ticker
 
-import log_parser
+from project.tools import logger
 
-graph_colors = ['r', 'b', 'g', 'c', 'm', 'y', 'k']
+graph_colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k']
 
 
 def time_ticks(x, pos):
@@ -30,7 +30,7 @@ def draw_custom_graph(user_agents):
 
     #requests = log_parser.get_log_dicts(user_agent = r'SiteSucker.*')
     for user_agent in user_agents:
-        requests = log_parser.get_log_dicts(user_agent=user_agent)
+        requests = logger.get_log_dicts(user_agent=user_agent)
         first_date = None
         x = []
         y = []
