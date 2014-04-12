@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from os import abort
+
 from flask import session, flash, redirect, url_for, request, render_template
 from loremipsum import get_sentences, get_paragraphs
+
 from project import app, config, init_db
 from project.controllers import graph
 from project.controllers.database import get_db
 from project.tools import logger
-from project.tools.tools import get_specific_item
 
 
 @app.route('/admin/logout')
@@ -47,11 +48,6 @@ def clear_entries(mode):
     with app.app_context():
         db = get_db()
 
-        try:
-            mode = get_specific_item(config.modes, "route", mode)
-        except ValueError:
-            abort(404)
-
         database_request = "drop table if exists " + mode + ";"
         db.cursor().executescript(database_request)
         db.commit()
@@ -63,11 +59,6 @@ def clear_entries(mode):
 def entries_add_auto(mode, num):
     if not session.get('logged_in'):
         abort(401)
-
-    try:
-        mode = get_specific_item(config.modes, "route", mode)
-    except ValueError:
-        return "invalid page"
 
     db = get_db()
     for i in range(0, num):
@@ -86,11 +77,6 @@ def entries_add_auto(mode, num):
 def entries_add(mode):
     if not session.get('logged_in'):
         abort(401)
-
-    try:
-        mode = get_specific_item(config.modes, "route", mode)
-    except ValueError:
-        return "invalid page"
 
     db = get_db()
     db.execute('insert into ' + mode + ' (title, text) values (?, ?)',
