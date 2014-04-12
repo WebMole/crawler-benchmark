@@ -7,6 +7,7 @@ from flask.ext.wtf import Form
 from loremipsum import get_sentences
 from wtforms import TextField, validators
 from project import app, config
+from project.tools.logger import logConsole
 
 __author__ = 'gableroux'
 

@@ -1,11 +1,11 @@
-{% extends "/layout/layout.html" %}
+{% extends "layout/layout.html" %}
 {% block body %}
     {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 
     {% if not session.logged_in %}
-        {% include "login.html" %}
+        {% include "layout/login.html" %}
     {% else %}
-        {% import "components/../components/add_entry.html" as entry %}
+        {% import "components/add_entry.html" as entry %}
 
         {%- for mode in modes %}
             Checkbox: {{ mode.get("enabled") }}
@@ -14,7 +14,7 @@
             {% endif %}
         {% endfor -%}
 
-        {% import "components/../components/metanav.html" as metanav %}
+        {% import "components/metanav.html" as metanav %}
         {{ metanav.metanav() }}
 
     {% endif %}

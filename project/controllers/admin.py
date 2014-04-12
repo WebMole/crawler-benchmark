@@ -112,7 +112,7 @@ def login():
             session['logged_in'] = "True"
             flash('You were logged in')
             return redirect(url_for('admin'))
-    return render_template('login.html', error=error)
+    return render_template('layout/login.html', error=error)
 
 
 @app.route('/admin')
