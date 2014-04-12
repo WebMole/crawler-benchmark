@@ -72,7 +72,7 @@ def per_request_callbacks(response):
             response = func(response)
 
         lr = LoggingRequest(
-            datetime.date.today(),
+            datetime.datetime.today(),
             request.method,
             request.path,
             request.args.lists(),
