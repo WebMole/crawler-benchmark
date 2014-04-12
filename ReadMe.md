@@ -3,7 +3,7 @@ CB is a crawler utility that implement a couple of site categories to be crawled
 
 ## Usage
 
-First, clone the repository, cd to the directory and install dependencies using pip (provided with python)
+First, clone the repository, `cd` into the directory and install dependencies using pip (provided with python)
 
     pip install -r requirements.txt
 
@@ -11,9 +11,9 @@ You may have troubles installing matplotlib so you can do this:
 
     pip install matplotlib --allow-external matplotlib
 
-Then launch the server using `cb.py` (cb for Crawler Benchmark)
+Then launch the server using `runserver.py`
 
-    python cb.py
+    python runserver.py
 
 Once the server is running, visit `/admin` and login with credentials.
 

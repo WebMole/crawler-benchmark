@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from project.configuration.configuration import Configuration
+from project.configuration import Configuration
 #from project.controllers.database import init_db
 
 __version__ = '0.1'

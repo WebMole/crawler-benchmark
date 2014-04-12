@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from os import abort
 import sqlite3
+
 from flask import g
+
 from project import app
-from project.configuration.configuration import Configuration
+from project.configuration import Configuration
+
 
 __author__ = 'gableroux'
 

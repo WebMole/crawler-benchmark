@@ -1,7 +1,6 @@
 # noinspection PyUnresolvedReferences
 import datetime
 import re
-
 import logging
 import logging.config
 
@@ -9,8 +8,7 @@ from flask import request, g
 import yaml
 
 from project import app
-from project.configuration.configuration import Configuration
-
+from project.configuration import Configuration
 from project.models.LoggingRequest import LoggingRequest
 
 
@@ -20,7 +18,7 @@ logConsole = logging.getLogger('console')
 
 
 def get_log_dicts(user_agent=None):
-    log_file = open("logging.log", "r")
+    log_file = open(Configuration.log_file_path, "r")
     requests = []
     for line in log_file:
         request = eval(line)
@@ -35,12 +33,12 @@ def get_log_dicts(user_agent=None):
 
 def clear_log(user_agents=None):
     # Read the log file
-    log_file = open("logging.log", "r")
+    log_file = open(Configuration.log_file_path, "r")
     lines = log_file.readlines()
     log_file.close()
 
     # ReWrite to the log file each lines excepts theses with selected user_agents
-    log_file = open("logging.log", "w")
+    log_file = open(Configuration.log_file_path, "w")
     for line in lines:
         has_to_write_line = True
         request = eval(line)
@@ -55,7 +53,7 @@ def clear_log(user_agents=None):
 
 
 def get_log_user_agents():
-    log_file = open("logging.log", "r")
+    log_file = open(Configuration.log_file_path, "r")
     user_agents = []
     for line in log_file:
         request = eval(line)

@@ -46,4 +46,5 @@ def url_for_other_page(page_number):
     args['page_number'] = page_number
     return url_for(request.endpoint, **args)
 
+
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page

@@ -3,7 +3,7 @@ from os import abort
 from flask import session, flash, redirect, url_for, request, render_template
 from loremipsum import get_sentences, get_paragraphs
 from project import app, config, init_db
-from project.controllers import GraphManager
+from project.controllers import graph
 from project.controllers.database import get_db
 from project.tools import logger
 from project.tools.tools import get_specific_item
@@ -20,7 +20,7 @@ def logout():
 def plot():
     from flask import make_response
 
-    output = GraphManager.draw_custom_graph(user_agents=request.values.getlist('selUserAgent'))
+    output = graph.draw_custom_graph(user_agents=request.values.getlist('selUserAgent'))
     response = make_response(output.getvalue())
     response.mimetype = 'image/svg+xml'
     return response
