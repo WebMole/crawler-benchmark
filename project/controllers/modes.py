@@ -48,32 +48,34 @@ def entries(mode, page_number):
         else:  # AJAX is disabled
             no_layout = False
             infinite_scroll_enabled = False
-            if page_number is None:
-                page_number = 1
-        db = get_db()
 
-        cur = db.execute('select count(id) from ' + mode.get("route"))
-        count = cur.fetchone()
-        count_value = count[0]
+    if page_number is None:
+        page_number = 1
 
-        pagination = Pagination(
-            page_number,
+    db = get_db()
+
+    cur = db.execute('select count(id) from ' + mode.get("route"))
+    count = cur.fetchone()
+    count_value = count[0]
+
+    pagination = Pagination(
+        page_number,
+        config.pagination_entry_per_page,
+        count_value
+    )
+
+    db = get_db()
+    cur = db.execute(
+        'select id, title, text from %s order by id desc limit %d offset %d' % (
+            mode.get('route'),
             config.pagination_entry_per_page,
-            count_value
+            (pagination.page - 1) * config.pagination_entry_per_page
         )
+    )
+    mode_entries = cur.fetchall()
 
-        db = get_db()
-        cur = db.execute(
-            'select id, title, text from %s order by id desc limit %d offset %d' % (
-                mode.get('route'),
-                config.pagination_entry_per_page,
-                (pagination.page - 1) * config.pagination_entry_per_page
-            )
-        )
-        mode_entries = cur.fetchall()
-
-        if not mode_entries and page_number != 1:
-            abort(404)
+    if not mode_entries and page_number != 1:
+        abort(404)
 
     return render_template(
         'modes/' + mode.get('route') + '.html',

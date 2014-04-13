@@ -1,4 +1,4 @@
-{% if not no_layout %}
+{% if not noLayout %}
     <!doctype html>
     <head>
         <title>Crawler Benchmark{% if title is defined %} | {{ title }}{% endif %}</title>
@@ -6,7 +6,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.0.2.min.js') }}"></script>
         {% if in_admin %}
             <script type="text/javascript" src="{{ url_for('static', filename='js/admin.js') }}"></script>{% endif %}
-        {% if ajax_enabled %}
+        {% if ajaxOn %}
             <script type="text/javascript" src="{{ url_for('static', filename='js/ajax.js') }}"></script>{% endif %}
     </head>
     <body>
@@ -22,7 +22,9 @@
                     {% for error in field.errors %}<span class='error'>{{ error }}</span>{% endfor %}
                 {% endif %}
             {% endmacro %}
+{% endif %}
         {% block body %}{% endblock %}
+{% if not noLayout %}
     </div>
     {% if infiniteScrollOn %}<input id="infiniteScrollOn" type="hidden" value="on">{% endif %}
     </body>

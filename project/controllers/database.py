@@ -4,8 +4,7 @@ import sqlite3
 
 from flask import g
 
-from project import app
-from project.configuration import Configuration
+from project import app, config
 
 
 __author__ = 'gableroux'
@@ -16,7 +15,7 @@ def init_db():
     with app.app_context():
         db = get_db()
 
-        for mode in Configuration.modes:
+        for mode in config.modes:
             # create tables if not already created
             database_request = "create table if not exists " \
                                + mode.get("route") \
@@ -48,7 +47,8 @@ def close_db(error):
         if hasattr(g, 'sqlite_db'):
             g.sqlite_db.close()
         else:
-            abort(500, "Database not loaded yet")
+            pass
+            #abort(500, "Database not loaded yet")
 
 
 def connect_db(database_name):

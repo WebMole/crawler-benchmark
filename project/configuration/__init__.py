@@ -44,8 +44,9 @@ class Configuration:
     entry_single_page = True
     pagination_entry_per_page = 25
 
-    ajax_enabled = False
-    infinite_scroll_enabled = False
+    #@todo: Fix the infinite_scroll !!!
+    ajax_enabled = True
+    infinite_scroll_enabled = True
 
 
     # external links to use with the trap
