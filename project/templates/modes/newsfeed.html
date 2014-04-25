@@ -2,11 +2,11 @@
 {% import "components/pagination.html" as p %}
 
 {% block body %}
-    {% if not no_layout %}
-        <div id="content"{% if ajax_enabled %} data-first_url="{{ url_for_other_page(1) }}">{% endif %}
+    {% if not noLayout %}
+        <div id="content"{% if ajaxOn %} data-first_url="{{ url_for_other_page(1) }}">{% endif %}
     {% endif %}
 
-{% if not ajax_enabled or no_layout %}
+{% if not ajaxOn or noLayout %}
     <ul class=entries>
         {% for entry in entries %}
             <li>
@@ -22,7 +22,7 @@
     {{ p.render_pagination(pagination) }}
 {% endif %}
 
-{% if not no_layout %}
+{% if not noLayout %}
     </div>
 {% endif %}
 {% endblock %}

@@ -28,7 +28,7 @@ $(function () {
         infiniteScrollOn = true;
     }
 
-    $("<div>").load($("#content").data('firstUrl'), function () {
+    $("<div>").load($("#content").data('first_url'), function () {
         if (infiniteScrollOn) {
             $("#content").html($(this).find("ul.entries")).append('<div class="pagination"></div>');
             nextUrl = findNextPage($(this).find(".pagination"));
