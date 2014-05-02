@@ -1,0 +1,31 @@
+{% if not noLayout %}
+    <!doctype html>
+    <head>
+        <title>Crawler Benchmark{% if title is defined %} | {{ title }}{% endif %}</title>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.0.2.min.js') }}"></script>
+        {% if in_admin %}
+            <script type="text/javascript" src="{{ url_for('static', filename='js/admin.js') }}"></script>{% endif %}
+        {% if ajaxOn %}
+            <script type="text/javascript" src="{{ url_for('static', filename='js/ajax.js') }}"></script>{% endif %}
+    </head>
+    <body>
+    <div class=page>
+        <h1>Crawler Benchmark</h1>
+
+        {% if title is defined %}<h2>{{ title }}</h2>{% endif %}
+           {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+            {% macro render_error(field) %}
+                {% if field.errors %}
+                    {% for error in field.errors %}<span class='error'>{{ error }}</span>{% endfor %}
+                {% endif %}
+            {% endmacro %}
+{% endif %}
+        {% block body %}{% endblock %}
+{% if not noLayout %}
+    </div>
+    {% if infiniteScrollOn %}<input id="infiniteScrollOn" type="hidden" value="on">{% endif %}
+    </body>
+{% endif %}

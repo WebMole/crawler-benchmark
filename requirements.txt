@@ -13,3 +13,5 @@ CairoSVG==1.0.3
 tinycss==0.3
 cssselect==0.9.1
 loremipsum==1.0.2
+Flask-WTF==0.8.3
+Flask-DebugToolbar==0.8.0
