@@ -2,6 +2,7 @@
 db/main.db
 logging.log
 .idea
+node_modules/
 
 *.py[cod]
 

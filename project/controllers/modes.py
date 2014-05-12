@@ -36,7 +36,7 @@ def entries(mode, page_number):
     pagination = None
     mode_entries = None
 
-    # todo: Chose if ajax_enabled and infinite_scroll_enabled configs are for each separate modes or globals
+    # todo: Choose if ajax_enabled and infinite_scroll_enabled configs are for each separate modes or globals
     ajax_enabled = config.ajax_enabled
     infinite_scroll_enabled = config.infinite_scroll_enabled
 
