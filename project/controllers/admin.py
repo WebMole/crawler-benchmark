@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from os import abort
+import json
 
-from flask import session, flash, redirect, url_for, request, render_template
+from flask import session, flash, redirect, url_for, request, render_template, Response
 from loremipsum import get_sentences, get_paragraphs
 
 from project import app, config, init_db
@@ -32,6 +33,11 @@ def plot():
 def clear_log_user_agents():
     logger.clear_log(user_agents=request.values.getlist('selUserAgent'))
     return "OK"
+
+
+@app.route('/admin/user_agents', methods=['GET'])
+def get_user_agents():
+    return Response(json.dumps(logger.get_log_user_agents()),  mimetype='application/json')
 
 
 @app.route('/admin/results')

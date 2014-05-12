@@ -18,7 +18,8 @@ $(function () {
                     type: "DELETE",
                     url: clearUserAgentsUrl,
                     success: function () {
-                        alert('Success');
+                        //alert('Success');
+                        loadUserAgents();
                     },
                     error: function () {
                         alert('Error')
@@ -107,6 +108,24 @@ $(function () {
         loadMode(this.value);
     });
 });
+
+function loadUserAgents() {
+    url = $('#selUserAgent').data('url');
+
+    $.getJSON( url, function( data ) {
+        $('#selUserAgent').find('option').remove();
+
+        var strToAppend = "";
+        
+        $.each( data, function ( key, value ) {
+
+            var option = $('<option/>');
+            option.attr({ 'value': value }).text(value);
+
+            $('#selUserAgent').append(option);
+        });
+    });
+}
 
 function loadMode(url) {
     if (url === undefined)

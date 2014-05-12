@@ -11,14 +11,14 @@
         <div id="divUserAgent">
             <form id="frmUserAgent" action="{{ url_for('plot') }}">
                 <label for="selUserAgent">User Agents</label><br />
-                <select name="selUserAgent" id="selUserAgent" multiple>
-                    {%- for user_agent in user_agents %}
+                <select name="selUserAgent" id="selUserAgent" data-url="{{ url_for('get_user_agents') }}" multiple>
+                    {% for user_agent in user_agents %}
                         <option value="{{ user_agent }}">{{ user_agent }}</option>
-                    {% endfor -%}
+                    {% endfor %}
                 </select>
                 <br/>
-                <input type="submit" value="Update graph">
-                <button id="clearLogUserAgents" data-url="{{ url_for('clear_log_user_agents') }}">Clear log by user
+                <input type="submit" class="btn btn-green" value="Update graph">
+                <button id="clearLogUserAgents" class="btn btn-red" data-url="{{ url_for('clear_log_user_agents') }}">Clear log by user
                     agents
                 </button>
             </form>

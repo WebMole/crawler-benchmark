@@ -6,21 +6,21 @@
     <form action="{{ url_for('entries_add', mode=entry_type.get('route')) }}" id="frm_add_entry" method="post" class="add-entry">
         <dl>
             <dt>Title:
-            <dd><input type=text size=30 name=title>
+            <dd><input type="text" size="30" name="title">
             <dt>Text:
-            <dd><textarea name=text rows=5 cols=40></textarea>
-            <dd><input type=submit value=Share>
+            <dd><textarea name="text" rows="5" cols="40"></textarea>
+            <dd><input type="submit" class="btn btn-blue" value="Share">
         </dl>
     </form>
     <div id="divAddAuto">
         <input type="text" id="num{{ entry_type.get('route') }}" value="0">
-        <button class="btnAddAuto" url="{{ url_for('entries_add', mode=entry_type.get('route')) }}"
+        <button class="btnAddAuto btn btn-blue" url="{{ url_for('entries_add', mode=entry_type.get('route')) }}"
                 route="{{ entry_type.get('route') }}">
             Add auto
         </button>
     </div>
     <div id="divClearEntries">
-        <button class="btnClearEntries" data-url="{{ url_for('clear_entries', mode=entry_type.get('route')) }}">
+        <button class="btnClearEntries btn btn-red" data-url="{{ url_for('clear_entries', mode=entry_type.get('route')) }}">
             Clear {{ entry_type.get('count') }} entries
         </button>
     </div>

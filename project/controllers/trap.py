@@ -111,7 +111,7 @@ def trap_calendar(year):
             year = date.today().year
             year_mod = year
         else:
-            year_mod = year % 10000
+            year_mod = year % 9999
             if year_mod < 1:
                 year_mod = 1
         cal_list = [cal.monthdatescalendar(year_mod, i + 1) for i in xrange(12)]
