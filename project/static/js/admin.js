@@ -1,30 +1,4 @@
 $(function () {
-    $('.btnAddAuto').click(function () {
-        $.ajax({
-            type: "POST",
-            url: $(this).attr('url') + '/' + $('#num' + $(this).attr('route')).val(),
-            success: function () {
-                alert('Success');
-            },
-            error: function () {
-                alert('Error')
-            }
-        });
-    });
-
-    $('.btnClearEntries').click(function () {
-        $.ajax({
-            type: "DELETE",
-            url: $(this).attr('url'),
-            success: function () {
-                alert('Success');
-            },
-            error: function () {
-                alert('Error')
-            }
-        });
-    });
-
     $('#clearLogUserAgents').click(function (event) {
         event.preventDefault();
 
@@ -53,7 +27,7 @@ $(function () {
             }
         }
     });
-
+    
     $('#frmUserAgent').submit(function (event) {
         event.preventDefault();
         //$.('#imgResult').attr('src', $("#frmUserAgent") + $.param($('#selUserAgent').val()));
@@ -77,4 +51,66 @@ $(function () {
 
         $('#imgResult').attr('src', imgUrl);
     });
+
+    $(document).on('submit', '#frm_add_entry', function(event) {
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function () {
+                //alert('Success');
+                loadMode();
+            },
+            error: function () {
+                alert('Error')
+            }
+        });
+        //event.preventDefault();
+        //console.log($(this).serialize());
+    });
+
+    $(document).on('click', '.btnAddAuto', function() {
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('url') + '/' + $('#num' + $(this).attr('route')).val(),
+            success: function () {
+                //alert('Success');
+                loadMode();
+            },
+            error: function () {
+                alert('Error')
+            }
+        });
+    });
+
+    $(document).on('click', '.btnClearEntries', function() {
+        if (confirm("Do you really want to clear all the entries for this mode?")) {
+            $.ajax({
+                type: "DELETE",
+                url: $(this).data('url'),
+                success: function () {
+                    //alert('Success');
+                    loadMode();
+                },
+                error: function () {
+                    alert('Error')
+                }
+            });
+        }
+    });
+
+    loadMode();
+
+    $('#sel_modes').change(function () {
+        loadMode(this.value);
+    });
 });
+
+function loadMode(url) {
+    if (url === undefined)
+        url = $('#sel_modes').val();
+    $('#div_mode').html('<img style="display:block;margin:auto;" src="/static/img/loadingBar.gif">');
+    $('#div_mode').load(url);
+}

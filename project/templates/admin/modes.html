@@ -1,0 +1,7 @@
+{% if session.logged_in %}
+    {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% import "components/add_entry.html" as entry %}
+    {{ entry.add_entry(mode) }}
+{% endif %}

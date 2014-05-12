@@ -5,14 +5,16 @@
     {% if not session.logged_in %}
         {% include "layout/login.html" %}
     {% else %}
-        {% import "components/add_entry.html" as entry %}
+        Mode :
+        <select id="sel_modes">
+            {% for mode in modes %}
+                <option value="{{ url_for('get_mode', mode=mode.get('route')) }}">{{ mode.get('name') }}</option>
+            {% endfor %}
+        </select>
 
-        {%- for mode in modes %}
-            Checkbox: {{ mode.get("enabled") }}
-            {% if mode.get("enabled") %}
-                {{ entry.add_entry(mode) }}
-            {% endif %}
-        {% endfor -%}
+        <div id="div_mode">
+            {# Loaded in AJAX #}
+        </div>
 
         {% import "components/metanav.html" as metanav %}
         {{ metanav.metanav() }}

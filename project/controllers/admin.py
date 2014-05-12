@@ -8,6 +8,7 @@ from project import app, config, init_db
 from project.controllers import graph
 from project.controllers.database import get_db
 from project.tools import logger
+from project.tools.tools import get_specific_item
 
 
 @app.route('/admin/logout')
@@ -52,6 +53,8 @@ def clear_entries(mode):
         db.cursor().executescript(database_request)
         db.commit()
         init_db()
+
+        flash('All ' + mode + ' entries were successfully cleared')
         return "OK"
 
 
@@ -68,9 +71,9 @@ def entries_add_auto(mode, num):
             [get_sentences(1, False)[0].replace(".", ""), get_paragraphs(1, False)[0]]
         )
     db.commit()
-    flash('New automatic %d %s entrie%s successfully posted' %
+    flash('New ' + mode + ' automatic %d %s entrie%s successfully posted' %
           (num, mode, 's were' if (num > 1) else ' was'))
-    return redirect(url_for('admin'))
+    return "OK"
 
 
 @app.route("/admin/add/<string:mode>", methods=['POST'])
@@ -83,7 +86,7 @@ def entries_add(mode):
                [request.form['title'], request.form['text']])
     db.commit()
     flash('New ' + mode + ' entry was successfully posted')
-    return redirect(url_for('admin'))
+    return "OK"
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -99,6 +102,23 @@ def login():
             flash('You were logged in')
             return redirect(url_for('admin'))
     return render_template('layout/login.html', error=error)
+
+
+@app.route("/admin/mode/<string:mode>", methods=['GET'])
+def get_mode(mode):
+    db = get_db()
+    for tmp_mode in config.modes:
+        cur = db.execute('select count(id) from ' + tmp_mode.get("route"))
+        count = cur.fetchone()
+        tmp_mode.__setitem__('count', count[0])
+
+    mode = get_specific_item(config.modes, "route", mode)
+
+    return render_template(
+        "admin/modes.html",
+        mode=mode,
+        in_admin=True
+    )
 
 
 @app.route('/admin')

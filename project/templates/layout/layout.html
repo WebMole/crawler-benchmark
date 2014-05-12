@@ -14,7 +14,7 @@
         <h1>Crawler Benchmark</h1>
 
         {% if title is defined %}<h2>{{ title }}</h2>{% endif %}
-           {% for message in get_flashed_messages() %}
+            {% for message in get_flashed_messages() %}
                 <div class="flash">{{ message }}</div>
             {% endfor %}
             {% macro render_error(field) %}

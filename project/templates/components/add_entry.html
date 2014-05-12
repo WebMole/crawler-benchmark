@@ -1,6 +1,9 @@
 {% macro add_entry(entry_type) -%}
-    <h3>Add a {{ entry_type.get('name') }} entry</h3>
-    <form action="{{ url_for('entries_add', mode=entry_type.get('route')) }}" method=post class=add-entry>
+    <input type="checkbox" class="inline chk_modes" id="chk_{{ entry_type.get('route') }}" disabled {% if entry_type.get("enabled") %} checked {% endif %}>
+    <h3>
+        Add a {{ entry_type.get('name') }} entry
+    </h3>
+    <form action="{{ url_for('entries_add', mode=entry_type.get('route')) }}" id="frm_add_entry" method="post" class="add-entry">
         <dl>
             <dt>Title:
             <dd><input type=text size=30 name=title>
@@ -17,7 +20,7 @@
         </button>
     </div>
     <div id="divClearEntries">
-        <button class="btnClearEntries" url="{{ url_for('clear_entries', mode=entry_type.get('route')) }}">
+        <button class="btnClearEntries" data-url="{{ url_for('clear_entries', mode=entry_type.get('route')) }}">
             Clear {{ entry_type.get('count') }} entries
         </button>
     </div>
