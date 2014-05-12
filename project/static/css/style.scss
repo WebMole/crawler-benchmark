@@ -110,6 +110,10 @@ ul.metanav {
   }
 }
 
+.inline {
+  display: inline;
+}
+
 .navigation {
   .previous {
     text-align: left;
@@ -122,3 +126,7 @@ ul.metanav {
 .clear {
   clear: both;
 }
+
+@import "_buttons";
+@import "_forms";
+@import "_forms-r";

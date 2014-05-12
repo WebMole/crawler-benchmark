@@ -3,7 +3,9 @@ CB is a crawler utility that implement a couple of site categories to be crawled
 
 ## Usage
 
-First, clone the repository, `cd` into the directory and install dependencies using pip (provided with python)
+### Python dependencies
+
+First, clone the repository, `cd` into the directory and install dependencies using pip (usually provided with python)
 
     pip install -r requirements.txt
 
@@ -21,6 +23,28 @@ Default login:
 
     username: admin
     password: default
+
+## Development
+
+### css editing
+
+We are using [grunt](http://gruntjs.com/) to auto compile [scss](http://sass-lang.com/) files into `css` files and we may add tasks in the future. [npm](https://www.npmjs.org/) dependencies are specified in `package.json`.
+
+[Install sass from the command line](http://sass-lang.com/install) (you may need `sudo` powers)
+
+    gem install sass
+
+Install grunt dependencies
+
+    npm install
+
+Install grunt globally
+
+    npm install -g grunt grunt-cli
+
+Run grunt and enjoy
+
+    grunt
 
 ## Changelog
 See [changelog.md](./Changelog.md) file.

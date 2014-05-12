@@ -1,0 +1,17 @@
+{
+  "name": "crawler-benchmark",
+  "version": "0.0.0",
+  "description": "CB is a crawler utility that implement a couple of site categories to be crawled. It also includes scenarios and configurations to handle ajax and some other goodies. Work in progress.",
+  "main": "runserver.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-sass": "^0.7.3",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}
