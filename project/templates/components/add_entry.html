@@ -1,27 +1,51 @@
 {% macro add_entry(entry_type) -%}
-    <input type="checkbox" class="inline chk_modes" id="chk_{{ entry_type.get('route') }}" disabled {% if entry_type.get("enabled") %} checked {% endif %}>
-    <h3>
-        Add a {{ entry_type.get('name') }} entry
-    </h3>
-    <form action="{{ url_for('entries_add', mode=entry_type.get('route')) }}" id="frm_add_entry" method="post" class="add-entry">
-        <dl>
-            <dt>Title:
-            <dd><input type="text" size="30" name="title">
-            <dt>Text:
-            <dd><textarea name="text" rows="5" cols="40"></textarea>
-            <dd><input type="submit" class="btn btn-blue" value="Share">
-        </dl>
+
+    <h2>{{ entry_type.get('name') }}</h2>
+    <span>{{ entry_type.get('count') }} entries</span>
+
+    <form action="{{ url_for('entries_add', mode=entry_type.get('route')) }}" id="frm_add_entry" method="post"
+          class="pure-form pure-form-aligned">
+        <fieldset>
+            <legend>Add a new entry</legend>
+            <div class="pure-control-group">
+                <label for="title">Title</label>
+                <input type="text" name="title" placeholder="Some title">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="text">Content</label>
+                <textarea name="text" rows="5" cols="40" placeholder="Some text"></textarea>
+            </div>
+
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
     </form>
+
+
     <div id="divAddAuto">
-        <input type="text" id="num{{ entry_type.get('route') }}" value="0">
-        <button class="btnAddAuto btn btn-blue" url="{{ url_for('entries_add', mode=entry_type.get('route')) }}"
-                route="{{ entry_type.get('route') }}">
-            Add auto
-        </button>
+        <form class="pure-form">
+            <fieldset>
+                <legend>Add random content</legend>
+
+                <label for="num{{ entry_type.get('route') }}">Number of elements:</label>
+                <input type="number" id="num{{ entry_type.get('route') }}" value="0">
+
+                <a class="btnAddAuto pure-button pure-button-green"
+                   url="{{ url_for('entries_add', mode=entry_type.get('route')) }}"
+                   route="{{ entry_type.get('route') }}">
+                    Generate entries
+                </a>
+            </fieldset>
+        </form>
+
     </div>
+
     <div id="divClearEntries">
-        <button class="btnClearEntries btn btn-red" data-url="{{ url_for('clear_entries', mode=entry_type.get('route')) }}">
-            Clear {{ entry_type.get('count') }} entries
+        <button class="btnClearEntries pure-button pure-button-red"
+                data-url="{{ url_for('clear_entries', mode=entry_type.get('route')) }}">
+            Delete {{ entry_type.get('count') }} entries
         </button>
     </div>
 {%- endmacro %}

@@ -1,5 +1,6 @@
-@import 'reset.css';
-@import 'text.css';
+@import 'reset';
+@import 'pure';
+@import 'text';
 
 $dark: #1D1A19;
 $dark_green: #5A740F;
@@ -66,6 +67,10 @@ ul.metanav {
   }
 }
 
+.full-width {
+  width: 100%;
+}
+
 .flash {
   margin-top: 0.5em;
   margin-bottom: 1em;
@@ -127,6 +132,5 @@ ul.metanav {
   clear: both;
 }
 
-@import "_buttons";
-@import "_forms";
-@import "_forms-r";
+@import "colors";
+@import "media_queries";

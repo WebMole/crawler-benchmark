@@ -1,16 +1,21 @@
 {% extends "layout/layout.html" %}
+
+{% block title %}Administration{% endblock %}
+
 {% block body %}
     {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 
     {% if not session.logged_in %}
         {% include "layout/login.html" %}
     {% else %}
-        Mode :
-        <select id="sel_modes">
-            {% for mode in modes %}
-                <option value="{{ url_for('get_mode', mode=mode.get('route')) }}">{{ mode.get('name') }}</option>
-            {% endfor %}
-        </select>
+        <form class="pure-form">
+            <label for="sel_modes">Mode :</label>
+            <select id="sel_modes">
+                {% for mode in modes %}
+                    <option value="{{ url_for('get_mode', mode=mode.get('route')) }}">{{ mode.get('name') }}</option>
+                {% endfor %}
+            </select>
+        </form>
 
         <div id="div_mode">
             {# Loaded in AJAX #}
