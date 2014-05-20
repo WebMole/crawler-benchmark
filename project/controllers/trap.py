@@ -129,12 +129,7 @@ def trap_calendar(year):
 
 @app.route('/trap/errors/')
 def trap_errors():
-    return render_template(
-        'traps/errors.html',
-        title=get_sentences(1, False)[0],
-        content=get_sentences(random.randint(1, 5)),
-        config=config
-    )
+    abort(500)
 
 
 @app.route('/trap/deadends/')

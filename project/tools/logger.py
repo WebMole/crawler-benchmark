@@ -17,18 +17,27 @@ log_file = logging.getLogger('file')
 logConsole = logging.getLogger('console')
 
 
-def get_log_dicts(user_agent=None):
+def get_log_dicts(user_agent=None, path_regex=None):
     log_file = open(Configuration.log_file_path, "r")
     requests = []
     for line in log_file:
         request = eval(line)
+        has_to_append = True
         if user_agent is not None:
-            if user_agent == request['user_agent']:
-                requests.append(request)
-        else:
+            if user_agent != request['user_agent']:
+                has_to_append = False
+        if path_regex is not None:
+            if not re.match(path_regex, request['path'], re.M | re.I):
+                has_to_append = False
+        if has_to_append:
             requests.append(request)
     log_file.close()
     return requests
+
+
+# @todo: Use this function to display something in results
+def get_log_dicts_success():
+    return get_log_dicts(path_regex=r'/success/(.*)')
 
 
 def clear_log(user_agents=None):
