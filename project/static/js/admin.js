@@ -1,6 +1,7 @@
 $(function () {
-
-    new Tablesort(document.getElementById('successes_table'));
+    if ($('#successes_table').length > 0) {
+        new Tablesort(document.getElementById('successes_table'));
+    }
 
     $('#clearLogUserAgents').click(function (event) {
         event.preventDefault();
