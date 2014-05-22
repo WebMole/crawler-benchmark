@@ -6,6 +6,8 @@
         {% include "layout/login.html" %}
     {% else %}
 
+        <h2>Speed by user agents</h2>
+
         <img src="{{ url_for('plot') }}" id="imgResult" alt="Image Placeholder"/>
 
         <div id="divUserAgent">
@@ -31,6 +33,23 @@
                 </fieldset>
             </form>
         </div>
+
+        <h2>Successes</h2>
+
+        <table>
+            <tr>
+              <th>User Agent</th>
+              <th>Challenge</th>
+              <th>Moment</th>
+            </tr>
+            {% for success in successes %}
+                <tr>
+                  <td>{{ success['user_agent'] }}</td>
+                  <td>{{ success['path'].replace('/success/', '') }}</td>
+                  <td>{{ success['datetime'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
 
         {% import "components/metanav.html" as metanav %}
         {{ metanav.metanav() }}

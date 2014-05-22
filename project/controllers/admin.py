@@ -45,6 +45,7 @@ def results():
     return render_template(
         "admin/results.html",
         user_agents=logger.get_log_user_agents(),
+        successes=logger.get_log_dicts_success(),
         in_admin=True
     )
 
