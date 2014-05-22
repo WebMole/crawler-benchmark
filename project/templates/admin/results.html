@@ -20,7 +20,8 @@
                         <small>You may select multiple at the same time</small>
                     </div>
                     <br>
-                    <select name="selUserAgent" id="selUserAgent" class="full-width" data-url="{{ url_for('get_user_agents') }}" multiple>
+                    <select name="selUserAgent" id="selUserAgent" class="full-width"
+                            data-url="{{ url_for('get_user_agents') }}" multiple>
                         {% for user_agent in user_agents %}
                             <option value="{{ user_agent }}">{{ user_agent }}</option>
                         {% endfor %}
@@ -36,19 +37,23 @@
 
         <h2>Successes</h2>
 
-        <table>
+        <table id="successes_table">
+            <thead>
             <tr>
-              <th>User Agent</th>
-              <th>Challenge</th>
-              <th>Moment</th>
+                <th>User Agent</th>
+                <th>Challenge</th>
+                <th>Moment</th>
             </tr>
+            </thead>
+            <tbody>
             {% for success in successes %}
                 <tr>
-                  <td>{{ success['user_agent'] }}</td>
-                  <td>{{ success['path'].replace('/success/', '') }}</td>
-                  <td>{{ success['datetime'] }}</td>
+                    <td>{{ success['user_agent'] }}</td>
+                    <td>{{ success['path'].replace('/success/', '') }}</td>
+                    <td>{{ success['datetime'] }}</td>
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
 
         {% import "components/metanav.html" as metanav %}

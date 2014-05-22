@@ -128,6 +128,99 @@ ul.metanav {
   }
 }
 
+table {
+  background: #fff;
+  max-width: 100%;
+  border-spacing: 0;
+  width: 100%;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-collapse: separate;
+  *border-collapse: collapsed;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.10);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.10);
+}
+
+table th,
+table td {
+  padding: 8px;
+  line-height: 18px;
+  text-align: left;
+  border-top: 1px solid #ddd;
+}
+
+table th {
+  background: #eee;
+  background: -webkit-gradient(linear, left top, left bottom, from(#f6f6f6), to(#eee));
+  background: -moz-linear-gradient(top, #f6f6f6, #eee);
+  text-shadow: 0 1px 0 #fff;
+  font-weight: bold;
+  vertical-align: bottom;
+}
+
+table td {
+  vertical-align: top;
+}
+
+table thead:first-child tr th,
+table thead:first-child tr td {
+  border-top: 0;
+}
+
+table tbody + tbody {
+  border-top: 2px solid #ddd;
+}
+
+table th + th,
+table td + td,
+table th + td,
+table td + th {
+  border-left: 1px solid #ddd;
+}
+
+table thead:first-child tr:first-child th,
+table tbody:first-child tr:first-child th,
+table tbody:first-child tr:first-child td {
+  border-top: 0;
+}
+
+/*tablesort specific styling*/
+th.sort-header {
+  cursor: pointer;
+}
+
+th.sort-header::-moz-selection,
+th.sort-header::selection {
+  background: transparent;
+}
+
+table th.sort-header:after {
+  content: '';
+  float: right;
+  margin-top: 7px;
+  border-width: 0 4px 4px;
+  border-style: solid;
+  border-color: #404040 transparent;
+  visibility: hidden;
+}
+
+table th.sort-header:hover:after {
+  visibility: visible;
+}
+
+table th.sort-up:after,
+table th.sort-down:after,
+table th.sort-down:hover:after {
+  visibility: visible;
+  opacity: 0.4;
+}
+
+table th.sort-up:after {
+  border-bottom: none;
+  border-width: 4px 4px 0;
+}
+
 .clear {
   clear: both;
 }

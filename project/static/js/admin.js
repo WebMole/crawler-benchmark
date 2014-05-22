@@ -1,4 +1,7 @@
 $(function () {
+
+    new Tablesort(document.getElementById('successes_table'));
+
     $('#clearLogUserAgents').click(function (event) {
         event.preventDefault();
 
@@ -28,7 +31,7 @@ $(function () {
             }
         }
     });
-    
+
     $('#frmUserAgent').submit(function (event) {
         event.preventDefault();
         //$.('#imgResult').attr('src', $("#frmUserAgent") + $.param($('#selUserAgent').val()));
@@ -53,7 +56,7 @@ $(function () {
         $('#imgResult').attr('src', imgUrl);
     });
 
-    $(document).on('submit', '#frm_add_entry', function(event) {
+    $(document).on('submit', '#frm_add_entry', function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -72,7 +75,7 @@ $(function () {
         //console.log($(this).serialize());
     });
 
-    $(document).on('click', '.btnAddAuto', function() {
+    $(document).on('click', '.btnAddAuto', function () {
         $.ajax({
             type: "POST",
             url: $(this).attr('url') + '/' + $('#num' + $(this).attr('route')).val(),
@@ -86,7 +89,7 @@ $(function () {
         });
     });
 
-    $(document).on('click', '.btnClearEntries', function() {
+    $(document).on('click', '.btnClearEntries', function () {
         if (confirm("Do you really want to clear all the entries for this mode?")) {
             $.ajax({
                 type: "DELETE",
@@ -112,12 +115,12 @@ $(function () {
 function loadUserAgents() {
     url = $('#selUserAgent').data('url');
 
-    $.getJSON( url, function( data ) {
+    $.getJSON(url, function (data) {
         $('#selUserAgent').find('option').remove();
 
         var strToAppend = "";
-        
-        $.each( data, function ( key, value ) {
+
+        $.each(data, function (key, value) {
 
             var option = $('<option/>');
             option.attr({ 'value': value }).text(value);
