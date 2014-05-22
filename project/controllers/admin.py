@@ -50,6 +50,30 @@ def results():
     )
 
 
+@app.route('/admin/logs')
+@app.route('/admin/logs/<int:limit>')
+def logs(limit=None):
+    if (limit is None):
+        last_n_lines_to_pass = config.log_view_n_lines
+    else:
+        last_n_lines_to_pass = limit
+    return render_template(
+        "admin/logs.html",
+        logs=logger.get_log_dicts(last_n_lines=last_n_lines_to_pass),
+        log_view_n_lines=last_n_lines_to_pass,
+        in_admin=True
+    )
+
+@app.route('/admin/logs/full')
+def logs_full():
+    return render_template(
+        "admin/logs.html",
+        logs=logger.get_log_dicts(),
+        log_view_n_lines="all",
+        in_admin=True
+    )
+
+
 @app.route("/admin/clear/<string:mode>", methods=['DELETE'])
 def clear_entries(mode):
     """Creates the database tables."""

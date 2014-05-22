@@ -6,6 +6,9 @@
         <li{% if request.path == url_for('admin') %} class="active"{% endif %}>
             <a href="{{ url_for('admin') }}">Admin</a>
         </li>
+        <li{% if request.path == url_for('logs') %} class="active"{% endif %}>
+            <a href="{{ url_for('logs') }}">Logs</a>
+        </li>
         <li{% if request.path == url_for('results') %} class="active"{% endif %}>
             <a href="{{ url_for('results') }}">Results</a>
         </li>

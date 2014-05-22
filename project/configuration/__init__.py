@@ -6,6 +6,8 @@ class Configuration:
     log_conf_path = "project/configuration/logging.conf"
     log_file_path = "logging.log"
 
+    log_view_n_lines = 100
+
     template_folder_path = "project/templates/"
 
     modes = [
