@@ -3,7 +3,6 @@ from project.configuration import Configuration
 
 __version__ = '0.1'
 from flask import Flask
-from flask_debugtoolbar import DebugToolbarExtension
 import jinja2
 
 app = Flask('project')
@@ -21,7 +20,7 @@ app.config.update(dict(
     SECRET_KEY='ls20f48g578hbmflgdi3',
     USERNAME='admin',
     PASSWORD='default',
-
+    # To get your keys: https://www.google.com/recaptcha/admin#whyrecaptcha
     RECAPTCHA_USE_SSL=False,
     RECAPTCHA_PUBLIC_KEY="",
     RECAPTCHA_PRIVATE_KEY="",
@@ -33,6 +32,7 @@ app.config.update(dict(
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 if app.debug and app.debug_toolbar:
+    from flask_debugtoolbar import DebugToolbarExtension
     toolbar = DebugToolbarExtension(app)
 
 config = Configuration
