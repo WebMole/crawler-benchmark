@@ -3,7 +3,7 @@
 from flask import render_template, url_for, request, make_response
 
 from project import app, config
-from project.controllers.form import recaptcha_form
+from project.controllers.form import RecaptchaForm
 
 
 @app.route('/')
@@ -13,7 +13,7 @@ def index():
 
 @app.route('/print', methods=['GET', 'POST'])
 def printer():
-    form = recaptcha_form(request.form)
+    form = RecaptchaForm(request.form)
     if request.method == 'POST' and form.validate():
         from project.models.Printer import Printer
 

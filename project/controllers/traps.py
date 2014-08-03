@@ -7,7 +7,7 @@ from loremipsum import get_sentences
 
 from project import app, config
 from project.tools.logger import logConsole
-from form import recaptcha_form
+from form import RecaptchaForm, RegistrationForm
 
 
 @app.route('/trap/random/')
@@ -164,7 +164,7 @@ def trap_comet():
 @app.route('/trap/depth/')
 @app.route('/trap/depth/<path:current_path>')
 def trap_depth(current_path=""):
-    # Starts at 2 because of initial deth: trap/depth/
+    # Starts at 2 because of initial depth: trap/depth/
     if current_path == "":
         next_path = "3/"
         current_depth = 2
@@ -174,11 +174,11 @@ def trap_depth(current_path=""):
         next_depth = str(current_depth + 1)
         next_path = current_path + next_depth + "/"
 
-    if config.trap_deth_max_depth == -1 or current_depth <= config.trap_deth_max_depth:
+    if config.trap_depth_max_depth == -1 or current_depth <= config.trap_depth_max_depth:
         title = "current depth: " + str(current_depth)
 
-        if config.trap_deth_max_depth != -1:
-            title += ", max_depth: " + str(config.trap_deth_max_depth)
+        if config.trap_depth_max_depth != -1:
+            title += ", max_depth: " + str(config.trap_depth_max_depth)
 
         return render_template(
             'traps/depth.html',
@@ -191,9 +191,11 @@ def trap_depth(current_path=""):
         )
 
     else:
-        message = "You have reached max depth (config.trap_deth_max_depth): " + str(config.trap_deth_max_depth)
+        message = "You have reached max depth (config.trap_depth_max_depth): " + str(config.trap_depth_max_depth)
         return redirect(url_for('fail', challenge="depth", message=message))
 
+
+# @todo: validate csrf, don't care for the moment.
 
 @app.route('/trap/recaptcha', methods=['GET', 'POST'])
 def trap_recaptcha():
@@ -205,7 +207,7 @@ def trap_recaptcha():
             ), 500
         )
     else:
-        form = recaptcha_form(request.form, csrf_enabled=False)
+        form = RecaptchaForm(request.form, csrf_enabled=False)
 
         if request.method != 'POST':
             return render_template('traps/recaptcha.html', form=form)
@@ -217,10 +219,7 @@ def trap_recaptcha():
 
 @app.route('/trap/registration', methods=['GET', 'POST'])
 def trap_registration():
-    form = RegistrationForm(request.form)
+    form = RegistrationForm(request.form, csrf_enabled=False)
     if request.method == 'POST' and form.validate():
-        user = User(form.username.data, form.email.data, form.password.data)
-        db_session.add(user)
-        flash('Thanks for registering')
-        return redirect(url_for('login'))
-    return render_template('register.html', form=form)
+        return redirect(url_for('success', challenge="registration"))
+    return render_template('traps/registration.html', form=form)

@@ -11,7 +11,7 @@ class Configuration:
     template_folder_path = "project/templates/"
 
     # trap settings
-    trap_deth_max_depth = -1  # -1 (infinite), 2 (trap/depth/), 3 (trap/depth/3), etc.
+    trap_depth_max_depth = -1  # -1 (infinite), 2 (trap/depth/), 3 (trap/depth/3), etc.
 
     modes = [
         {
