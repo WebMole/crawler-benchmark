@@ -1,0 +1,42 @@
+{% extends "layout/layout.html" %}
+{% block body %}
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+
+    {% if not session.logged_in %}
+        {% include "layout/login.html" %}
+    {% else %}
+
+        <h2>Logs ({{ log_view_n_lines }} last entries)</h2>
+
+        <table id="logs_table">
+            <thead>
+            <tr>
+                <th>User Agent</th>
+                <th>Method</th>
+                <th>Path</th>
+                <th>Form</th>
+                <th>Args</th>
+                <th>Routing Exception</th>
+                <th>Moment</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for log in logs | reverse %}
+                <tr>
+                    <td>{{ log['user_agent'] }}</td>
+                    <td>{{ log['method'] }}</td>
+                    <td>{{ log['path'] }}</td>
+                    <td>{{ log['form'] }}</td>
+                    <td>{{ log['args'] }}</td>
+                    <td>{{ log['routing_exception'] }}</td>
+                    <td>{{ log['datetime'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% import "components/metanav.html" as metanav %}
+        {{ metanav.metanav() }}
+
+    {% endif %}
+{% endblock %}

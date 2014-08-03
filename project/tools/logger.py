@@ -10,6 +10,7 @@ import yaml
 from project import app
 from project.configuration import Configuration
 from project.models.LoggingRequest import LoggingRequest
+from project.tools.tools import tail
 
 
 logging.config.dictConfig(yaml.load(open(Configuration.log_conf_path)))
@@ -17,10 +18,14 @@ log_file = logging.getLogger('file')
 logConsole = logging.getLogger('console')
 
 
-def get_log_dicts(user_agent=None, path_regex=None):
+def get_log_dicts(user_agent=None, path_regex=None, last_n_lines=None):
     log_file = open(Configuration.log_file_path, "r")
     requests = []
-    for line in log_file:
+    if (last_n_lines is not None):
+        lines = tail(log_file, last_n_lines)[0];
+    else:
+        lines = log_file;
+    for line in lines:
         request = eval(line)
         has_to_append = True
         if user_agent is not None:
