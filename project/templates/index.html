@@ -1,5 +1,8 @@
 {% extends "/layout/layout.html" %}
+
 {% block body %}
+    {% if modes %}
+    <h3>Paged Navigation</h3>
     <ul class="modes">
         {% for mode in modes %}
             {% if mode.get('enabled') %}
@@ -11,17 +14,20 @@
             <li><em>Unbelievable. No modes so far</em>
         {% endfor %}
     </ul>
-    <h2>Traps</h2>
+    {% endif %}
+    
+    <h3>Traps</h3>
     <ul class="traps">
-        <li><a href="{{ url_for('trap_random_page') }}">Random each time</a></li>
+        <li><a href="{{ url_for('trap_random_page') }}">Page with random content</a></li>
+        <li><a href="{{ url_for('trap_recaptcha') }}">ReCaptcha</a></li>
         <li><a href="{{ url_for('trap_login') }}">login (displayed on page)</a></li>
         <li><a href="{{ url_for('trap_outgoing') }}">outgoing links inside</a></li>
-        <li><a href="{{ url_for('trap_parameters') }}">Parameters</a></li>
+{#        <li><a href="{{ url_for('trap_parameters') }}">Parameters</a></li>#}
         <li><a href="{{ url_for('trap_session_variables') }}">Session Variables</a></li>
         <li><a href="{{ url_for('trap_calendar') }}">Calendar (Infinite Paging)</a></li>
         <li><a href="{{ url_for('trap_errors') }}">Errors</a></li>
-        <li><a href="{{ url_for('trap_deadends') }}">Dead Ends</a></li>
-        <li><a href="{{ url_for('trap_comet') }}">Comet</a></li>
+{#        <li><a href="{{ url_for('trap_deadends') }}">Dead Ends</a></li>#}
+{#        <li><a href="{{ url_for('trap_comet') }}">Comet</a></li>#}
         <li><a href="{{ url_for('trap_depth') }}">Infinite detph</a></li>
     </ul>
 {% endblock %}

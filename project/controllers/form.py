@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask.ext.wtf import Form
 from wtforms import StringField, validators
 
+from flask_wtf import Form, RecaptchaField
 
-class CreateForm(Form):
-    text = StringField(u'Text:', [validators.Length(min=1, max=20)])
+
+class recaptcha_form(Form):
+    # text = StringField(u'Text:', [validators.Length(min=1, max=20)])
+    recaptcha = RecaptchaField()

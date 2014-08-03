@@ -1,25 +1,12 @@
 # -*- coding: utf-8 -*-
 from os import abort
 
-from flask import render_template, request
+from flask import render_template
 
 from project import app, config
 from project.controllers.database import get_db
-from project.controllers.form import CreateForm
 from project.models.Pagination import Pagination
 from project.tools.tools import get_specific_item
-
-
-@app.route('/print', methods=['GET', 'POST'])
-def printer():
-    form = CreateForm(request.form)
-    if request.method == 'POST' and form.validate():
-        from project.models.Printer import Printer
-
-        printer = Printer()
-        printer.show_string(form.text.data)
-        return render_template('printer/index.html')
-    return render_template('printer/print.html', form=form)
 
 
 @app.route("/modes/<string:mode>/", defaults={'page_number': None})

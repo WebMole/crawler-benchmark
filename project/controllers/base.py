@@ -3,11 +3,24 @@
 from flask import render_template, url_for, request, make_response
 
 from project import app, config
+from project.controllers.form import recaptcha_form
 
 
 @app.route('/')
 def index():
-    return render_template('index.html', modes=config.modes, title='Page selection')
+    return render_template('index.html', modes=config.modes, title='Home')
+
+
+@app.route('/print', methods=['GET', 'POST'])
+def printer():
+    form = recaptcha_form(request.form)
+    if request.method == 'POST' and form.validate():
+        from project.models.Printer import Printer
+
+        printer = Printer()
+        printer.show_string(form.text.data)
+        return render_template('printer/index.html')
+    return render_template('printer/print.html', form=form)
 
 
 @app.errorhandler(404)
@@ -40,13 +53,14 @@ def fail(challenge):
             message = request.args['message']
         except KeyError:
             message = None
-    
+
     return render_template(
         'layout/fail.html',
         title="Challenge " + challenge + " failed!",
         challenge=challenge,
         message=message
     )
+
 
 def url_for_other_page(page_number):
     """url_for helper function for pagination"""
@@ -56,3 +70,4 @@ def url_for_other_page(page_number):
 
 
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+

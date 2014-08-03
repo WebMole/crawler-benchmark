@@ -3,15 +3,11 @@ from datetime import date
 import random
 
 from flask import render_template, request, session, flash, redirect, url_for, make_response
-from flask.ext.wtf import Form
 from loremipsum import get_sentences
-from wtforms import TextField, validators
 
 from project import app, config
 from project.tools.logger import logConsole
-
-
-__author__ = 'gableroux'
+from form import recaptcha_form
 
 
 @app.route('/trap/random/')
@@ -198,17 +194,32 @@ def trap_depth(current_path=""):
         return redirect(url_for('fail', challenge="depth", message=message))
 
 
-@app.route('/trap/single_form', methods=['GET', 'POST'])
-def trap_single_form():
-    form = CreateForm(request.form)
+@app.route('/trap/recaptcha', methods=['GET', 'POST'])
+def trap_recaptcha():
+    if app.config['RECAPTCHA_PUBLIC_KEY'] == "" or app.config['RECAPTCHA_PRIVATE_KEY'] == "":
+        return make_response(
+            render_template(
+                'layout/500.html',
+                message="You must set RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY in project's __init__.py first"
+            ), 500
+        )
+    else:
+        form = recaptcha_form(request.form, csrf_enabled=False)
+
+        if request.method != 'POST':
+            return render_template('traps/recaptcha.html', form=form)
+        elif form.validate():
+            return redirect(url_for('success', challenge="recaptcha"))
+        else:
+            return redirect(url_for('fail', challenge="recaptcha", message='recaptcha did not validate'))
+
+
+@app.route('/trap/recaptcha', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        from project.models.Printer import Printer
-
-        printer = Printer()
-        printer.show_string(form.text.data)
-        return render_template('printer/index.html')
-    return render_template('printer/print.html', form=form)
-
-
-class CreateForm(Form):
-    text = TextField(u'Text:', [validators.Length(min=1, max=20)])
+        user = User(form.username.data, form.email.data, form.password.data)
+        db_session.add(user)
+        flash('Thanks for registering')
+        return redirect(url_for('login'))
+    return render_template('register.html', form=form)

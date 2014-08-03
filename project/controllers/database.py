@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-from os import abort
 import sqlite3
 
 from flask import g
 
 from project import app, config
-
-
-__author__ = 'gableroux'
 
 
 def init_db():
@@ -48,7 +44,7 @@ def close_db(error):
             g.sqlite_db.close()
         else:
             pass
-            #abort(500, "Database not loaded yet")
+            # abort(500, "Database not loaded yet")
 
 
 def connect_db(database_name):
