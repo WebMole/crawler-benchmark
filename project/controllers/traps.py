@@ -215,8 +215,8 @@ def trap_recaptcha():
             return redirect(url_for('fail', challenge="recaptcha", message='recaptcha did not validate'))
 
 
-@app.route('/trap/recaptcha', methods=['GET', 'POST'])
-def register():
+@app.route('/trap/registration', methods=['GET', 'POST'])
+def trap_registration():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         user = User(form.username.data, form.email.data, form.password.data)

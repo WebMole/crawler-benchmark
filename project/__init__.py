@@ -7,11 +7,10 @@ from flask_debugtoolbar import DebugToolbarExtension
 import jinja2
 
 app = Flask('project')
-app.debug = False
+app.debug = True
+app.debug_toolbar = False
 app.testing = False  # set to true so recaptcha always validate
 
-if app.debug:
-    toolbar = DebugToolbarExtension(app)
 
 # Load default config and override config from an environment variable
 app.config.update(dict(
@@ -29,6 +28,9 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 config = Configuration
+
+if app.debug and app.debug_toolbar:
+    toolbar = DebugToolbarExtension(app)
 
 my_loader = jinja2.ChoiceLoader([
     app.jinja_loader,
