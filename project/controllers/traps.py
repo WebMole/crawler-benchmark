@@ -1,6 +1,5 @@
 from calendar import Calendar
 from datetime import date
-from os import abort
 import random
 
 from flask import render_template, request, session, flash, redirect, url_for, make_response
@@ -40,8 +39,7 @@ def trap_login():
 
     return render_template(
         'traps/login.html',
-        title=get_sentences(1, False)[0],
-        content=get_sentences(random.randint(1, 5)),
+        title="Login Trap",
         error=error,
         config=config
     )
@@ -51,8 +49,7 @@ def trap_login():
 def trap_outgoing():
     return render_template(
         'traps/outgoing.html',
-        title=get_sentences(1, False)[0],
-        content=get_sentences(random.randint(1, 5)),
+        title="Outgoing links Trap",
         config=config,
         links=config.links["external"],
         next=url_for("success", challenge="outgoing")
@@ -63,8 +60,7 @@ def trap_outgoing():
 def trap_parameters():
     return render_template(
         'traps/parameters.html',
-        title=get_sentences(1, False)[0],
-        content=get_sentences(random.randint(1, 5)),
+        title="@todo: Parameters, ask to manually insert a parameter?",
         config=config
     )
 
@@ -74,12 +70,12 @@ def trap_cookies():
     resp = make_response(
         render_template(
             'traps/cookies.html',
-            title=get_sentences(1, False)[0],
-            content=get_sentences(random.randint(1, 5)),
+            title="We just stored a cookie value for 'crawler_stores_cookies'",
             config=config
         )
     )
     resp.set_cookie('crawler_stores_cookies', 'yes')
+    # @todo: Check later if 'crawler_stores_cookies' is set
     return resp
 
 
@@ -96,8 +92,7 @@ def trap_cookies_verify():
 def trap_session_variables():
     return render_template(
         'traps/parameters.html',
-        title=get_sentences(1, False)[0],
-        content=get_sentences(random.randint(1, 5)),
+        title="@todo: Session variables, we will set some session variable and check later if it is set",
         config=config
     )
 
@@ -117,27 +112,45 @@ def trap_calendar(year):
         cal_list = [cal.monthdatescalendar(year_mod, i + 1) for i in xrange(12)]
     except Exception, e:
         logConsole(e)
-        abort(500)
     else:
         return render_template(
             'traps/calendar.html',
             year=year,
             calendar=cal_list
         )
-    abort(501)
+    return make_response(render_template("layout/500.html"), 500)
 
 
 @app.route('/trap/errors/')
 def trap_errors():
-    abort(500)
+    return render_template(
+        'traps/errors.html',
+        title="Do you support errors?",
+        config=config
+    )
+
+
+@app.route('/trap/errors/<int:error_code>/')
+def trap_error(error_code):
+    # default error name, will be updated if exists in config error codes
+    error_name = "Error code not defined"
+
+    for error in config.error_codes:
+        for code, name in config.error_codes[error]:
+            if code == error_code:
+                error_name = name
+
+    return make_response(
+        render_template("traps/error.html", error_code=error_code, error_name=error_name),
+        error_code
+    )
 
 
 @app.route('/trap/deadends/')
 def trap_deadends():
     return render_template(
         'traps/deadends.html',
-        title=get_sentences(1, False)[0],
-        content=get_sentences(random.randint(1, 5)),
+        title="@todo: Deadends",
         config=config
     )
 
@@ -146,20 +159,43 @@ def trap_deadends():
 def trap_comet():
     return render_template(
         'traps/comet.html',
-        title=get_sentences(1, False)[0],
-        content=get_sentences(random.randint(1, 5)),
+        title="@todo: comet",
         config=config
     )
 
 
 @app.route('/trap/depth/')
-def trap_depth():
-    return render_template(
-        'traps/depth.html',
-        title=get_sentences(1, False)[0],
-        content=get_sentences(random.randint(1, 5)),
-        config=config
-    )
+@app.route('/trap/depth/<path:current_path>')
+def trap_depth(current_path=""):
+    # Starts at 2 because of initial deth: trap/depth/
+    if current_path == "":
+        next_path = "3/"
+        current_depth = 2
+        next_depth = str(current_depth + 1)
+    else:
+        current_depth = len(current_path.split("/")) + 1
+        next_depth = str(current_depth + 1)
+        next_path = current_path + next_depth + "/"
+
+    if config.trap_deth_max_depth == -1 or current_depth <= config.trap_deth_max_depth:
+        title = "current depth: " + str(current_depth)
+
+        if config.trap_deth_max_depth != -1:
+            title += ", max_depth: " + str(config.trap_deth_max_depth)
+
+        return render_template(
+            'traps/depth.html',
+            title=title,
+            content=get_sentences(random.randint(1, 5)),
+            config=config,
+            current_path=current_path,
+            next_path=next_path,
+            next_depth=next_depth
+        )
+
+    else:
+        message = "You have reached max depth (config.trap_deth_max_depth): " + str(config.trap_deth_max_depth)
+        return redirect(url_for('fail', challenge="depth", message=message))
 
 
 @app.route('/trap/single_form', methods=['GET', 'POST'])

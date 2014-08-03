@@ -28,7 +28,7 @@ def time_delta(dt1, dt2):
 def draw_custom_graph(user_agents):
     plot_x_y = []
 
-    #requests = log_parser.get_log_dicts(user_agent = r'SiteSucker.*')
+    # requests = log_parser.get_log_dicts(user_agent = r'SiteSucker.*')
     for user_agent in user_agents:
         requests = logger.get_log_dicts(user_agent=user_agent)
         first_date = None
@@ -60,8 +60,8 @@ def draw_custom_graph(user_agents):
         ax.legend(framealpha=0.5, loc=4, prop={'size': 8})
         current_index += 1
 
-    plt.xlabel('Time (seconds)')
-    plt.ylabel('Request number')
+    plt.xlabel('Delta Time (seconds)')
+    plt.ylabel('Number of requests')
 
     ax.xaxis.set_major_formatter(formatter)
 

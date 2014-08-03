@@ -2,5 +2,6 @@
 {% block body %}
     <p class="fail">Congratulations, if you reached this page, you have failed the <b
             class="special">{{ challenge }}</b> challenge!</p>
+    {% if message %}<p>{{ message }}</p>{% endif %}
     <p>This page is a deadend, now go away!</p>
 {% endblock %}

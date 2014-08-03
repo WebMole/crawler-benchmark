@@ -1,3 +1,5 @@
 {% extends "layout/layout.html" %}
 {% block body %}
+    <pre><code>/trap/depth/{{ current_path }}</code></pre>
+    <a href="{{ url_for('trap_depth', current_path=next_path) }}">"./{{ next_depth }}"</a>
 {% endblock %}

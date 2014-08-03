@@ -6,7 +6,7 @@
         {% include "layout/login.html" %}
     {% else %}
 
-        <h2>Speed by user agents</h2>
+        <h2>Number of HTTP requests made by each crawler</h2>
 
         <img src="{{ url_for('plot') }}" id="imgResult" alt="Image Placeholder"/>
 
@@ -35,7 +35,7 @@
             </form>
         </div>
 
-        <h2>Successes</h2>
+        <h2>Success</h2>
 
         <table id="successes_table">
             <thead>
@@ -51,6 +51,27 @@
                     <td>{{ success['user_agent'] }}</td>
                     <td>{{ success['path'].replace('/success/', '') }}</td>
                     <td>{{ success['datetime'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        
+        <h2>Failures</h2>
+
+        <table id="failure_table">
+            <thead>
+            <tr>
+                <th>User Agent</th>
+                <th>Challenge</th>
+                <th>Moment</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for failure in failures %}
+                <tr>
+                    <td>{{ failure['user_agent'] }}</td>
+                    <td>{{ failure['path'].replace('/fail/', '') }}</td>
+                    <td>{{ failure['datetime'] }}</td>
                 </tr>
             {% endfor %}
             </tbody>

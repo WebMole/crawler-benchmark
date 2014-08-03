@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from os import abort
 
-from flask import render_template, url_for, request
+from flask import render_template, url_for, request, make_response
 
 from project import app, config
 
@@ -20,7 +19,7 @@ def page_not_found(e):
 @app.route('/success/<string:challenge>')
 def success(challenge):
     if not challenge:
-        abort(500)
+        return make_response(render_template("layout/500.html", message="Challenge must be set"), 500)
     else:
         return render_template(
             'layout/success.html',
@@ -35,10 +34,19 @@ def success(challenge):
 @app.route('/fail/<string:challenge>')
 def fail(challenge):
     if not challenge:
-        abort(500)
+        return make_response(render_template("layout/500.html", message="Challenge must be set"))
     else:
-        return render_template('layout/fail.html', title="Challenge " + challenge + " failed!", challenge=challenge)
-
+        try:
+            message = request.args['message']
+        except KeyError:
+            message = None
+    
+    return render_template(
+        'layout/fail.html',
+        title="Challenge " + challenge + " failed!",
+        challenge=challenge,
+        message=message
+    )
 
 def url_for_other_page(page_number):
     """url_for helper function for pagination"""

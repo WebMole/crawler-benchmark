@@ -2176,6 +2176,7 @@ ul.metanav li.active a {
   text-align: right;
 }
 
+/* tablesort style */
 table {
   background: #fff;
   max-width: 100%;
@@ -2204,7 +2205,7 @@ table th {
   background: -moz-linear-gradient(top, #f6f6f6, #eeeeee);
   text-shadow: 0 1px 0 #fff;
   font-weight: bold;
-  vertical-align: bottom;
+  vertical-align: middle;
 }
 
 table td {

@@ -46,6 +46,7 @@ def results():
         "admin/results.html",
         user_agents=logger.get_log_user_agents(),
         successes=logger.get_log_dicts_success(),
+        failures=logger.get_log_dicts_failure(),
         in_admin=True
     )
 

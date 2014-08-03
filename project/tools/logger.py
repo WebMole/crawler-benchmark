@@ -39,6 +39,8 @@ def get_log_dicts(user_agent=None, path_regex=None):
 def get_log_dicts_success():
     return get_log_dicts(path_regex=r'/success/(.*)')
 
+def get_log_dicts_failure():
+    return get_log_dicts(path_regex=r'/fail/(.*)')
 
 def clear_log(user_agents=None):
     # Read the log file
