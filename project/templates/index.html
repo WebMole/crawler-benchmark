@@ -18,16 +18,18 @@
     
     <h3>Traps</h3>
     <ul class="traps">
-        <li><a href="{{ url_for('trap_random_page') }}">Page with random content</a></li>
-        <li><a href="{{ url_for('trap_recaptcha') }}">ReCaptcha</a></li>
-        <li><a href="{{ url_for('trap_login') }}">login (displayed on page)</a></li>
-        <li><a href="{{ url_for('trap_outgoing') }}">outgoing links inside</a></li>
-{#        <li><a href="{{ url_for('trap_parameters') }}">Parameters</a></li>#}
-        <li><a href="{{ url_for('trap_session_variables') }}">Session Variables</a></li>
-        <li><a href="{{ url_for('trap_calendar') }}">Calendar (Infinite Paging)</a></li>
         <li><a href="{{ url_for('trap_errors') }}">Errors</a></li>
+        <li><a href="{{ url_for('trap_random_page') }}">Page with random content</a></li>
+        <li><a href="{{ url_for('trap_outgoing') }}">Outgoing links</a></li>
+        <li><a href="{{ url_for('trap_login') }}">Login (displayed on page)</a></li>
+        <li><a href="{{ url_for('trap_cookies') }}">Cookies</a></li>
+        <li><a href="{{ url_for('trap_recaptcha') }}">ReCaptcha</a></li>
+        <li><a href="{{ url_for('trap_depth') }}">Infinite detph</a></li>
+        <li><a href="{{ url_for('trap_calendar') }}">Calendar (Infinite Paging)</a></li>
+{#        <li><a href="{{ url_for('trap_session_variables') }}">Session Variables</a></li>#}
+{#        <li><a href="{{ url_for('trap_parameters') }}">Parameters</a></li>#}
 {#        <li><a href="{{ url_for('trap_deadends') }}">Dead Ends</a></li>#}
 {#        <li><a href="{{ url_for('trap_comet') }}">Comet</a></li>#}
-        <li><a href="{{ url_for('trap_depth') }}">Infinite detph</a></li>
+{#        <li><a href="{{ url_for('trap_registration') }}">Registration</a></li>#}
     </ul>
 {% endblock %}

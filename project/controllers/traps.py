@@ -66,12 +66,13 @@ def trap_cookies():
     resp = make_response(
         render_template(
             'traps/cookies.html',
-            title="We just stored a cookie value for 'crawler_stores_cookies'",
-            config=config
+            title="Cookies",
+            content="We just stored a cookie value for 'crawler_stores_cookies'",
+            next=url_for('trap_cookies_verify'),
+            config=config,
         )
     )
     resp.set_cookie('crawler_stores_cookies', 'yes')
-    # @todo: Check later if 'crawler_stores_cookies' is set
     return resp
 
 
