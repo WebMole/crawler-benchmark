@@ -4,6 +4,7 @@ logging.log
 .idea
 node_modules/
 .sass-cache/
+.vagrant/
 
 *.py[cod]
 
