@@ -20,7 +20,14 @@ Now simply run this in the current repository directory
 
 > Now sit and relaxe or go take a coffee, may take a while ;)
 
-Note: Not fully tested yet, you now need to manually `vagrant ssh`, `cd /crawler-benchmark`, then `python runserver.py`. Will automate this in the future.
+Note: Not fully tested yet, you now need to manually run the app
+
+    vagrant ssh
+    cd /crawler-benchmark
+    workon cb
+    python runserver.py
+    
+Will automate this in the future.
 
 When it's done, you can visit the app running at [localhost:8888](http://localhost:8888)
 
