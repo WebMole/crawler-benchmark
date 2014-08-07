@@ -14,7 +14,7 @@ First [install vagrant](https://docs.vagrantup.com/v2/installation/). Install [V
 
 Also make sure you have [precise64 box installed](https://docs.vagrantup.com/v2/providers/basic_usage.html)
 
-Now simply run this in this project's directory
+Now simply run this in the current repository directory
 
     vagrant up
 
