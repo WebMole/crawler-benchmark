@@ -3,17 +3,19 @@
 
 $script = <<SCRIPT
 apt-get update -y
-apt-get install python python-dev python-pip -y
-apt-get install libfreetype6-dev build-essential g++ build-dep python-matplotlib libffi-dev -y
+apt-get install python python-dev python-pip python-virtualenv -y
+apt-get install libfreetype6-dev build-essential g++ libpng-dev libjpeg8-dev libfreetype6-dev python-matplotlib libffi-dev -y
 pip install virtualenvwrapper
-echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc
-source ~/.bashrc
+source /usr/local/bin/virtualenvwrapper.sh
+echo 'source /usr/local/bin/virtualenvwrapper.sh' >> /home/vagrant/.bashrc
 
-easy_install -U distribute
-
+export WORKON_HOME=/home/vagrant/.virtualenvs
 mkvirtualenv cb
+easy_install -U distribute
 cd /crawler-benchmark
-pip install -r requirements
+pip install -r requirements.txt
+
+chown -R vagrant: /home/vagrant
 
 SCRIPT
 
