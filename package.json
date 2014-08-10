@@ -1,7 +1,7 @@
 {
   "name": "crawler-benchmark",
-  "version": "0.0.0",
-  "description": "CB is a crawler utility that implement a couple of site categories to be crawled. It also includes scenarios and configurations to handle ajax and some other goodies. Work in progress.",
+  "version": "0.2.0",
+  "description": "CrawlerBenchmark is a Reference Framework for the Automated Exploration of Web Applications. It provides some general web features to let you test crawlers in a well defined environment.",
   "main": "runserver.py",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
