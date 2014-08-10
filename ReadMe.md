@@ -2,7 +2,7 @@
 
 ![Crawler-Benchmark](http://i.imgur.com/vHUkr9t.jpg)
 
-A Reference Framework for the Automated Exploration of Web Applications. Provides some general web features to let you test crawlers in a well defined environement.
+A Reference Framework for the Automated Exploration of Web Applications. Provides some general web features to let you test crawlers in a well defined environment.
 
 ## Usage
 
@@ -20,14 +20,14 @@ Now simply run this in the current repository directory
 
 > Now sit and relaxe or go take a coffee, may take a while ;)
 
-Note: Not fully tested yet, you now need to manually run the app
+Now you need to manually run the app
 
     vagrant ssh
     cd /crawler-benchmark
     workon cb
     python runserver.py
     
-Will automate this in the future.
+> @todo: automate this in the future.
 
 When it's done, you can visit the app running at [localhost:8888](http://localhost:8888)
 
@@ -62,11 +62,11 @@ Then launch the server using `runserver.py`
 #### Update apt-get, install python and pip
 
 	sudo apt-get update -y
-	sudo apt-get install python python-dev python-pip -y
+	sudo apt-get install python python-dev python-pip python-virtualenv -y
 
 #### Install matplotlib dependencies and build tools requirements
 	
-	sudo apt-get install libfreetype6-dev build-essential g++ build-dep python-matplotlib -y
+	sudo apt-get install libfreetype6-dev build-essential g++ libpng-dev libjpeg8-dev libfreetype6-dev python-matplotlib libffi-dev -y
 
 #### To install [MatPlotLib](http://matplotlib.org/) correctly, you also need to upgrade `distribute`
 
@@ -77,6 +77,7 @@ Then launch the server using `runserver.py`
 	pip install virtualenvwrapper
 	echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc
 	source ~/.bashrc
+	export WORKON_HOME=/home/vagrant/.virtualenvs
 
 ##### Create a virtualenv with virtualenvwrapper (optionnal)
 
@@ -84,7 +85,7 @@ Then launch the server using `runserver.py`
 
 #### Install requirements
 
-	sudo pip install -r requirements
+	sudo pip install -r requirements.txt
 
 When it's done, you can visit the app running at [localhost:8888](http://localhost:8888)
 
