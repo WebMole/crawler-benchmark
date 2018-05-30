@@ -70,4 +70,3 @@ def url_for_other_page(page_number):
 
 
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
-

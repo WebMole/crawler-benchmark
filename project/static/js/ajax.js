@@ -4,7 +4,7 @@ var nextUrl = null;
 
 function loadMoreContent(pageToLoad) {
     if (pageToLoad != null) {
-        $('.pagination').html('<img style="display:block;margin:auto;" src="/static/img/loadingBar.gif">');
+        $('.pagination').html('<img style="display:block;margin:auto;" src="../../static/img/loadingBar.gif">');
 
         $("<div>").load(pageToLoad, function () {
             $('.pagination').empty(); // Remove loadingBar

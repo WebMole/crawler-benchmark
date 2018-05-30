@@ -1,7 +1,6 @@
 # noinspection PyUnresolvedReferences
 import datetime
 import re
-import logging
 import logging.config
 
 from flask import request, g
@@ -12,7 +11,6 @@ from project.configuration import Configuration
 from project.models.LoggingRequest import LoggingRequest
 from project.tools.tools import tail
 
-
 logging.config.dictConfig(yaml.load(open(Configuration.log_conf_path)))
 log_file = logging.getLogger('file')
 logConsole = logging.getLogger('console')
@@ -21,10 +19,10 @@ logConsole = logging.getLogger('console')
 def get_log_dicts(user_agent=None, path_regex=None, last_n_lines=None):
     log_file = open(Configuration.log_file_path, "r")
     requests = []
-    if (last_n_lines is not None):
-        lines = tail(log_file, last_n_lines)[0];
+    if last_n_lines is not None:
+        lines = tail(log_file, last_n_lines)[0]
     else:
-        lines = log_file;
+        lines = log_file
     for line in lines:
         request = eval(line)
         has_to_append = True
@@ -44,8 +42,10 @@ def get_log_dicts(user_agent=None, path_regex=None, last_n_lines=None):
 def get_log_dicts_success():
     return get_log_dicts(path_regex=r'/success/(.*)')
 
+
 def get_log_dicts_failure():
     return get_log_dicts(path_regex=r'/fail/(.*)')
+
 
 def clear_log(user_agents=None):
     # Read the log file

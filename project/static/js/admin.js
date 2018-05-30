@@ -128,7 +128,7 @@ function loadUserAgents() {
         $.each(data, function (key, value) {
 
             var option = $('<option/>');
-            option.attr({ 'value': value }).text(value);
+            option.attr({'value': value}).text(value);
 
             $('#selUserAgent').append(option);
         });

@@ -15,7 +15,7 @@
 
     Tablesort.prototype = {
 
-        init: function(el, options) {
+        init: function (el, options) {
             var that = this,
                 firstRow;
             this.thead = false;
@@ -60,7 +60,7 @@
             }
         },
 
-        getFirstDataRowIndex: function() {
+        getFirstDataRowIndex: function () {
             // If table does not have a <thead>, assume that first row is
             // a header and skip it.
             if (!this.thead) {
@@ -70,7 +70,7 @@
             }
         },
 
-        sortTable: function(header, update) {
+        sortTable: function (header, update) {
             var that = this,
                 column = header.cellIndex,
                 sortFunction,
@@ -112,7 +112,7 @@
                 return compareNumber(bb, aa);
             };
 
-            var sortDate = function(a, b) {
+            var sortDate = function (a, b) {
                 var aa = getInnerText(a.cells[that.col]).toLowerCase(),
                     bb = getInnerText(b.cells[that.col]).toLowerCase();
                 return parseDate(bb) - parseDate(aa);
@@ -122,7 +122,7 @@
             if (item.match(/^-?[£\x24Û¢´€] ?\d/) || // prefixed currency
                 item.match(/^-?\d+\s*[€]/) || // suffixed currencty
                 item.match(/^-?(\d+[,\.]?)+(E[\-+][\d]+)?%?$/) // number
-               ) {
+            ) {
                 sortFunction = sortNumber;
             } else if (testDate(item)) {
                 sortFunction = sortDate;
@@ -193,7 +193,7 @@
             }
         },
 
-        refresh: function() {
+        refresh: function () {
             if (this.current !== undefined) {
                 this.sortTable(this.current, true);
             }
@@ -204,10 +204,10 @@
         commonDate = /\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/,
         month = /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/i;
 
-    var testDate = function(date) {
+    var testDate = function (date) {
             return (
                 date.search(week) !== -1 ||
-                date.search(commonDate) !== -1  ||
+                date.search(commonDate) !== -1 ||
                 date.search(month !== -1)
             ) !== -1 && !isNaN(parseDate(date));
         },
@@ -255,11 +255,11 @@
                     case 1:
                         // ELEMENT_NODE
                         str += that.getInnerText(cs[i]);
-                    break;
+                        break;
                     case 3:
                         // TEXT_NODE
                         str += cs[i].nodeValue;
-                    break;
+                        break;
                 }
             }
 
