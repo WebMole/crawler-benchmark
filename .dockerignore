@@ -44,3 +44,4 @@ nosetests.xml
 .pydevproject
 .python-version
 .pytest_cache/
+*.css.map

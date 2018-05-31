@@ -1,7 +1,10 @@
 /* global module:true */
 
+
 module.exports = function (grunt) {
     'use strict';
+
+    require('load-grunt-tasks')(grunt);
 
     // Project configuration.
     grunt.initConfig({
@@ -17,9 +20,6 @@ module.exports = function (grunt) {
         },
         sass: {
             dist: {
-                options: {
-                    style: 'expanded'
-                },
                 files: {
                     '<%= staticPath %>/css/style.css': '<%= staticPath %>/css/style.scss'
                 }
@@ -39,10 +39,6 @@ module.exports = function (grunt) {
             }
         }
     });
-
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-sass');
     
     grunt.registerTask('build', ['jshint', 'sass']);
     grunt.registerTask('default', ['watch']);
