@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+
+import matplotlib
+matplotlib.use('Agg')
+
 from project import app, Configuration
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 FROM python:2.7-jessie
 
-RUN apt-get update -y && \
-	apt-get install -y \
+RUN apt-get update -y \
+	&& apt-get install -y \
 		build-essential \
 		python-dev \
 		g++ \
@@ -10,9 +10,9 @@ RUN apt-get update -y && \
 		libpng-dev \
 		libjpeg62-turbo-dev \
 		python-matplotlib \
-		libffi-dev && \
-	apt-get clean && \
-	rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
+		libffi-dev \
+	&& apt-get clean \
+	&& rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN easy_install -U distribute
 
