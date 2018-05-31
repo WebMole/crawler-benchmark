@@ -1,5 +1,7 @@
 # Crawler Benchmark
 
+[![Build Status](https://travis-ci.org/WebMole/crawler-benchmark.svg?branch=master)](https://travis-ci.org/WebMole/crawler-benchmark)
+
 ![Crawler-Benchmark](http://i.imgur.com/vHUkr9t.jpg)
 
 A Reference Framework for the Automated Exploration of Web Applications. Provides some general web features to let you test crawlers in a well defined environment.
