@@ -2,8 +2,6 @@
 
 
 module.exports = function (grunt) {
-    'use strict';
-
     require('load-grunt-tasks')(grunt);
 
     // Project configuration.
@@ -39,8 +37,7 @@ module.exports = function (grunt) {
             }
         }
     });
-    
+
     grunt.registerTask('build', ['jshint', 'sass']);
     grunt.registerTask('default', ['watch']);
-
 };
