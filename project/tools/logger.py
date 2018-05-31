@@ -1,17 +1,15 @@
 # noinspection PyUnresolvedReferences
 import datetime
-import re
-import logging
 import logging.config
+import re
 
-from flask import request, g
 import yaml
+from flask import request, g
 
 from project import app
 from project.configuration import Configuration
 from project.models.LoggingRequest import LoggingRequest
 from project.tools.tools import tail
-
 
 logging.config.dictConfig(yaml.load(open(Configuration.log_conf_path)))
 log_file = logging.getLogger('file')
@@ -44,8 +42,10 @@ def get_log_dicts(user_agent=None, path_regex=None, last_n_lines=None):
 def get_log_dicts_success():
     return get_log_dicts(path_regex=r'/success/(.*)')
 
+
 def get_log_dicts_failure():
     return get_log_dicts(path_regex=r'/fail/(.*)')
+
 
 def clear_log(user_agents=None):
     # Read the log file
@@ -95,13 +95,20 @@ def per_request_callbacks(response):
             request.form.lists(),
             None if request.routing_exception is None
             else str(request.routing_exception),
-            request.environ['HTTP_USER_AGENT']
+            get_http_user_agent()
         )
 
         str_to_log = lr.__dict__
         log_file.debug(str_to_log)
 
     return response
+
+
+def get_http_user_agent():
+    try:
+        return request.environ['HTTP_USER_AGENT']
+    except KeyError:
+        return None
 
 
 if __name__ == '__main__':

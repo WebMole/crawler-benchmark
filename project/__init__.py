@@ -7,7 +7,7 @@ import jinja2
 
 app = Flask('project')
 
-# You can play with the settings bellow
+# You can play with the settings below
 
 app.debug = True
 app.debug_toolbar = False
