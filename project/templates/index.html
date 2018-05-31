@@ -1,21 +1,21 @@
-{% extends "/layout/layout.html" %}
+{% extends "./layout/layout.html" %}
 
 {% block body %}
     {% if modes %}
-    <h3>Paged Navigation</h3>
-    <ul class="modes">
-        {% for mode in modes %}
-            {% if mode.get('enabled') %}
-                <li>
-                    <a href="{{ url_for('entries', mode=mode.get('route')) }}">{{ mode.get('name') }}</a>
-                </li>
-            {% endif %}
-        {% else %}
-            <li><em>Unbelievable. No modes so far</em>
-        {% endfor %}
-    </ul>
+        <h3>Paged Navigation</h3>
+        <ul class="modes">
+            {% for mode in modes %}
+                {% if mode.get('enabled') %}
+                    <li>
+                        <a href="{{ url_for('entries', mode=mode.get('route')) }}">{{ mode.get('name') }}</a>
+                    </li>
+                {% endif %}
+            {% else %}
+                <li><em>Unbelievable. No modes so far</em>
+            {% endfor %}
+        </ul>
     {% endif %}
-    
+
     <h3>Traps</h3>
     <ul class="traps">
         <li><a href="{{ url_for('trap_errors') }}">Errors</a></li>
@@ -26,10 +26,19 @@
         <li><a href="{{ url_for('trap_recaptcha') }}">ReCaptcha</a></li>
         <li><a href="{{ url_for('trap_depth') }}">Infinite detph</a></li>
         <li><a href="{{ url_for('trap_calendar') }}">Calendar (Infinite Paging)</a></li>
-{#        <li><a href="{{ url_for('trap_session_variables') }}">Session Variables</a></li>#}
-{#        <li><a href="{{ url_for('trap_parameters') }}">Parameters</a></li>#}
-{#        <li><a href="{{ url_for('trap_deadends') }}">Dead Ends</a></li>#}
-{#        <li><a href="{{ url_for('trap_comet') }}">Comet</a></li>#}
+        {#        <li><a href="{{ url_for('trap_session_variables') }}">Session Variables</a></li>#}
+        {#        <li><a href="{{ url_for('trap_parameters') }}">Parameters</a></li>#}
+        {#        <li><a href="{{ url_for('trap_deadends') }}">Dead Ends</a></li>#}
+        {#        <li><a href="{{ url_for('trap_comet') }}">Comet</a></li>#}
         <li><a href="{{ url_for('trap_registration') }}">Registration</a></li>
+        <li><a href="{{ url_for('trap_honeypot') }}" style="color: #fafafa">Honeypot</a></li>
+        <li><a href="{{ url_for('trap_honeypot') }}" style="color: #fbfbfb">Honeypot</a></li>
+        <li><a href="{{ url_for('trap_honeypot') }}" style="visibility: hidden">Honeypot</a></li>
     </ul>
+    <a href="{{ url_for('trap_honeypot') }}" style="text-decoration: none">
+        <img src="../static/img/invisible.png" alt="It's a trap!" width="1" height="1">
+    </a>
+    <a href="{{ url_for('trap_honeypot') }}" style="text-decoration: none">
+        <img src="../static/img/invisible.png" alt="It's a trap!" width="2" height="2">
+    </a>
 {% endblock %}
