@@ -11,7 +11,7 @@ jobs:
         - pip install -r requirements.txt
       script: pytest
     - stage: test
-      language: javascript
+      language: node_js
       node:
         - 1.10
       install:
@@ -24,4 +24,3 @@ jobs:
       services:
         - docker
       script: docker build . -t webmole/crawler-benchmark
-
