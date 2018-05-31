@@ -6,3 +6,19 @@ python:
 install:
   - easy_install distribute
   - pip install -r requirements.txt
+
+test:
+  - pytest
+
+stages:
+  - docker
+
+jobs:
+  include:
+    - stage: docker
+      language: bash
+      sudo: required
+      services:
+        - docker
+      script: docker build . -t webmole/crawler-benchmark
+
