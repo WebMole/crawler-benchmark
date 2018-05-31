@@ -1,20 +1,18 @@
-language: python
-python:
-- '2.7'
-# - '3.3'
-
-install:
-  - easy_install distribute
-  - pip install -r requirements.txt
-
-test:
-  - pytest
-
 stages:
+  - python
   - docker
 
 jobs:
   include:
+    - stage: python
+      language: python
+      python:
+        - '2.7'
+      install:
+        - easy_install distribute
+        - pip install -r requirements.txt
+      test:
+        - pytest
     - stage: docker
       language: bash
       sudo: required
