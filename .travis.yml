@@ -16,7 +16,7 @@ jobs:
         - 1.10
       install:
         - npm i
-      test:
+      script:
         - npm run grunt -- build
     - stage: test
       language: bash
