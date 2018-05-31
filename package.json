@@ -4,7 +4,8 @@
   "description": "CrawlerBenchmark is a Reference Framework for the Automated Exploration of Web Applications. It provides some general web features to let you test crawlers in a well defined environment.",
   "main": "runserver.py",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "grunt": "grunt"
   },
   "author": "",
   "license": "ISC",
