@@ -1,17 +1,16 @@
 stages:
-  - python
-  - docker
+  - test
 
 jobs:
   include:
-    - stage: python
+    - stage: test
       language: python
       python: '2.7'
       install:
         - easy_install distribute
         - pip install -r requirements.txt
       script: pytest
-    - stage: docker
+    - stage: test
       language: bash
       sudo: required
       services:
