@@ -13,7 +13,11 @@ jobs:
     - stage: test
       language: node_js
       node:
-        - 1.10
+        - 10
+        - 9
+        - 8
+        - 7
+        - 6
       script:
         - npm run grunt -- --version
         - npm run grunt -- build
