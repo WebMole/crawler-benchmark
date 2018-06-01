@@ -31,14 +31,15 @@
         {#        <li><a href="{{ url_for('trap_deadends') }}">Dead Ends</a></li>#}
         {#        <li><a href="{{ url_for('trap_comet') }}">Comet</a></li>#}
         <li><a href="{{ url_for('trap_registration') }}">Registration</a></li>
-        <li><a href="{{ url_for('trap_honeypot') }}" style="color: #fafafa">Honeypot</a></li>
-        <li><a href="{{ url_for('trap_honeypot') }}" style="color: #fbfbfb">Honeypot</a></li>
-        <li><a href="{{ url_for('trap_honeypot') }}" style="visibility: hidden">Honeypot</a></li>
+        <li><a href="{{ url_for('trap_honeypot', trap_number = 1) }}" style="color: #fafafa">Honeypot</a></li>
+        <li><a href="{{ url_for('trap_honeypot', trap_number = 2) }}" style="color: #fbfbfb">Honeypot</a></li>
+        <li><a href="{{ url_for('trap_honeypot', trap_number = 3) }}" style="visibility: hidden">Honeypot</a></li>
     </ul>
-    <a href="{{ url_for('trap_honeypot') }}" style="text-decoration: none">
+    <a href="{{ url_for('trap_honeypot', trap_number = 4) }}" style="text-decoration: none">
         <img src="../static/img/invisible.png" alt="It's a trap!" width="1" height="1">
     </a>
-    <a href="{{ url_for('trap_honeypot') }}" style="text-decoration: none">
+    <a href="{{ url_for('trap_honeypot', trap_number = 5) }}" style="text-decoration: none">
+        <!--suppress CheckImageSize -->
         <img src="../static/img/invisible.png" alt="It's a trap!" width="10" height="2">
     </a>
 {% endblock %}

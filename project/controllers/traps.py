@@ -225,8 +225,8 @@ def trap_registration():
     return render_template('traps/registration.html', form=form)
 
 
-@app.route('/trap/honeypot')
-def trap_honeypot():
+@app.route('/trap/honeypot/<path:trap_number>')
+def trap_honeypot(trap_number):
     return render_template(
         'traps/honeypot.html',
         title="Honeypot",
