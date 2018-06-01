@@ -12,7 +12,7 @@ jobs:
       script: pytest
     - stage: test
       language: node_js
-      node:
+      node_js:
         - 10
         - 9
         - 8
