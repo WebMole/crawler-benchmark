@@ -17,9 +17,6 @@ module.exports = function (grunt) {
         },
         sass: {
             dist: {
-                options: {
-                    style: 'expanded'
-                },
                 files: {
                     '<%= staticPath %>/css/style.css': '<%= staticPath %>/css/style.scss'
                 }
@@ -40,11 +37,8 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-sass');
+    require('load-grunt-tasks')(grunt);
 
-    // Default task.
+    grunt.registerTask('build', ['jshint', 'sass']);
     grunt.registerTask('default', ['watch']);
-
 };

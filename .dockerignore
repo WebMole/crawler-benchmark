@@ -6,8 +6,6 @@ node_modules/
 .sass-cache/
 .vagrant/
 
-docker-compose.yml
-
 *.py[cod]
 
 # C extensions
@@ -44,3 +42,6 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+.python-version
+.pytest_cache/
+*.css.map

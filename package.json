@@ -4,14 +4,17 @@
   "description": "CrawlerBenchmark is a Reference Framework for the Automated Exploration of Web Applications. It provides some general web features to let you test crawlers in a well defined environment.",
   "main": "runserver.py",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "grunt": "grunt"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "grunt": "^0.4.4",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-sass": "^0.7.3",
-    "grunt-contrib-watch": "^0.6.1"
+    "grunt": "^1.0.2",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-sass": "^2.1.0",
+    "load-grunt-tasks": "^4.0.0"
   }
 }

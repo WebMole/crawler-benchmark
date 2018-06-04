@@ -3,6 +3,7 @@
 import os
 
 import matplotlib
+
 matplotlib.use('Agg')
 
 from project import app, Configuration

@@ -1,10 +1,10 @@
 # noinspection PyUnresolvedReferences
 import datetime
-import re
 import logging.config
+import re
 
-from flask import request, g
 import yaml
+from flask import request, g
 
 from project import app
 from project.configuration import Configuration
@@ -95,13 +95,20 @@ def per_request_callbacks(response):
             request.form.lists(),
             None if request.routing_exception is None
             else str(request.routing_exception),
-            request.environ['HTTP_USER_AGENT']
+            get_http_user_agent()
         )
 
         str_to_log = lr.__dict__
         log_file.debug(str_to_log)
 
     return response
+
+
+def get_http_user_agent():
+    try:
+        return request.environ['HTTP_USER_AGENT']
+    except KeyError:
+        return None
 
 
 if __name__ == '__main__':
