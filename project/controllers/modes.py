@@ -4,9 +4,9 @@ from os import abort
 from flask import render_template
 
 from project import app, config
-from project.controllers.database import get_db
 from project.models.Pagination import Pagination
 from project.tools.tools import get_specific_item
+from project.models import db
 
 
 @app.route("/modes/<string:mode>/", defaults={'page_number': None})
@@ -39,8 +39,6 @@ def entries(mode, page_number):
     if page_number is None:
         page_number = 1
 
-    db = get_db()
-
     cur = db.execute('select count(id) from ' + mode.get("route"))
     count = cur.fetchone()
     count_value = count[0]
@@ -51,7 +49,6 @@ def entries(mode, page_number):
         count_value
     )
 
-    db = get_db()
     cur = db.execute(
         'select id, title, text from %s order by id desc limit %d offset %d' % (
             mode.get('route'),
@@ -87,7 +84,6 @@ def entry(mode, mode_id):
     if not mode.get('enabled'):
         return "This mode is disabled"
 
-    db = get_db()
     cur = db.execute('select id, title, text from ' + mode.get('route') + ' where id = ' + str(mode_id))
     mode_entry = cur.fetchall()
 

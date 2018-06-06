@@ -1,10 +1,9 @@
 import os
 import shelve
 
+INFINITE_TRAP_DEPTH = -1
 
-# @todo: use config.json instead?
 class Configuration:
-    default_port = 8080
     log_conf_path = "project/configuration/logging.conf"
     log_file_path = "logging.log"
 
@@ -13,7 +12,7 @@ class Configuration:
     template_folder_path = "project/templates/"
 
     # trap settings
-    trap_depth_max_depth = -1  # -1 (infinite), 2 (trap/depth/), 3 (trap/depth/3), etc.
+    trap_depth_max_depth = INFINITE_TRAP_DEPTH  # 1 (trap/), 2 (trap/depth/), 3 (trap/depth/3), (trap/depth/4).
 
     modes = [
         {

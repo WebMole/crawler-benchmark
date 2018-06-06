@@ -8,7 +8,7 @@ from flask import request, g
 
 from project import app
 from project.configuration import Configuration
-from project.models.LoggingRequest import LoggingRequest
+from project.models.logging_request import LoggingRequest
 from project.tools.tools import tail
 
 logging.config.dictConfig(yaml.load(open(Configuration.log_conf_path)))

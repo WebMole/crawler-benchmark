@@ -5,9 +5,8 @@ from os import abort
 from flask import session, flash, redirect, url_for, request, render_template, Response
 from loremipsum import get_sentences, get_paragraphs
 
-from project import app, config, init_db
+from project import app, config, db
 from project.controllers import graph
-from project.controllers.database import get_db
 from project.tools import logger
 from project.tools.tools import get_specific_item
 
@@ -78,14 +77,12 @@ def logs_full():
 
 @app.route("/admin/clear/<string:mode>", methods=['DELETE'])
 def clear_entries(mode):
-    """Creates the database tables."""
     with app.app_context():
-        db = get_db()
-
         database_request = "drop table if exists " + mode + ";"
+        if mode == 'blog':
+            models
         db.cursor().executescript(database_request)
         db.commit()
-        init_db()
 
         flash('All ' + mode + ' entries were successfully cleared')
         return "OK"
@@ -96,7 +93,6 @@ def entries_add_auto(mode, num):
     if not session.get('logged_in'):
         abort(401)
 
-    db = get_db()
     for i in range(0, num):
         db.execute(
             'insert into ' + mode +
@@ -114,7 +110,6 @@ def entries_add(mode):
     if not session.get('logged_in'):
         abort(401)
 
-    db = get_db()
     db.execute('insert into ' + mode + ' (title, text) values (?, ?)',
                [request.form['title'], request.form['text']])
     db.commit()
@@ -139,7 +134,6 @@ def login():
 
 @app.route("/admin/mode/<string:mode>", methods=['GET'])
 def get_mode(mode):
-    db = get_db()
     for tmp_mode in config.modes:
         cur = db.execute('select count(id) from ' + tmp_mode.get("route"))
         count = cur.fetchone()
@@ -156,7 +150,6 @@ def get_mode(mode):
 
 @app.route('/admin')
 def admin():
-    db = get_db()
     for mode in config.modes:
         cur = db.execute('select count(id) from ' + mode.get("route"))
         count = cur.fetchone()

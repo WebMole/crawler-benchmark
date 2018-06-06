@@ -60,9 +60,4 @@ my_loader = jinja2.ChoiceLoader([
 ])
 app.jinja_loader = my_loader
 
-# imported here because app must exist first
-from project.controllers.database import init_db
-
-init_db()
-
 from project.controllers import *
