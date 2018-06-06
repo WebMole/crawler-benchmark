@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from project.configuration import Configuration
 from project.configuration.utils import env_var
+from project.models import db
 
 __version__ = '0.1'
 from flask import Flask
@@ -27,6 +28,18 @@ app.config.update(dict(
     RECAPTCHA_PRIVATE_KEY="",
     RECAPTCHA_OPTIONS=""
 ))
+
+POSTGRES = {
+    'user': 'postgres',
+    'pw': 'password',
+    'db': 'my_database',
+    'host': 'localhost',
+    'port': '5432',
+}
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
+%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+db.init_app(app)
 
 # Application goodies bellow, should not be edited
 # Load default config and override config from an environment variable
