@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from project.configuration import Configuration
+from project.configuration.utils import env_var
 
 __version__ = '0.1'
 from flask import Flask
 import jinja2
-import os
 
 app = Flask('project')
 
@@ -18,9 +18,9 @@ app.config.update(dict(
     DATABASE='./db/main.db',
     DEBUG=app.debug,
     TESTING=app.testing,
-    SECRET_KEY=os.getenv('SECRET_KEY'),
-    USERNAME=os.getenv('USERNAME', 'admin'),
-    PASSWORD=os.getenv('PASSWORD', 'default'),
+    SECRET_KEY=env_var('SECRET_KEY'),
+    USERNAME=env_var('USERNAME', 'admin'),
+    PASSWORD=env_var('PASSWORD', 'default'),
     # To get your keys: https://www.google.com/recaptcha/admin#whyrecaptcha
     RECAPTCHA_USE_SSL=False,
     RECAPTCHA_PUBLIC_KEY="",

@@ -1,3 +1,4 @@
+import os
 import shelve
 
 
@@ -50,7 +51,7 @@ class Configuration:
     entry_single_page = True
     pagination_entry_per_page = 25
 
-    ajax_enabled = True
+    ajax_enabled = os.getenv('BENCHMARK_AJAX_ENABLED')
     infinite_scroll_enabled = True
 
     # external links to use with the trap

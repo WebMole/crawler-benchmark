@@ -39,8 +39,9 @@ npm install
 npm run grunt
 ```
 
-##  Todos
+## Todos
 
+* build frontend using webpack and load `pure.scss` from `node_modules`
 * Publish docker image so the world can spin this
 * Add nodejs docker support
 * Add link to home page (from title)
