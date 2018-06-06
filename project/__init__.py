@@ -4,6 +4,7 @@ from project.configuration import Configuration
 __version__ = '0.1'
 from flask import Flask
 import jinja2
+import os
 
 app = Flask('project')
 
@@ -17,9 +18,9 @@ app.config.update(dict(
     DATABASE='./db/main.db',
     DEBUG=app.debug,
     TESTING=app.testing,
-    SECRET_KEY='ls20f48g578hbmflgdi3',
-    USERNAME='admin',
-    PASSWORD='default',
+    SECRET_KEY=os.getenv('SECRET_KEY'),
+    USERNAME=os.getenv('USERNAME', 'admin'),
+    PASSWORD=os.getenv('PASSWORD', 'default'),
     # To get your keys: https://www.google.com/recaptcha/admin#whyrecaptcha
     RECAPTCHA_USE_SSL=False,
     RECAPTCHA_PUBLIC_KEY="",
@@ -48,4 +49,5 @@ from project.controllers.database import init_db
 
 init_db()
 
+# todo: don't do this
 from project.controllers import *
