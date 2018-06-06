@@ -9,7 +9,9 @@ jobs:
       install:
         - easy_install distribute
         - pip install -r requirements.txt
-      script: pytest
+      script: pytest --cov
+      after_success:
+        - codecov
     - stage: test
       language: node_js
       node_js: 10
