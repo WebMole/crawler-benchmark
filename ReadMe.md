@@ -1,6 +1,7 @@
 # Crawler Benchmark
 
 [![Build Status](https://travis-ci.org/WebMole/crawler-benchmark.svg?branch=master)](https://travis-ci.org/WebMole/crawler-benchmark)
+[![codecov](https://codecov.io/gh/WebMole/crawler-benchmark/branch/master/graph/badge.svg)](https://codecov.io/gh/WebMole/crawler-benchmark)
 
 ![Crawler-Benchmark](http://i.imgur.com/vHUkr9t.jpg)
 
