@@ -10,97 +10,20 @@ A Reference Framework for the Automated Exploration of Web Applications. Provide
 
 First, clone the repository and `cd` into the repository.
 
-### Using [Vagrant](http://www.vagrantup.com/)
+### Using [Docker][docker]
 
-First [install vagrant](https://docs.vagrantup.com/v2/installation/). Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) if you don't have it already.
+1. Clone repository
+2. Install [Docker][docker-install]
+2. Install [docker-compose][docker-compose-install]
+3. Build and use the docker image with [docker-compose][docker-compose]
 
-Also make sure you have [precise64 box installed](https://docs.vagrantup.com/v2/providers/basic_usage.html)
+    ```bash
+    cd crawler-benchmark
+    cp .env.example .env # then edit with desired credentials
+    docker-compose up -d
+    ```
 
-Now simply run this in the current repository directory
-
-    vagrant up
-
-> Now sit and relaxe or go take a coffee, may take a while ;)
-
-Now you need to manually run the app
-
-    vagrant ssh
-    cd /crawler-benchmark
-    workon cb
-    python runserver.py
-    
-> @todo: automate this in the future.
-
-When it's done, you can visit the app running at [localhost:8888](http://localhost:8888)
-
-
-### Using osx
-
-#### [Install python](http://docs.python-guide.org/en/latest/starting/install/osx/)
-
-#### I suggest you use [VirtualEnvWrapper](http://virtualenvwrapper.readthedocs.org/en/latest/)
-
-    pip install virtualenvwrapper
-    echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc
-	source ~/.bashrc
-
-#### Python dependencies
-
-Install dependencies using pip (usually provided with python)
-
-    pip install -r requirements.txt
-
-You may have troubles installing matplotlib so you can do this:
-
-    pip install matplotlib --allow-external matplotlib
-
-Then launch the server using `runserver.py`
-
-    python runserver.py
-
-
-### Using Ubuntu or similar os
-
-#### Update apt-get, install python and pip
-
-	sudo apt-get update -y
-	sudo apt-get install python python-dev python-pip python-virtualenv -y
-
-#### Install matplotlib dependencies and build tools requirements
-	
-	sudo apt-get install libfreetype6-dev build-essential g++ libpng-dev libjpeg8-dev libfreetype6-dev python-matplotlib libffi-dev -y
-
-#### To install [MatPlotLib](http://matplotlib.org/) correctly, you also need to upgrade `distribute`
-
-    sudo easy_install -U distribute
-
-#### install virtualenvwrapper (optionnal)
-
-	pip install virtualenvwrapper
-	echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc
-	source ~/.bashrc
-	export WORKON_HOME=/home/vagrant/.virtualenvs
-
-##### Create a virtualenv with virtualenvwrapper (optionnal)
-
-	mkvirtualenv cb
-
-#### Install requirements
-
-	sudo pip install -r requirements.txt
-
-When it's done, you can visit the app running at [localhost:8888](http://localhost:8888)
-
-
-## CrawlerBenchmark Administration
-
-Once the server is running, visit `/admin` and login with credentials.
-
-Default login:
-
-    username: admin
-    password: default
-
+When it's done, you can visit the app running at [localhost:8080](http://localhost:8080)
 
 ## Development
 
@@ -108,38 +31,34 @@ Default login:
 
 We are using [grunt](http://gruntjs.com/) to auto compile [scss](http://sass-lang.com/) files into `css` files and we may add tasks in the future. [npm](https://www.npmjs.org/) dependencies are specified in `package.json`.
 
-[Install sass from the command line](http://sass-lang.com/install) (you may need `sudo` powers)
+[Install sass from the command line](http://sass-lang.com/install) (you may need `sudo` privileges)
 
-    gem install sass
-
-Install grunt dependencies
-
-    npm install
-
-Install grunt globally
-
-    npm install -g grunt grunt-cli
-
-Run grunt and enjoy
-
-    grunt
-
+```bash
+gem install sass
+npm install
+npm run grunt
+```
 
 ##  Todos
 
- * Add new features!
-   * Robots.txt validation
-   * Visited urls
-   * Provide an api 
- * Website navigation generation from model
- * Improve settings
-    * Import
-    * Export
-    * json? yaml?
- * Spread the word, make the application known by crawler authors
- * Put online
-   * Get crawled by general crawlers like google bot
-   * Share results to the public
+* Publish docker image so the world can spin this
+* Add nodejs docker support
+* Add link to home page (from title)
+* Add new features!
+  * Robots.txt validation
+  * Visited urls
+  * Provide an api 
+* Website navigation generation from model
+* Improve settings
+  * Import
+  * Export
+  * json? yaml?
+* Spread the word, make the application known by crawler authors
+* Put online
+  * Get crawled by general crawlers like google bot
+  * Share results to the public
 
-## Changelog
-See [changelog.md](./Changelog.md) file.
+[docker]: https://docker.com/
+[docker-install]: https://docs.docker.com/install/
+[docker-compose]: https://docs.docker.com/compose/
+[docker-compose-install]: https://docs.docker.com/compose/install/
