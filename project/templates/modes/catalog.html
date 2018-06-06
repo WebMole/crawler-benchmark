@@ -12,7 +12,7 @@
             <li>
                 <h2>{% if config.entry_single_page %}
                     <a href="{{ url_for('entry', mode=mode, mode_id=entry.id) }}">{% endif %}{{ entry.title }}
-                {% if config.entry_single_page %}</a>{% endif %}</h2>
+                    {% if config.entry_single_page %}</a>{% endif %}</h2>
                 {{ entry.text|safe }}
             </li>
         {% else %}

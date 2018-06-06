@@ -3,7 +3,8 @@
     <ul>
         {% for link in links %}
             <li>
-                <a href="{{ link.url }}"{% if link.target is defined %} target="{{ link.target }}"{% endif %}>{{ link.name }}</a>
+                <a href="{{ link.url }}"
+                        {% if link.target is defined %} target="{{ link.target }}"{% endif %}>{{ link.name }}</a>
             </li>
         {% endfor %}
         <li><a href="{{ next }}">Solution here</a></li>

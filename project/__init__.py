@@ -34,6 +34,7 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 if app.debug and app.debug_toolbar:
     from flask_debugtoolbar import DebugToolbarExtension
+
     toolbar = DebugToolbarExtension(app)
 
 config = Configuration
@@ -49,5 +50,4 @@ from project.controllers.database import init_db
 
 init_db()
 
-# todo: don't do this
 from project.controllers import *

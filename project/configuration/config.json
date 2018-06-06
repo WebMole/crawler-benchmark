@@ -1,124 +1,124 @@
 {
-    "name": "default configuration",
-    "version": "0.0.1",
-    "description": "default configuration to use with crawler-benchmark",
-    "modes": {
-        "Blog": {
-            "route": "blog",
-            "add": "admin/blog/add",
-            "enabled": "true",
-            "entry_single_page": "true",
-            "pagination_entry_per_page": 20,
-            "insert_elements_on_load": 50
-        },
-        "Forum": {
-            "route": "forum",
-            "add": "admin/forum/add",
-            "enabled": "true",
-            "entry_single_page": "true",
-            "pagination_entry_per_page": 20,
-            "insert_elements_on_load": 50
-        },
-        "Newsfeed": {
-            "route": "newsfeed",
-            "add": "admin/newsfeed/add",
-            "enabled": "true",
-            "entry_single_page": "true",
-            "pagination_entry_per_page": 20,
-            "insert_elements_on_load": 50
-        },
-        "Forms": {
-            "route": "forms",
-            "add": "admin/forms/add",
-            "enabled": "true",
-            "entry_single_page": "true",
-            "pagination_entry_per_page": 20,
-            "insert_elements_on_load": 50
-        },
-        "Catalog": {
-            "route": "catalog",
-            "add": "admin/catalog/add",
-            "enabled": "true",
-            "entry_single_page": "true",
-            "pagination_entry_per_page": 20,
-            "insert_elements_on_load": 50
-        }
+  "name": "default configuration",
+  "version": "0.0.1",
+  "description": "default configuration to use with crawler-benchmark",
+  "modes": {
+    "Blog": {
+      "route": "blog",
+      "add": "admin/blog/add",
+      "enabled": "true",
+      "entry_single_page": "true",
+      "pagination_entry_per_page": 20,
+      "insert_elements_on_load": 50
     },
-    "traps": {
-        "random_pages": {
-            "enabled": "true",
-            "pagination": "true"
-        },
-        "logins": {
-            "enabled": "true",
-            "pagination": "true"
-        },
-        "outgoing_links": {
-            "enabled": "true",
-            "pagination": "true"
-        },
-        "parameters_navigation": {
-            "enabled": "true",
-            "pagination": "true"
-        },
-        "session_variables_navigation": {
-            "enabled": "true",
-            "pagination": "true"
-        },
-        "calendar": {
-            "enabled": "true",
-            "pagination": "true"
-        },
-        "error_navigation": {
-            "enabled": "true",
-            "pagination": "true"
-        },
-        "dead_ends": {
-            "enabled": "true",
-            "pagination": "true"
-        },
-        "comet": {
-            "enabled": "true",
-            "pagination": "true"
-        },
-        "infinite_depth": {
-            "enabled": "true",
-            "pagination": "true"
-        }
+    "Forum": {
+      "route": "forum",
+      "add": "admin/forum/add",
+      "enabled": "true",
+      "entry_single_page": "true",
+      "pagination_entry_per_page": 20,
+      "insert_elements_on_load": 50
     },
-    "external_links": [
-        {
-            "name": "Google",
-            "url": "http://www.google.ca/",
-            "target": "_blank"
-        },
-        {
-            "name": "Facebook",
-            "url": "http://www.facebook.com/"
-        },
-        {
-            "name": "twitter",
-            "url": "http://www.twitter.com/"
-        },
-        {
-            "name": "Facebook",
-            "url": "http://www.facebook.com/"
-        },
-        {
-            "name": "Grooveshark",
-            "url": "http://www.grooveshark.com/"
-        },
-        {
-            "name": "Python",
-            "url": "http://www.python.org/"
-        },
-        {
-            "name": "Perdu?",
-            "url": "http://www.perdu.com/"
-        },
-        {
-            "name": "thisdomaindoesnetexist",
-            "url": "http://www.thisdomaindoesnetexist.com/"
-        }
-    ]
+    "Newsfeed": {
+      "route": "newsfeed",
+      "add": "admin/newsfeed/add",
+      "enabled": "true",
+      "entry_single_page": "true",
+      "pagination_entry_per_page": 20,
+      "insert_elements_on_load": 50
+    },
+    "Forms": {
+      "route": "forms",
+      "add": "admin/forms/add",
+      "enabled": "true",
+      "entry_single_page": "true",
+      "pagination_entry_per_page": 20,
+      "insert_elements_on_load": 50
+    },
+    "Catalog": {
+      "route": "catalog",
+      "add": "admin/catalog/add",
+      "enabled": "true",
+      "entry_single_page": "true",
+      "pagination_entry_per_page": 20,
+      "insert_elements_on_load": 50
+    }
+  },
+  "traps": {
+    "random_pages": {
+      "enabled": "true",
+      "pagination": "true"
+    },
+    "logins": {
+      "enabled": "true",
+      "pagination": "true"
+    },
+    "outgoing_links": {
+      "enabled": "true",
+      "pagination": "true"
+    },
+    "parameters_navigation": {
+      "enabled": "true",
+      "pagination": "true"
+    },
+    "session_variables_navigation": {
+      "enabled": "true",
+      "pagination": "true"
+    },
+    "calendar": {
+      "enabled": "true",
+      "pagination": "true"
+    },
+    "error_navigation": {
+      "enabled": "true",
+      "pagination": "true"
+    },
+    "dead_ends": {
+      "enabled": "true",
+      "pagination": "true"
+    },
+    "comet": {
+      "enabled": "true",
+      "pagination": "true"
+    },
+    "infinite_depth": {
+      "enabled": "true",
+      "pagination": "true"
+    }
+  },
+  "external_links": [
+    {
+      "name": "Google",
+      "url": "http://www.google.ca/",
+      "target": "_blank"
+    },
+    {
+      "name": "Facebook",
+      "url": "http://www.facebook.com/"
+    },
+    {
+      "name": "twitter",
+      "url": "http://www.twitter.com/"
+    },
+    {
+      "name": "Facebook",
+      "url": "http://www.facebook.com/"
+    },
+    {
+      "name": "Grooveshark",
+      "url": "http://www.grooveshark.com/"
+    },
+    {
+      "name": "Python",
+      "url": "http://www.python.org/"
+    },
+    {
+      "name": "Perdu?",
+      "url": "http://www.perdu.com/"
+    },
+    {
+      "name": "thisdomaindoesnetexist",
+      "url": "http://www.thisdomaindoesnetexist.com/"
+    }
+  ]
 }

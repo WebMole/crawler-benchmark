@@ -5,24 +5,24 @@
 {% block body %}
     {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 
-    {% if not session.logged_in %}
-        {% include "layout/login.html" %}
-    {% else %}
-        <form class="pure-form">
-            <label for="sel_modes">Mode :</label>
-            <select id="sel_modes">
-                {% for mode in modes %}
-                    <option value="{{ url_for('get_mode', mode=mode.get('route')) }}">{{ mode.get('name') }}</option>
-                {% endfor %}
-            </select>
-        </form>
+{% if not session.logged_in %}
+    {% include "layout/login.html" %}
+{% else %}
+    <form class="pure-form">
+        <label for="sel_modes">Mode :</label>
+        <select id="sel_modes">
+            {% for mode in modes %}
+                <option value="{{ url_for('get_mode', mode=mode.get('route')) }}">{{ mode.get('name') }}</option>
+            {% endfor %}
+        </select>
+    </form>
 
-        <div id="div_mode">
-            {# Loaded in AJAX #}
-        </div>
+    <div id="div_mode">
+        {# Loaded in AJAX #}
+    </div>
 
-        {% import "components/metanav.html" as metanav %}
-        {{ metanav.metanav() }}
+    {% import "components/metanav.html" as metanav %}
+    {{ metanav.metanav() }}
 
-    {% endif %}
+{% endif %}
 {% endblock %}

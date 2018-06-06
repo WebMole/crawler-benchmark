@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from os import abort
 import json
+from os import abort
 
 from flask import session, flash, redirect, url_for, request, render_template, Response
 from loremipsum import get_sentences, get_paragraphs

@@ -1,5 +1,6 @@
 import shelve
 
+
 # @todo: use config.json instead?
 class Configuration:
     default_port = 8080
@@ -51,7 +52,6 @@ class Configuration:
 
     ajax_enabled = True
     infinite_scroll_enabled = True
-
 
     # external links to use with the trap
     links = {
@@ -189,7 +189,6 @@ class Configuration:
         ]
     }
 
-
     # Shelve database for configuration, unused yet
     def __init__(self):
         self.config_path = "db/shelve.db"
@@ -208,7 +207,6 @@ class Configuration:
         shelve_db.close()
         self.load()
 
-
     def save(self):
         shelve_db = shelve.open(self.config_path)
         shelve_db['modes'] = self.modes
@@ -217,7 +215,6 @@ class Configuration:
         shelve_db['entry_single_page'] = self.entry_single_page
 
         shelve_db.close()
-
 
     def load(self):
         shelve_db = shelve.open(self.config_path)

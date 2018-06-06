@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from wtforms import validators
-
 from flask_wtf import Form, RecaptchaField, StringField, PasswordField, BooleanField
+from wtforms import validators
 
 
 class RecaptchaForm(Form):
