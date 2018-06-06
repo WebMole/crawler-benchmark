@@ -9,6 +9,10 @@ def test_env_var_unset():
     assert env_var('UNSET_ENV_VAR') is None
 
 
+def test_env_var_unset_with_default_value():
+    assert env_var('UNSET_ENV_VAR', True) is True
+
+
 @mock.patch.dict(os.environ, {'FALSE_ENV_VAR': 'False'})
 def test_env_var_false():
     assert env_var('FALSE_ENV_VAR') is False
@@ -22,3 +26,4 @@ def test_env_var_true():
 @mock.patch.dict(os.environ, {'FOO': 'bar'})
 def test_env_var_str():
     assert env_var('FOO') is 'bar'
+

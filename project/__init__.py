@@ -11,30 +11,32 @@ app = Flask('project')
 
 # You can play with the settings below
 
-app.debug = True
-app.debug_toolbar = False
-app.testing = False  # set to true so recaptcha always validate
+app.debug = env_var('DEBUG', True)
+app.debug_toolbar = env_var('DEBUG_TOOLBAR', False)
+app.testing = env_var('TESTING', False)  # set to true so recaptcha always validate
 
 app.config.update(dict(
     DATABASE='./db/main.db',
     DEBUG=app.debug,
     TESTING=app.testing,
     SECRET_KEY=env_var('SECRET_KEY'),
-    USERNAME=env_var('USERNAME', 'admin'),
-    PASSWORD=env_var('PASSWORD', 'default'),
+    USERNAME=env_var('BENCHMARK_USERNAME', 'admin'),
+    PASSWORD=env_var('BENCHMARK_PASSWORD', 'default'),
     # To get your keys: https://www.google.com/recaptcha/admin#whyrecaptcha
-    RECAPTCHA_USE_SSL=False,
-    RECAPTCHA_PUBLIC_KEY="",
-    RECAPTCHA_PRIVATE_KEY="",
-    RECAPTCHA_OPTIONS=""
+    RECAPTCHA_USE_SSL=env_var('RECAPTCHA_USE_SSL', False),
+    RECAPTCHA_PUBLIC_KEY=env_var('RECAPTCHA_PUBLIC_KEY', ''),
+    RECAPTCHA_PRIVATE_KEY=env_var('RECAPTCHA_PRIVATE_KEY', ''),
+    RECAPTCHA_OPTIONS=env_var('RECAPTCHA_OPTIONS', ''),
+    SQLALCHEMY_TRACK_MODIFICATIONS=env_var('SQLALCHEMY_TRACK_MODIFICATIONS', False)
+
 ))
 
 POSTGRES = {
-    'user': 'postgres',
-    'pw': 'password',
-    'db': 'my_database',
-    'host': 'localhost',
-    'port': '5432',
+    'user': env_var('DATABASE_USER'),
+    'pw': env_var('DATABASE_PASSWORD'),
+    'db': env_var('DATABASE_NAME'),
+    'host': env_var('DATABASE_HOST'),
+    'port': env_var('DATABASE_PORT', '5432'),
 }
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\

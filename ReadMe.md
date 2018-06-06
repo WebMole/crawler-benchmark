@@ -15,13 +15,15 @@ First, clone the repository and `cd` into the repository.
 
 1. Clone repository
 2. Install [Docker][docker-install]
-2. Install [docker-compose][docker-compose-install]
-3. Build and use the docker image with [docker-compose][docker-compose]
+3. Install [docker-compose][docker-compose-install]
+4. Build and use the docker image with [docker-compose][docker-compose]
+5. initialize database
 
     ```bash
     cd crawler-benchmark
     cp .env.example .env # then edit with desired credentials
     docker-compose up -d
+    docker-compose run --rm website bash -c 'python manage.py db migrate'
     ```
 
 When it's done, you can visit the app running at [localhost:8080](http://localhost:8080)
