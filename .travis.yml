@@ -9,7 +9,7 @@ jobs:
       install:
         - easy_install distribute
         - pip install -r requirements.txt
-      script: pytest --cov
+      script: pytest --cov --cov-report term:skip-covered
       after_success:
         - codecov
     - stage: test

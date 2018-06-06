@@ -27,6 +27,12 @@ When it's done, you can visit the app running at [localhost:8080](http://localho
 
 ## Development
 
+### Run tests locally
+
+```bash
+docker-compose run --rm website bash -c 'pytest --cov --cov-report term:skip-covered'
+```
+
 ### css editing
 
 We are using [grunt](http://gruntjs.com/) to auto compile [scss](http://sass-lang.com/) files into `css` files and we may add tasks in the future. [npm](https://www.npmjs.org/) dependencies are specified in `package.json`.
