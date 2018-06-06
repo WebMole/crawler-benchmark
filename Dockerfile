@@ -16,8 +16,6 @@ RUN apt-get update -y \
 
 RUN easy_install -U distribute
 
-RUN python -mpip install -U matplotlib
-
 WORKDIR /app
 
 ADD ./requirements.txt /app

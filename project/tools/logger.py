@@ -19,10 +19,10 @@ logConsole = logging.getLogger('console')
 def get_log_dicts(user_agent=None, path_regex=None, last_n_lines=None):
     log_file = open(Configuration.log_file_path, "r")
     requests = []
-    if (last_n_lines is not None):
-        lines = tail(log_file, last_n_lines)[0];
+    if last_n_lines is not None:
+        lines = tail(log_file, last_n_lines)[0]
     else:
-        lines = log_file;
+        lines = log_file
     for line in lines:
         request = eval(line)
         has_to_append = True

@@ -4,6 +4,7 @@ def get_specific_item(table, key, value):
             return item
     raise ValueError('No item found for ' + key + ":" + value)
 
+
 def tail(f, n, offset=None):
     """Reads a n lines from f with an offset of offset lines.  The return
     value is a tuple in the form ``(lines, has_more)`` where `has_more` is

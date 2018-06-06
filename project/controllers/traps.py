@@ -223,3 +223,12 @@ def trap_registration():
     if request.method == 'POST' and form.validate():
         return redirect(url_for('success', challenge="registration"))
     return render_template('traps/registration.html', form=form)
+
+
+@app.route('/trap/honeypot/<path:trap_number>')
+def trap_honeypot(trap_number):
+    return render_template(
+        'traps/honeypot.html',
+        title="Honeypot",
+        config=config
+    )
