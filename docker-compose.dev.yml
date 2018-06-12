@@ -7,15 +7,14 @@ services:
     volumes:
       - .:/app
     env_file:
-      - .env.dev
+      - .env
     depends_on:
       - postgres
-    command: ./wait-for-postgres.sh python runserver.py
     tty: true
   postgres:
     image: postgres:10.4
     restart: always
     env_file:
-      - .env.dev
+      - .env
     ports:
       - 5432:5432
