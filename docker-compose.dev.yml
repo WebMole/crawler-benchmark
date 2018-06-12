@@ -1,0 +1,21 @@
+version: '3'
+services:
+  website:
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app
+    env_file:
+      - .env.dev
+    depends_on:
+      - postgres
+    command: ./wait-for-postgres.sh python runserver.py
+    tty: true
+  postgres:
+    image: postgres:10.4
+    restart: always
+    env_file:
+      - .env.dev
+    ports:
+      - 5432:5432
