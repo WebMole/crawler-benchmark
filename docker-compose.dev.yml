@@ -11,6 +11,7 @@ services:
     depends_on:
       - postgres
     tty: true
+    command: ./wait-for-postgres.sh python runserver.py
   postgres:
     image: postgres:10.4
     restart: always

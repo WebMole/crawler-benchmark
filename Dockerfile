@@ -29,4 +29,4 @@ ADD . /app
 EXPOSE 8080
 
 ENTRYPOINT ["/bin/bash", "-l", "-c"]
-CMD ./wait-for-postgres.sh python runserver.py
+CMD python runserver.py
