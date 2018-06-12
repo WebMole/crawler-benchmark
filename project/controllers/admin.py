@@ -54,7 +54,7 @@ def results():
 @app.route('/admin/logs')
 @app.route('/admin/logs/<int:limit>')
 def logs(limit=None):
-    if (limit is None):
+    if limit is None:
         last_n_lines_to_pass = config.log_view_n_lines
     else:
         last_n_lines_to_pass = limit
@@ -78,12 +78,11 @@ def logs_full():
 
 @app.route("/admin/clear/<string:mode>", methods=['DELETE'])
 def clear_entries(mode):
-    """Creates the database tables."""
     with app.app_context():
         db = get_db()
 
         database_request = "drop table if exists " + mode + ";"
-        db.cursor().executescript(database_request)
+        db.cursor().execute(database_request)
         db.commit()
         init_db()
 
@@ -98,10 +97,11 @@ def entries_add_auto(mode, num):
 
     db = get_db()
     for i in range(0, num):
-        db.execute(
-            'insert into ' + mode +
-            ' (title, text) values (?, ?)',
-            [get_sentences(1, False)[0].replace(".", ""), get_paragraphs(1, False)[0]]
+        db.cursor().execute(
+            "insert into " + mode +
+            " (title, text) values ('" +
+            str(get_sentences(1, False)[0].replace(".", "")) + "', '" +
+            str(get_paragraphs(1, False)[0]) + "')"
         )
     db.commit()
     flash('New ' + mode + ' automatic %d %s entrie%s successfully posted' %
@@ -115,8 +115,12 @@ def entries_add(mode):
         abort(401)
 
     db = get_db()
-    db.execute('insert into ' + mode + ' (title, text) values (?, ?)',
-               [request.form['title'], request.form['text']])
+    db.cursor().execute(
+        "insert into " + mode +
+        " (title, text) values ('" +
+        str(request.form['title']) + "', '" +
+        str(request.form['text']) + "')"
+    )
     db.commit()
     flash('New ' + mode + ' entry was successfully posted')
     return "OK"
@@ -141,9 +145,10 @@ def login():
 def get_mode(mode):
     db = get_db()
     for tmp_mode in config.modes:
-        cur = db.execute('select count(id) from ' + tmp_mode.get("route"))
+        cur = db.cursor()
+        cur.execute('select count(id) from ' + tmp_mode.get("route"))
         count = cur.fetchone()
-        tmp_mode.__setitem__('count', count[0])
+        tmp_mode.__setitem__('count', count)
 
     mode = get_specific_item(config.modes, "route", mode)
 
@@ -158,9 +163,10 @@ def get_mode(mode):
 def admin():
     db = get_db()
     for mode in config.modes:
-        cur = db.execute('select count(id) from ' + mode.get("route"))
+        cur = db.cursor()
+        cur.execute('select count(id) from ' + mode.get("route"))
         count = cur.fetchone()
-        mode.__setitem__('count', count[0])
+        mode.__setitem__('count', count)
 
     return render_template(
         "admin/admin.html",

@@ -1,54 +1,52 @@
 # -*- coding: utf-8 -*-
-import sqlite3
+import os
 
-from flask import g
+import psycopg2
+import psycopg2.extras
 
+from flask import g as flask_global
 from project import app, config
 
 
 def init_db():
-    """Creates the database tables."""
     with app.app_context():
         db = get_db()
 
         for mode in config.modes:
-            # create tables if not already created
             database_request = "create table if not exists " \
                                + mode.get("route") \
                                + " (" \
-                                 "    id integer primary key autoincrement," \
+                                 "    id serial primary key," \
                                  "    title text not null," \
                                  "    text text not null" \
                                  ");"
-            db.cursor().executescript(database_request)
+            db.cursor().execute(database_request)
             db.commit()
 
 
 def get_db():
-    """
-    Opens a new database connection if there is none yet for the
-    current application context.
-    """
-    if not hasattr(g, 'sqlite_db'):
-        g.sqlite_db = connect_db(app.config["DATABASE"])
-    return g.sqlite_db
+    if not hasattr(flask_global, 'postgres_db'):
+        flask_global.postgres_db = connect_db()
+    return flask_global.postgres_db
 
 
 @app.teardown_appcontext
 def close_db(error):
-    """Closes the database again at the end of the request."""
     if error is not None:
         raise Exception(str(error))
     else:
-        if hasattr(g, 'sqlite_db'):
-            g.sqlite_db.close()
+        if hasattr(flask_global, 'postgres_db'):
+            flask_global.postgres_db.close()
         else:
             pass
             # abort(500, "Database not loaded yet")
 
 
-def connect_db(database_name):
-    """Connects to the specific database."""
-    rv = sqlite3.connect(database_name)
-    rv.row_factory = sqlite3.Row
-    return rv
+def connect_db():
+    db = psycopg2.connect(
+        dbname=os.getenv('POSTGRES_DB'),
+        user=os.getenv('POSTGRES_USER'),
+        host=os.getenv('POSTGRES_HOST'),
+        password=os.getenv('POSTGRES_PASSWORD'),
+    )
+    return db

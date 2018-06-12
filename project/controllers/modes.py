@@ -2,6 +2,7 @@
 from os import abort
 
 from flask import render_template
+import psycopg2.extras
 
 from project import app, config
 from project.controllers.database import get_db
@@ -41,7 +42,8 @@ def entries(mode, page_number):
 
     db = get_db()
 
-    cur = db.execute('select count(id) from ' + mode.get("route"))
+    cur = db.cursor()
+    cur.execute('select count(id) from ' + mode.get("route"))
     count = cur.fetchone()
     count_value = count[0]
 
@@ -51,8 +53,8 @@ def entries(mode, page_number):
         count_value
     )
 
-    db = get_db()
-    cur = db.execute(
+    cur = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
         'select id, title, text from %s order by id desc limit %d offset %d' % (
             mode.get('route'),
             config.pagination_entry_per_page,
@@ -63,6 +65,8 @@ def entries(mode, page_number):
 
     if not mode_entries and page_number != 1:
         abort(404)
+
+    print (mode_entries)
 
     return render_template(
         'modes/' + mode.get('route') + '.html',
@@ -88,7 +92,8 @@ def entry(mode, mode_id):
         return "This mode is disabled"
 
     db = get_db()
-    cur = db.execute('select id, title, text from ' + mode.get('route') + ' where id = ' + str(mode_id))
+    cur = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute('select id, title, text from ' + mode.get('route') + ' where id = ' + str(mode_id))
     mode_entry = cur.fetchall()
 
     if not mode_entry:
