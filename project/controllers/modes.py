@@ -44,13 +44,12 @@ def entries(mode, page_number):
 
     cur = db.cursor()
     cur.execute('select count(id) from ' + mode.get("route"))
-    count = cur.fetchone()
-    count_value = count[0]
+    count = cur.fetchone()[0]
 
     pagination = Pagination(
         page_number,
         config.pagination_entry_per_page,
-        count_value
+        count
     )
 
     cur = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)

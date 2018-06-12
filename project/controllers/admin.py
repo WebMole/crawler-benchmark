@@ -146,8 +146,8 @@ def get_mode(mode):
     db = get_db()
     for tmp_mode in config.modes:
         cur = db.cursor()
-        cur.execute('select count(id) from ' + tmp_mode.get("route"))
-        count = cur.fetchone()
+        cur.execute('select count(*) from ' + tmp_mode.get("route"))
+        count = cur.fetchone()[0]
         tmp_mode.__setitem__('count', count)
 
     mode = get_specific_item(config.modes, "route", mode)
@@ -165,7 +165,7 @@ def admin():
     for mode in config.modes:
         cur = db.cursor()
         cur.execute('select count(id) from ' + mode.get("route"))
-        count = cur.fetchone()
+        count = cur.fetchone()[0]
         mode.__setitem__('count', count)
 
     return render_template(
