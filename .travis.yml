@@ -13,7 +13,7 @@ jobs:
         - pip install -r requirements.txt
       env:
         - DB=postgres
-        - POSTGRES_USER=postrgres
+        - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=
         - POSTGRES_DB=travis_ci_test
         - POSTGRES_HOST=localhost
