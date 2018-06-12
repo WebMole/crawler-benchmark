@@ -45,5 +45,3 @@ nosetests.xml
 .python-version
 .pytest_cache/
 *.css.map
-
-/.env

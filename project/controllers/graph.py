@@ -2,8 +2,8 @@
 import StringIO
 
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib import ticker
+from matplotlib.backends.backend_svg import FigureCanvasSVG as FigureCanvas
 
 from project.tools import logger
 

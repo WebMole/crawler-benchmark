@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from os import abort
 import json
+from os import abort
 
 from flask import session, flash, redirect, url_for, request, render_template, Response
 from loremipsum import get_sentences, get_paragraphs
@@ -37,7 +37,7 @@ def clear_log_user_agents():
 
 @app.route('/admin/user_agents', methods=['GET'])
 def get_user_agents():
-    return Response(json.dumps(logger.get_log_user_agents()),  mimetype='application/json')
+    return Response(json.dumps(logger.get_log_user_agents()), mimetype='application/json')
 
 
 @app.route('/admin/results')
@@ -64,6 +64,7 @@ def logs(limit=None):
         log_view_n_lines=last_n_lines_to_pass,
         in_admin=True
     )
+
 
 @app.route('/admin/logs/full')
 def logs_full():

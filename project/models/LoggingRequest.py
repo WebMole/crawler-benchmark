@@ -1,5 +1,6 @@
 # Custom http request for the JSON logging.
 
+
 class LoggingRequest(object):
     def __init__(self, datetime, method, path, args, form, routing_exception, user_agent):
         self.datetime = datetime

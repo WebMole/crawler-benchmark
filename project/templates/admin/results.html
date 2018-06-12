@@ -2,83 +2,83 @@
 {% block body %}
     {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 
-    {% if not session.logged_in %}
-        {% include "layout/login.html" %}
-    {% else %}
+{% if not session.logged_in %}
+    {% include "layout/login.html" %}
+{% else %}
 
-        <h2>Number of HTTP requests made by each crawler</h2>
+    <h2>Number of HTTP requests made by each crawler</h2>
 
-        <img src="{{ url_for('plot') }}" id="imgResult" alt="Image Placeholder"/>
+    <img src="{{ url_for('plot') }}" id="imgResult" alt="Image Placeholder"/>
 
-        <div id="divUserAgent">
-            <form id="frmUserAgent" class="pure-form pure-form-aligned" action="{{ url_for('plot') }}">
-                <fieldset>
-                    <legend>Manage graph</legend>
-                    <label for="selUserAgent">User Agents</label>
+    <div id="divUserAgent">
+        <form id="frmUserAgent" class="pure-form pure-form-aligned" action="{{ url_for('plot') }}">
+            <fieldset>
+                <legend>Manage graph</legend>
+                <label for="selUserAgent">User Agents</label>
 
-                    <div>
-                        <small>You may select multiple at the same time</small>
-                    </div>
-                    <br>
-                    <select name="selUserAgent" id="selUserAgent" class="full-width"
-                            data-url="{{ url_for('get_user_agents') }}" multiple>
-                        {% for user_agent in user_agents %}
-                            <option value="{{ user_agent }}">{{ user_agent }}</option>
-                        {% endfor %}
-                    </select>
+                <div>
+                    <small>You may select multiple at the same time</small>
+                </div>
+                <br>
+                <select name="selUserAgent" id="selUserAgent" class="full-width"
+                        data-url="{{ url_for('get_user_agents') }}" multiple>
+                    {% for user_agent in user_agents %}
+                        <option value="{{ user_agent }}">{{ user_agent }}</option>
+                    {% endfor %}
+                </select>
 
-                    <input type="submit" class="pure-button pure-button-green" value="Update graph">
-                    <button id="clearLogUserAgents" class="pure-button pure-button-red"
-                            data-url="{{ url_for('clear_log_user_agents') }}">Clear log by user agents
-                    </button>
-                </fieldset>
-            </form>
-        </div>
+                <input type="submit" class="pure-button pure-button-green" value="Update graph">
+                <button id="clearLogUserAgents" class="pure-button pure-button-red"
+                        data-url="{{ url_for('clear_log_user_agents') }}">Clear log by user agents
+                </button>
+            </fieldset>
+        </form>
+    </div>
 
-        <h2>Success</h2>
+    <h2>Success</h2>
 
-        <table id="successes_table">
-            <thead>
+    <table id="successes_table">
+        <thead>
+        <tr>
+            <th>User Agent</th>
+            <th>Challenge</th>
+            <th>Moment</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for success in successes %}
             <tr>
-                <th>User Agent</th>
-                <th>Challenge</th>
-                <th>Moment</th>
+                <td>{{ success['user_agent'] }}</td>
+                <td>{{ success['path'].replace('/success/', '') }}</td>
+                <td>{{ success['datetime'] }}</td>
             </tr>
-            </thead>
-            <tbody>
-            {% for success in successes %}
-                <tr>
-                    <td>{{ success['user_agent'] }}</td>
-                    <td>{{ success['path'].replace('/success/', '') }}</td>
-                    <td>{{ success['datetime'] }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        
-        <h2>Failures</h2>
+        {% endfor %}
+        </tbody>
+    </table>
 
-        <table id="failure_table">
-            <thead>
+    <h2>Failures</h2>
+
+    <table id="failure_table">
+        <thead>
+        <tr>
+            <th>User Agent</th>
+            <th>Challenge</th>
+            <th>Moment</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for failure in failures %}
             <tr>
-                <th>User Agent</th>
-                <th>Challenge</th>
-                <th>Moment</th>
+                <td>{{ failure['user_agent'] }}</td>
+                <td>{{ failure['path'].replace('/fail/', '') }}</td>
+                <td>{{ failure['datetime'] }}</td>
             </tr>
-            </thead>
-            <tbody>
-            {% for failure in failures %}
-                <tr>
-                    <td>{{ failure['user_agent'] }}</td>
-                    <td>{{ failure['path'].replace('/fail/', '') }}</td>
-                    <td>{{ failure['datetime'] }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% endfor %}
+        </tbody>
+    </table>
 
-        {% import "components/metanav.html" as metanav %}
-        {{ metanav.metanav() }}
+    {% import "components/metanav.html" as metanav %}
+    {{ metanav.metanav() }}
 
-    {% endif %}
+{% endif %}
 {% endblock %}

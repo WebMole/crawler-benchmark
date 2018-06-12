@@ -1,0 +1,26 @@
+stages:
+  - test
+
+jobs:
+  include:
+    - stage: test
+      language: python
+      python: '2.7'
+      install:
+        - easy_install distribute
+        - pip install -r requirements.txt
+      script: pytest --cov --cov-report term:skip-covered
+      after_success:
+        - codecov
+    - stage: test
+      language: node_js
+      node_js: 10
+      script:
+        - npm run grunt -- --version
+        - npm run grunt -- build
+    - stage: test
+      language: bash
+      sudo: required
+      services:
+        - docker
+      script: docker build . -t webmole/crawler-benchmark

@@ -1,13 +1,13 @@
+import random
 from calendar import Calendar
 from datetime import date
-import random
 
 from flask import render_template, request, session, flash, redirect, url_for, make_response
 from loremipsum import get_sentences
 
+from form import RecaptchaForm, RegistrationForm
 from project import app, config
 from project.tools.logger import logConsole
-from form import RecaptchaForm, RegistrationForm
 
 
 @app.route('/trap/random/')
@@ -223,3 +223,12 @@ def trap_registration():
     if request.method == 'POST' and form.validate():
         return redirect(url_for('success', challenge="registration"))
     return render_template('traps/registration.html', form=form)
+
+
+@app.route('/trap/honeypot/<path:trap_number>')
+def trap_honeypot(trap_number):
+    return render_template(
+        'traps/honeypot.html',
+        title="Honeypot",
+        config=config
+    )
