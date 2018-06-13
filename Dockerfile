@@ -11,6 +11,8 @@ RUN apt-get update -y \
 		libjpeg62-turbo-dev \
 		python-matplotlib \
 		libffi-dev \
+		postgresql \
+		postgresql-client \
 	&& apt-get clean \
 	&& rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -26,4 +28,5 @@ ADD . /app
 
 EXPOSE 8080
 
+ENTRYPOINT ["/bin/bash", "-l", "-c"]
 CMD python runserver.py
