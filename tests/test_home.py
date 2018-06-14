@@ -1,12 +1,9 @@
 import matplotlib
-
 matplotlib.use('Agg')
 
 import os
 import tempfile
-
 import pytest
-
 import project
 
 
