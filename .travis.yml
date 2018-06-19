@@ -35,10 +35,10 @@ jobs:
         - docker
       script: |
         export IMAGE_NAME=webmole/crawler-benchmark
-        docker build . -t $IMAGE_NAME:$COMMIT
+        docker build . -t $IMAGE_NAME:$TRAVIS_COMMIT
         docker login -u $REGISTRY_USER -p $REGISTRY_PASS
         docker push "${IMAGE_NAME}:${TRAVIS_COMMIT}"
         if [ "$TRAVIS_BRANCH" == "master" ]; then
-          docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:$TRAVIS_COMMIT $IMAGE_NAME:latest
           docker push "${IMAGE_NAME}:latest"
         fi
