@@ -33,4 +33,12 @@ jobs:
       sudo: required
       services:
         - docker
-      script: docker build . -t webmole/crawler-benchmark
+      script: |
+        export IMAGE_NAME=webmole/crawler-benchmark
+        docker build . -t $IMAGE_NAME:$COMMIT
+        if [ "$TRAVIS_BRANCH" == "master" ]; then
+          docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+          docker push "${IMAGE_NAME}:${COMMIT}"
+          docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:latest
+          docker push "${IMAGE_NAME}:latest"
+        fi
