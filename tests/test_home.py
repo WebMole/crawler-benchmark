@@ -1,4 +1,5 @@
 import matplotlib
+
 matplotlib.use('Agg')
 
 import os
@@ -24,4 +25,74 @@ def client():
 
 def test_home(client):
     rv = client.get('/')
+    assert rv._status_code == 200
+
+
+def test_blog(client):
+    rv = client.get('/moded/blog')
+    assert rv._status_code == 200
+
+
+def test_forum(client):
+    rv = client.get('/moded/forum')
+    assert rv._status_code == 200
+
+
+def test_newsfeed(client):
+    rv = client.get('/moded/newsfeed')
+    assert rv._status_code == 200
+
+
+def test_forms(client):
+    rv = client.get('/moded/forms')
+    assert rv._status_code == 200
+
+
+def test_catalog(client):
+    rv = client.get('/moded/catalog')
+    assert rv._status_code == 200
+
+
+def test_errors(client):
+    rv = client.get('/trap/errors')
+    assert rv._status_code == 200
+
+
+def test_random(client):
+    rv = client.get('/trap/random')
+    assert rv._status_code == 200
+
+
+def test_outgoing(client):
+    rv = client.get('/trap/outgoing')
+    assert rv._status_code == 200
+
+
+def test_login(client):
+    rv = client.get('/trap/login')
+    assert rv._status_code == 200
+
+
+def test_cookies(client):
+    rv = client.get('/trap/cookies')
+    assert rv._status_code == 200
+
+
+def test_recaptcha(client):
+    rv = client.get('/trap/recaptcha')
+    assert rv._status_code == 200
+
+
+def test_depth(client):
+    rv = client.get('/trap/depth')
+    assert rv._status_code == 200
+
+
+def test_calendar(client):
+    rv = client.get('/trap/calendar')
+    assert rv._status_code == 200
+
+
+def test_registration(client):
+    rv = client.get('/trap/registration')
     assert rv._status_code == 200
