@@ -12,14 +12,11 @@ A Reference Framework for the Automated Exploration of Web Applications. Provide
 
 ## Usage
 
-First, clone the repository and `cd` into the repository.
-
-### Using [Docker][docker]
-
 1. Clone repository
-2. Install [Docker][docker-install]
-2. Install [docker-compose][docker-compose-install]
-3. Build and use the docker image with [docker-compose][docker-compose]
+2. `cd` into the repository
+3. Install [Docker][docker-install]
+4. Install [docker-compose][docker-compose-install]
+5. Build and use the docker image with [docker-compose][docker-compose]
 
     ```bash
     cd crawler-benchmark
@@ -69,7 +66,6 @@ npm run grunt
   * Get crawled by general crawlers like google bot
   * Share results to the public
 
-[docker]: https://docker.com/
 [docker-install]: https://docs.docker.com/install/
 [docker-compose]: https://docs.docker.com/compose/
 [docker-compose-install]: https://docs.docker.com/compose/install/
