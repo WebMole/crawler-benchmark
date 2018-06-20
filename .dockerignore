@@ -5,6 +5,7 @@ logging.log
 node_modules/
 .sass-cache/
 .vagrant/
+loggin.log.old
 
 *.py[cod]
 

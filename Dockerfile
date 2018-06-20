@@ -28,5 +28,4 @@ ADD . /app
 
 EXPOSE 8080
 
-ENTRYPOINT ["/bin/bash", "-l", "-c"]
 CMD python runserver.py
