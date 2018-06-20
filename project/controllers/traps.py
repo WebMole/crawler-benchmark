@@ -197,7 +197,7 @@ def trap_depth(current_path=""):
 
 # @todo: validate csrf, don't care for the moment.
 
-@app.route('/trap/recaptcha', methods=['GET', 'POST'])
+@app.route('/trap/recaptcha/', methods=['GET', 'POST'])
 def trap_recaptcha():
     if app.config['RECAPTCHA_PUBLIC_KEY'] == "" or app.config['RECAPTCHA_PRIVATE_KEY'] == "":
         return make_response(
@@ -217,7 +217,7 @@ def trap_recaptcha():
             return redirect(url_for('fail', challenge="recaptcha", message='recaptcha did not validate'))
 
 
-@app.route('/trap/registration', methods=['GET', 'POST'])
+@app.route('/trap/registration/', methods=['GET', 'POST'])
 def trap_registration():
     form = RegistrationForm(request.form, csrf_enabled=False)
     if request.method == 'POST' and form.validate():

@@ -29,70 +29,70 @@ def test_home(client):
 
 
 def test_blog(client):
-    rv = client.get('/modes/blog')
+    rv = client.get('/modes/blog/')
     assert rv._status_code == 200
 
 
 def test_forum(client):
-    rv = client.get('/modes/forum')
+    rv = client.get('/modes/forum/')
     assert rv._status_code == 200
 
 
 def test_newsfeed(client):
-    rv = client.get('/modes/newsfeed')
+    rv = client.get('/modes/newsfeed/')
     assert rv._status_code == 200
 
 
 def test_forms(client):
-    rv = client.get('/modes/forms')
+    rv = client.get('/modes/forms/')
     assert rv._status_code == 200
 
 
 def test_catalog(client):
-    rv = client.get('/modes/catalog')
+    rv = client.get('/modes/catalog/')
     assert rv._status_code == 200
 
 
 def test_errors(client):
-    rv = client.get('/trap/errors')
+    rv = client.get('/trap/errors/')
     assert rv._status_code == 200
 
 
 def test_random(client):
-    rv = client.get('/trap/random')
+    rv = client.get('/trap/random/')
     assert rv._status_code == 200
 
 
 def test_outgoing(client):
-    rv = client.get('/trap/outgoing')
+    rv = client.get('/trap/outgoing/')
     assert rv._status_code == 200
 
 
 def test_login(client):
-    rv = client.get('/trap/login')
+    rv = client.get('/trap/login/')
     assert rv._status_code == 200
 
 
 def test_cookies(client):
-    rv = client.get('/trap/cookies')
+    rv = client.get('/trap/cookies/')
     assert rv._status_code == 200
 
 
-def test_recaptcha(client):
-    rv = client.get('/trap/recaptcha')
-    assert rv._status_code == 200
+def test_recaptcha_without_key(client):
+    rv = client.get('/trap/recaptcha/')
+    assert rv._status_code == 500
 
 
 def test_depth(client):
-    rv = client.get('/trap/depth')
+    rv = client.get('/trap/depth/')
     assert rv._status_code == 200
 
 
 def test_calendar(client):
-    rv = client.get('/trap/calendar')
+    rv = client.get('/trap/calendar/')
     assert rv._status_code == 200
 
 
 def test_registration(client):
-    rv = client.get('/trap/registration')
+    rv = client.get('/trap/registration/')
     assert rv._status_code == 200
