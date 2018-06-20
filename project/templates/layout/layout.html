@@ -17,7 +17,7 @@
     {% block header %}{% endblock %}
 
     <div class=page>
-    <h1>Crawler Benchmark</h1>
+    <h1><a href="{{ url_for('index') }}" class="title">Crawler Benchmark</a></h1>
 
     {% if title is defined %}<h2>{{ title }}</h2>{% endif %}
     {% for message in get_flashed_messages() %}

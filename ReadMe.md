@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/WebMole/crawler-benchmark.svg?branch=master)](https://travis-ci.org/WebMole/crawler-benchmark)
 [![codecov](https://codecov.io/gh/WebMole/crawler-benchmark/branch/master/graph/badge.svg)](https://codecov.io/gh/WebMole/crawler-benchmark)
+[![Docker Stars](https://img.shields.io/docker/stars/webmole/crawler-benchmark.svg)](https://hub.docker.com/r/webmole/crawler-benchmark/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/webmole/crawler-benchmark.svg)](https://hub.docker.com/r/webmole/crawler-benchmark/)
+[![Docker layers](https://images.microbadger.com/badges/image/webmole/crawler-benchmark.svg)](https://microbadger.com/images/webmole/crawler-benchmark)
 
 ![Crawler-Benchmark](http://i.imgur.com/vHUkr9t.jpg)
 

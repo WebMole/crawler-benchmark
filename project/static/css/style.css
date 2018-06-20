@@ -1819,6 +1819,10 @@ body {
 img {
   max-width: 100%; }
 
+.title {
+  text-decoration: none;
+  color: #5A740F; }
+
 .page {
   width: 80%;
   margin: 2em auto;
