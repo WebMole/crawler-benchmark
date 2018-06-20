@@ -36,7 +36,7 @@ jobs:
       script: |
         export IMAGE_NAME=webmole/crawler-benchmark
         docker build . -t $IMAGE_NAME:$TRAVIS_COMMIT
-        if [ "$TRAVIS_PULL_REQUEST" = "false" ];
+        if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
           docker login -u $REGISTRY_USER -p $REGISTRY_PASS
           docker push "${IMAGE_NAME}:${TRAVIS_COMMIT}"
           if [ "$TRAVIS_BRANCH" == "master" ]; then
