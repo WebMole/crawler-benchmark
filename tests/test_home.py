@@ -29,27 +29,27 @@ def test_home(client):
 
 
 def test_blog(client):
-    rv = client.get('/moded/blog')
+    rv = client.get('/modes/blog')
     assert rv._status_code == 200
 
 
 def test_forum(client):
-    rv = client.get('/moded/forum')
+    rv = client.get('/modes/forum')
     assert rv._status_code == 200
 
 
 def test_newsfeed(client):
-    rv = client.get('/moded/newsfeed')
+    rv = client.get('/modes/newsfeed')
     assert rv._status_code == 200
 
 
 def test_forms(client):
-    rv = client.get('/moded/forms')
+    rv = client.get('/modes/forms')
     assert rv._status_code == 200
 
 
 def test_catalog(client):
-    rv = client.get('/moded/catalog')
+    rv = client.get('/modes/catalog')
     assert rv._status_code == 200
 
 
