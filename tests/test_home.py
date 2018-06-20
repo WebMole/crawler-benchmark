@@ -24,75 +24,75 @@ def client():
 
 
 def test_home(client):
-    rv = client.get('/')
-    assert rv._status_code == 200
+    response = client.get('/')
+    assert response._status_code == 200
 
 
 def test_blog(client):
-    rv = client.get('/modes/blog/')
-    assert rv._status_code == 200
+    response = client.get('/modes/blog/')
+    assert response._status_code == 200
 
 
 def test_forum(client):
-    rv = client.get('/modes/forum/')
-    assert rv._status_code == 200
+    response = client.get('/modes/forum/')
+    assert response._status_code == 200
 
 
 def test_newsfeed(client):
-    rv = client.get('/modes/newsfeed/')
-    assert rv._status_code == 200
+    response = client.get('/modes/newsfeed/')
+    assert response._status_code == 200
 
 
 def test_forms(client):
-    rv = client.get('/modes/forms/')
-    assert rv._status_code == 200
+    response = client.get('/modes/forms/')
+    assert response._status_code == 200
 
 
 def test_catalog(client):
-    rv = client.get('/modes/catalog/')
-    assert rv._status_code == 200
+    response = client.get('/modes/catalog/')
+    assert response._status_code == 200
 
 
 def test_errors(client):
-    rv = client.get('/trap/errors/')
-    assert rv._status_code == 200
+    response = client.get('/trap/errors/')
+    assert response._status_code == 200
 
 
 def test_random(client):
-    rv = client.get('/trap/random/')
-    assert rv._status_code == 200
+    response = client.get('/trap/random/')
+    assert response._status_code == 200
 
 
 def test_outgoing(client):
-    rv = client.get('/trap/outgoing/')
-    assert rv._status_code == 200
+    response = client.get('/trap/outgoing/')
+    assert response._status_code == 200
 
 
 def test_login(client):
-    rv = client.get('/trap/login/')
-    assert rv._status_code == 200
+    response = client.get('/trap/login/')
+    assert response._status_code == 200
 
 
 def test_cookies(client):
-    rv = client.get('/trap/cookies/')
-    assert rv._status_code == 200
+    response = client.get('/trap/cookies/')
+    assert response._status_code == 200
 
 
 def test_recaptcha_without_key(client):
-    rv = client.get('/trap/recaptcha/')
-    assert rv._status_code == 500
+    response = client.get('/trap/recaptcha/')
+    assert response._status_code == 500
 
 
 def test_depth(client):
-    rv = client.get('/trap/depth/')
-    assert rv._status_code == 200
+    response = client.get('/trap/depth/')
+    assert response._status_code == 200
 
 
 def test_calendar(client):
-    rv = client.get('/trap/calendar/')
-    assert rv._status_code == 200
+    response = client.get('/trap/calendar/')
+    assert response._status_code == 200
 
 
 def test_registration(client):
-    rv = client.get('/trap/registration/')
-    assert rv._status_code == 200
+    response = client.get('/trap/registration/')
+    assert response._status_code == 200
