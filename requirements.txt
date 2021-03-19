@@ -20,7 +20,7 @@ freetype-py==1.2.1
 funcsigs==1.0.2
 idna==2.6
 itsdangerous==0.24
-Jinja2==2.7.3
+Jinja2==2.11.3
 kiwisolver==1.0.1
 livereload==2.2.1
 loremipsum==1.0.2
