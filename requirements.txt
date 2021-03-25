@@ -40,7 +40,7 @@ pytest==3.6.0
 pytest-cov==2.5.1
 python-dateutil==2.2
 pytz==2018.4
-PyYAML==3.11
+PyYAML==5.4
 requests==2.18.4
 six==1.11.0
 subprocess32==3.5.1
